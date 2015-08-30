@@ -11,8 +11,9 @@ install:
   - composer install
 
 before_script:
-  - wget -O /tmp/tika-server.jar http://www.eu.apache.org/dist/tika/tika-server-1.10.jar
+  - wget -O /tmp/tika-server.jar http://mirrors.ibiblio.org/apache/tika/tika-server-1.10.jar
   - java -jar /tmp/tika-server.jar &
+  - sleep 5
 
 notifications:
   email:
