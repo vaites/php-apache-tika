@@ -1,0 +1,25 @@
+{
+  "name": "vaites/php-apache-tika",
+  "description": "Apache Tika bindings for PHP: extracts metadata, text, HTML and more",
+  "keywords": ["apache", "tika", "pdf", "doc", "docx", "ppt", "pptx", "odt", "office", "documents"],
+  "version": "0.1.0",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "David Martínez",
+      "email": "contacto@davidmartinez.net"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Vaites\\ApacheTika\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.4.0",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.8"
+  }
+}
