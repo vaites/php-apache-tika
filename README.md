@@ -37,7 +37,7 @@ Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-securi
 
 Use the class:
 
-    $client = Vaites\\ApacheTika\\Client::make($host, $port);
+    $client = \Vaites\ApacheTika\Client::make($host, $port);
     $client->getLanguage('/path/to/your/document');
     $client->getMetadata('/path/to/your/document');
 
