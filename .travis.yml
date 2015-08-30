@@ -12,7 +12,7 @@ install:
 
 before_script:
   - wget -O /tmp/tika-server.jar http://www.eu.apache.org/dist/tika/tika-server-1.10.jar
-  - java -jar /tmp/tika-server.jar
+  - java -jar /tmp/tika-server.jar &
 
 notifications:
   email:
