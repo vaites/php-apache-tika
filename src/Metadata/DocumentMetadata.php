@@ -79,6 +79,11 @@ class DocumentMetadata extends Metadata
     {
         $timezone = new DateTimeZone('UTC');
 
+        if(is_array($value))
+        {
+            $value = array_shift($value);
+        }
+
         switch(mb_strtolower($key))
         {
             case 'title':

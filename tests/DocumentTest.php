@@ -32,7 +32,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf
         (
-            '\\Vaites\\ApacheTika\\Metadata\\Metadata',
+            '\\Vaites\\ApacheTika\\Metadata\\DocumentMetadata',
             self::$client->getMetadata($file)
         );
     }
@@ -175,7 +175,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
      */
     public function fileProvider()
     {
-        foreach(glob(dirname(__DIR__) . '/samples/*') as $sample)
+        foreach(glob(dirname(__DIR__) . '/samples/sample1.*') as $sample)
         {
             $samples[basename($sample)] = [$sample];
         }

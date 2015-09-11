@@ -9,6 +9,7 @@ use Vaites\ApacheTika\Metadata\Metadata;
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  * @link    http://wiki.apache.org/tika/TikaJAXRS
+ * @link    https://tika.apache.org/1.10/formats.html
  * @package Vaites\ApacheTika
  */
 class Client
@@ -154,7 +155,7 @@ class Client
         {
             case 'html':
                 $resource = 'tika';
-                $headers[] = 'Accept: text/plain';
+                $headers[] = 'Accept: text/html';
                 break;
 
             case 'mime':

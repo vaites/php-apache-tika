@@ -90,8 +90,28 @@ abstract class Metadata
             throw new Exception(json_last_error_msg());
         }
 
-        // TODO: new classes for images and videos
-        return new DocumentMetadata($meta, $file);
+        // get content type
+        if(is_array($meta->{'Content-Type'}))
+        {
+            $mime = current($meta->{'Content-Type'});
+        }
+         else
+         {
+             $mime = $meta->{'Content-Type'};
+         }
+
+        // instance based on content type
+        switch(current(explode('/', $mime)))
+        {
+            case 'image':
+                $instance = new ImageMetadata($meta, $file);
+                break;
+
+            default:
+                $instance = new DocumentMetadata($meta, $file);
+        }
+
+        return $instance;
     }
 
     /**
