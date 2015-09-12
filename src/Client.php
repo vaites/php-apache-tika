@@ -270,7 +270,7 @@ class Client
         [
             CURLINFO_HEADER_OUT => true,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 3
+            CURLOPT_TIMEOUT => 5
         ] + $options);
 
         // get the response and the HTTP status code
