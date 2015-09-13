@@ -161,7 +161,8 @@ class Client
             case 'mime':
                 $name = basename($file);
                 $resource = 'detect/stream';
-                $headers[] = "Content-Disposition: attachment, filename=$name";
+                $headers[] = "Content-Disposition: attachment, " .
+                    "filename=$name";
                 break;
 
             case 'lang':
@@ -206,7 +207,8 @@ class Client
         $options[CURLOPT_HTTPHEADER] = $headers;
 
         // cURL init and options
-        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}/$resource";
+        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}" .
+            "/$resource";
 
         // get the response and the HTTP status code
         list($response, $status) = $this->exec($options);
@@ -243,7 +245,8 @@ class Client
 
             // unexpected
             default:
-                throw new Exception("Unexpected response ($status)");
+                throw new Exception("Unexpected response " .
+                    "for /$resource ($status)");
         }
 
         // cache certain responses
