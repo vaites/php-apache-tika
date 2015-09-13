@@ -1,40 +1,19 @@
-<?php
-
-use Vaites\ApacheTika\Client;
+<?php namespace Vaites\ApacheTika\Tests;
 
 /**
  * Test for images
  */
-class ImageTest extends PHPUnit_Framework_TestCase
+class ImageTest extends BaseTest
 {
-    /**
-     * Shared instance
-     *
-     * @var \Vaites\ApacheTika\Client
-     */
-    protected static $client = null;
-
-    /**
-     * Create shared instance of client
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$client = Client::make();
-    }
-    
     /**
      * Metadata test
      *
      * @dataProvider    fileProvider
      * @param   string  $file
      */
-    public function testMetadata($file)
+    public function testMetadata($file, $class = 'Metadata')
     {
-        $this->assertInstanceOf
-        (
-            '\\Vaites\\ApacheTika\\Metadata\\ImageMetadata',
-            self::$client->getMetadata($file)
-        );
+        parent::testMetadata($file, 'ImageMetadata');
     }
 
     /**
@@ -47,7 +26,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
     {
         $meta = self::$client->getMetadata($file);
 
-        $this->assertEquals($meta->width, 1600, basename($file));
+        $this->assertEquals(1600, $meta->width, basename($file));
     }
 
     /**
@@ -60,7 +39,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
     {
         $meta = self::$client->getMetadata($file);
 
-        $this->assertEquals($meta->height, 900, basename($file));
+        $this->assertEquals(900, $meta->height, basename($file));
     }
 
     /**
@@ -83,14 +62,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
      */
     public function fileProvider()
     {
-        $samples = [];
-
-        foreach(glob(dirname(__DIR__) . '/samples/sample2.*') as $sample)
-        {
-            $samples[basename($sample)] = [$sample];
-        }
-
-        return $samples;
+        return $this->samples('sample2');
     }
 
     /**
@@ -100,13 +72,6 @@ class ImageTest extends PHPUnit_Framework_TestCase
      */
     public function ocrProvider()
     {
-        $samples = [];
-
-        foreach(glob(dirname(__DIR__) . '/samples/sample3.*') as $sample)
-        {
-            $samples[basename($sample)] = [$sample];
-        }
-
-        return $samples;
+        return $this->samples('sample3');
     }
 }

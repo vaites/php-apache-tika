@@ -1,6 +1,5 @@
 <?php namespace Vaites\ApacheTika\Metadata;
 
-use DateTime;
 use DateTimeZone;
 
 /**
@@ -24,13 +23,6 @@ class ImageMetadata extends Metadata
      * @var int
      */
     public $height = 0;
-
-    /**
-     * DPI
-     *
-     * @var int
-     */
-    public $dpi = 72;
 
     /**
      * Lossy/Lossless

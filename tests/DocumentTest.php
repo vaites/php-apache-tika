@@ -1,40 +1,19 @@
-<?php
-
-use Vaites\ApacheTika\Client;
+<?php namespace Vaites\ApacheTika\Tests;
 
 /**
  * Test for documents
  */
-class DocumentTest extends PHPUnit_Framework_TestCase
+class DocumentTest extends BaseTest
 {
-    /**
-     * Shared instance
-     *
-     * @var \Vaites\ApacheTika\Client
-     */
-    protected static $client = null;
-
-    /**
-     * Create shared instance of client
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$client = Client::make();
-    }
-    
     /**
      * Metadata test
      *
      * @dataProvider    fileProvider
      * @param   string  $file
      */
-    public function testMetadata($file)
+    public function testMetadata($file, $class = 'Metadata')
     {
-        $this->assertInstanceOf
-        (
-            '\\Vaites\\ApacheTika\\Metadata\\DocumentMetadata',
-            self::$client->getMetadata($file)
-        );
+        parent::testMetadata($file, 'DocumentMetadata');
     }
 
     /**
@@ -175,11 +154,6 @@ class DocumentTest extends PHPUnit_Framework_TestCase
      */
     public function fileProvider()
     {
-        foreach(glob(dirname(__DIR__) . '/samples/sample1.*') as $sample)
-        {
-            $samples[basename($sample)] = [$sample];
-        }
-
-        return $samples;
+        return $this->samples('sample1');
     }
 }

@@ -54,8 +54,8 @@ class Client
             $this->port = $port;
         }
 
-        $this->exec(
-        [
+        $this->exec
+        ([
             CURLOPT_TIMEOUT => 1,
             CURLOPT_URL => "http://{$this->host}:{$this->port}/tika"
         ]);
