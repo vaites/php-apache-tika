@@ -9,7 +9,7 @@ php:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y tesseract
+  - sudo apt-get install -y tesseract-ocr
 
 install:
   - composer install
@@ -17,7 +17,7 @@ install:
 before_script:
   - wget -O /tmp/tika-server.jar http://apache.rediris.es/tika/tika-server-1.10.jar
   - java -jar /tmp/tika-server.jar &
-  - sleep 5
+  - sleep 10
 
 notifications:
   email:
