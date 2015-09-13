@@ -7,16 +7,23 @@ php:
   - 7.0
   - hhvm
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y tesseract-ocr
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - tesseract-ocr
+
+cache:
+  directories:
+  - $HOME/tika
 
 install:
   - composer install
 
 before_script:
-  - wget -O /tmp/tika-server.jar http://apache.rediris.es/tika/tika-server-1.10.jar
-  - java -jar /tmp/tika-server.jar &
+  - wget -O $HOME/tika/tika-server.jar -nc http://apache.rediris.es/tika/tika-server-1.10.jar
+  - java -jar $HOME/tika/tika-server.jar &
   - sleep 10
 
 notifications:
