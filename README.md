@@ -8,7 +8,7 @@ Two modes are supported:
 * **App mode**: run app JAR via command line interface
 * **Server mode**: make HTTP requests to [JSR 311 network server](http://wiki.apache.org/tika/TikaJAXRS)
 
-Server mode is recommended because is 5 times faster, but some shared hosts don't allow users to run daemons.
+Server mode is recommended because is 5 times faster, but some shared hosts don't allow run processes in background.
 
 Features
 --------
