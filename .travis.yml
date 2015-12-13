@@ -22,8 +22,8 @@ install:
   - composer install
 
 before_script:
-  - wget -O $HOME/tika/tika-app.jar -nc http://apache.rediris.es/tika/tika-app-1.11.jar
-  - wget -O $HOME/tika/tika-server.jar -nc http://apache.rediris.es/tika/tika-server-1.11.jar
+  - wget -O $HOME/tika/tika-app.jar -nc http://mirrors.ibiblio.org/apache/tika/tika-app-1.11.jar
+  - wget -O $HOME/tika/tika-server.jar -nc http://mirrors.ibiblio.org/apache/tika/tika-server-1.11.jar
   - java -jar $HOME/tika/tika-server.jar &
   - sleep 10
 
