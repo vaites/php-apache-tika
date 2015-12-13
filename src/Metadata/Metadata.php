@@ -81,13 +81,13 @@ abstract class Metadata
         $meta = json_decode($response);
 
         // exceptions if metadata is not valid
-        if(empty($meta))
-        {
-            throw new Exception("Empty response");
-        }
-        elseif(json_last_error())
+        if(json_last_error())
         {
             throw new Exception(json_last_error_msg());
+        }
+        elseif(empty($meta))
+        {
+            throw new Exception("Empty response");
         }
 
         // get content type

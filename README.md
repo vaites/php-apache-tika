@@ -1,11 +1,14 @@
 PHP Apache Tika
 ===============
 
-This tool provides [Apache Tika](https://tika.apache.org) bindings for PHP,
-allowing to extract text and metadata from documents, images and other formats. 
+This tool provides [Apache Tika](https://tika.apache.org) bindings for PHP, allowing to extract text and metadata 
+from documents, images and other formats. 
 
-Unlike other solutions [tika-server](http://wiki.apache.org/tika/TikaJAXRS)
-are used, increasing speed (no need to run JVM on each request).
+Two modes are supported:
+* **App mode**: run app JAR via command line interface
+* **Server mode**: make HTTP requests to [JSR 311 network server](http://wiki.apache.org/tika/TikaJAXRS)
+
+Server mode is recommended because is 5 times faster, but some shared hosts don't allow users to run daemons.
 
 Features
 --------
@@ -49,10 +52,14 @@ Usage
 Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-security/2015/08/13/5):
 
     java -jar tika-server-1.10.jar
+    
+Instantiate the class:
+
+    $client = \Vaites\ApacheTika\Client::make('localhost', 9998);
+    $client = \Vaites\ApacheTika\Client::make('/path/to/tika-app.jar');    
 
 Use the class to extract text from documents:
 
-    $client = \Vaites\ApacheTika\Client::make($host, $port);
     $language = $client->getLanguage('/path/to/your/document');
     $metadata = $client->getMetadata('/path/to/your/document');
 
