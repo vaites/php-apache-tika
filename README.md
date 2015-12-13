@@ -55,8 +55,8 @@ Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-securi
     
 Instantiate the class:
 
-    $client = \Vaites\ApacheTika\Client::make('localhost', 9998);
-    $client = \Vaites\ApacheTika\Client::make('/path/to/tika-app.jar');    
+    $client = \Vaites\ApacheTika\Client::make('localhost', 9998);           // server mode (default)
+    $client = \Vaites\ApacheTika\Client::make('/path/to/tika-app.jar');     // app mode 
 
 Use the class to extract text from documents:
 

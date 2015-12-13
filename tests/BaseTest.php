@@ -23,11 +23,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testMetadata($file, $class = 'Metadata')
     {
-        $this->assertInstanceOf
-        (
-            "\\Vaites\\ApacheTika\\Metadata\\$class"   ,
-            self::$client->getMetadata($file)
-        );
+        $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
     }
 
     /**
