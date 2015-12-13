@@ -12,7 +12,7 @@ class CLITest extends BaseTest
      */
     public static function setUpBeforeClass()
     {
-        $travis = '/home/' . trim(shell_exec('whoami')) . '/tika/tika-app-1.11.jar';
+        $travis = '/home/travis/tika/tika-app.jar';
         $develop = dirname(__DIR__) . '/bin/tika-app-1.11.jar';
 
         self::$client = Client::make(file_exists($travis) ? $travis : $develop);
