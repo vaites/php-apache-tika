@@ -1,36 +1,37 @@
-<?php namespace Vaites\ApacheTika\Clients;
+<?php
+
+namespace Vaites\ApacheTika\Clients;
 
 use Exception;
-
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
- * Apache Tika web client
+ * Apache Tika web client.
  *
  * @author  David Martínez <contacto@davidmartinez.net>
+ *
  * @link    http://wiki.apache.org/tika/TikaJAXRS
  * @link    https://tika.apache.org/1.11/formats.html
- * @package Vaites\ApacheTika
  */
 class WebClient extends Client
 {
     /**
-     * Cached responses to avoid multiple request for the same file
+     * Cached responses to avoid multiple request for the same file.
      *
      * @var array
      */
     protected $cache = [];
 
     /**
-     * Apache Tika server host
+     * Apache Tika server host.
      *
      * @var string
      */
     protected $host = '127.0.0.1';
 
     /**
-     * Apache Tika server port
+     * Apache Tika server port.
      *
      * @var int
      */
@@ -39,49 +40,47 @@ class WebClient extends Client
     /**
      * Is server running?
      *
-     * @param   string  $host
-     * @param   int     $port
-     * @throws  Exception
+     * @param string $host
+     * @param int    $port
+     *
+     * @throws Exception
      */
     public function __construct($host = null, $port = null)
     {
-        if($host)
-        {
+        if ($host) {
             $this->host = $host;
         }
 
-        if($port)
-        {
+        if ($port) {
             $this->port = $port;
         }
 
-        $this->exec
-        ([
+        $this->exec([
             CURLOPT_TIMEOUT => 1,
-            CURLOPT_URL => "http://{$this->host}:{$this->port}/tika"
+            CURLOPT_URL => "http://{$this->host}:{$this->port}/tika",
         ]);
     }
 
     /**
-     * Configure and make a request and return its results
+     * Configure and make a request and return its results.
      *
-     * @param   string  $file
-     * @param   string  $type
-     * @return  string
-     * @throws  \Exception
+     * @param string $file
+     * @param string $type
+     *
+     * @return string
+     *
+     * @throws \Exception
      */
     protected function request($file, $type)
     {
         // check if is cached
-        if(isset($this->cache[sha1($file)][$type]))
-        {
+        if (isset($this->cache[sha1($file)][$type])) {
             return $this->cache[sha1($file)][$type];
         }
 
         // parameters for cURL request
         $headers = [];
-        switch($type)
-        {
+        switch ($type) {
             case 'html':
                 $resource = 'tika';
                 $headers[] = 'Accept: text/html';
@@ -107,6 +106,10 @@ class WebClient extends Client
                 $headers[] = 'Accept: text/plain';
                 break;
 
+            case 'version':
+                $resource = 'version';
+                break;
+
             default:
                 throw new Exception("Unknown type $type");
         }
@@ -115,19 +118,18 @@ class WebClient extends Client
         $options = [CURLOPT_PUT => true];
 
         // remote file options
-        if(preg_match('/^http/', $file))
-        {
+        if ($file && preg_match('/^http/', $file)) {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
         }
         // local file options
-        elseif(file_exists($file) && is_readable($file))
-        {
+        elseif ($file && file_exists($file) && is_readable($file)) {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
             $options[CURLOPT_INFILESIZE] = filesize($file);
+        } elseif ($type == 'version') {
+            $options = [CURLOPT_PUT => false];
         }
         // error
-        else
-        {
+        else {
             throw new Exception("File $file can't be opened");
         }
 
@@ -135,17 +137,15 @@ class WebClient extends Client
         $options[CURLOPT_HTTPHEADER] = $headers;
 
         // cURL init and options
-        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}" . "/$resource";
+        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}"."/$resource";
 
         // get the response and the HTTP status code
         list($response, $status) = $this->exec($options);
 
-        switch($status)
-        {
+        switch ($status) {
             // request completed successfully
             case 200:
-                if($type == 'meta')
-                {
+                if ($type == 'meta') {
                     $response = Metadata::make($response, $file);
                 }
                 break;
@@ -157,17 +157,17 @@ class WebClient extends Client
 
             //  unsupported media type
             case 415:
-                throw new Exception("Unsupported media type");
+                throw new Exception('Unsupported media type');
                 break;
 
             //  unprocessable entity
             case 422:
-                throw new Exception("Unprocessable document");
+                throw new Exception('Unprocessable document');
                 break;
 
             // server error
             case 500:
-                throw new Exception("Error while processing document");
+                throw new Exception('Error while processing document');
                 break;
 
             // unexpected
@@ -176,8 +176,7 @@ class WebClient extends Client
         }
 
         // cache certain responses
-        if(in_array($type, ['lang', 'meta']))
-        {
+        if (in_array($type, ['lang', 'meta'])) {
             $this->cache[sha1($file)][$type] = $response;
         }
 
@@ -185,11 +184,13 @@ class WebClient extends Client
     }
 
     /**
-     * Make a request to Apache Tika Server
+     * Make a request to Apache Tika Server.
      *
-     * @param   array   $options
-     * @return  array
-     * @throws  Exception
+     * @param array $options
+     *
+     * @return array
+     *
+     * @throws Exception
      */
     protected function exec(array $options = [])
     {
@@ -199,19 +200,18 @@ class WebClient extends Client
         [
             CURLINFO_HEADER_OUT => true,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 5
+            CURLOPT_TIMEOUT => 5,
         ] + $options);
 
         // get the response and the HTTP status code
         $response =
         [
             trim(curl_exec($curl)),
-            curl_getinfo($curl, CURLINFO_HTTP_CODE)
+            curl_getinfo($curl, CURLINFO_HTTP_CODE),
         ];
 
         // exception if cURL fails
-        if(curl_errno($curl))
-        {
+        if (curl_errno($curl)) {
             throw new Exception(curl_error($curl), curl_errno($curl));
         }
 
