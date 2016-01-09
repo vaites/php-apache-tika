@@ -189,6 +189,16 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Version test
+     */
+    public function testVersion()
+    {
+        $version = self::$client->getVersion();
+
+        $this->assertEquals('Apache Tika 1.11', $version);
+    }
+
+    /**
      * Main file provider
      *
      * @return  array

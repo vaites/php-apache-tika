@@ -100,12 +100,24 @@ abstract class Client
     }
 
     /**
-     * Configure and make a request and return its results
+     * Returns current Tika version.
      *
-     * @param   string  $file
-     * @param   string  $type
-     * @return  string
-     * @throws  \Exception
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->request(null, 'version');
+    }
+
+    /**
+     * Configure and make a request and return its results.
+     *
+     * @param string $file
+     * @param string $type
+     *
+     * @return string
+     *
+     * @throws \Exception
      */
     abstract protected function request($file, $type);
 }

@@ -78,37 +78,40 @@ class CLIClient extends Client
                 $arguments[] = '--text';
                 break;
 
+            case 'version':
+                $arguments[] = '--version';
+                break;
+
             default:
                 throw new Exception("Unknown type $type");
         }
 
         // invalid file
-        if(!preg_match('/^http/', $file) && !file_exists($file))
-        {
+        if ($file && !preg_match('/^http/', $file) && !file_exists($file)) {
             throw new Exception("File $file can't be opened");
         }
 
         // add last argument
-        $arguments[] = "'$file'";
+        if ($file) {
+            $arguments[] = "'$file'";
+        }
 
         // build command
-        $command = "java -jar '{$this->path}' " . implode(' ', $arguments);
+        $command = "java -jar '{$this->path}' ".implode(' ', $arguments);
 
         // run command and process output
         $response = trim(shell_exec($command));
 
         // metadata response
-        if($type == 'meta')
-        {
+        if ($type == 'meta') {
             // fix for invalid? json returned only with images
-            $response = str_replace(basename($file) . '"}{', '", ', $response);
+            $response = str_replace(basename($file).'"}{', '", ', $response);
 
             $response = Metadata::make($response, $file);
         }
 
         // cache certain responses
-        if(in_array($type, ['lang', 'meta']))
-        {
+        if (in_array($type, ['lang', 'meta'])) {
             $this->cache[sha1($file)][$type] = $response;
         }
 

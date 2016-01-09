@@ -107,6 +107,10 @@ class WebClient extends Client
                 $headers[] = 'Accept: text/plain';
                 break;
 
+            case 'version':
+                $resource = 'version';
+                break;
+
             default:
                 throw new Exception("Unknown type $type");
         }
@@ -115,19 +119,18 @@ class WebClient extends Client
         $options = [CURLOPT_PUT => true];
 
         // remote file options
-        if(preg_match('/^http/', $file))
-        {
+        if ($file && preg_match('/^http/', $file)) {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
         }
         // local file options
-        elseif(file_exists($file) && is_readable($file))
-        {
+        elseif ($file && file_exists($file) && is_readable($file)) {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
             $options[CURLOPT_INFILESIZE] = filesize($file);
+        } elseif ($type == 'version') {
+            $options = [CURLOPT_PUT => false];
         }
         // error
-        else
-        {
+        else {
             throw new Exception("File $file can't be opened");
         }
 
