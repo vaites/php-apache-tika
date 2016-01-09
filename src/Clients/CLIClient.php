@@ -1,22 +1,23 @@
-<?php namespace Vaites\ApacheTika\Clients;
+<?php
+
+namespace Vaites\ApacheTika\Clients;
 
 use Exception;
-
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
- * Apache Tika command line interface client
+ * Apache Tika command line interface client.
  *
  * @author  David Martínez <contacto@davidmartinez.net>
+ *
  * @link    http://wiki.apache.org/tika/TikaJAXRS
  * @link    https://tika.apache.org/1.11/formats.html
- * @package Vaites\ApacheTika
  */
 class CLIClient extends Client
 {
     /**
-     * Apache Tika app path
+     * Apache Tika app path.
      *
      * @var string
      */
@@ -25,45 +26,45 @@ class CLIClient extends Client
     /**
      * Is server running?
      *
-     * @param   string  $path
-     * @throws  Exception
+     * @param string $path
+     *
+     * @throws Exception
      */
     public function __construct($path = null)
     {
         $this->path = realpath($path);
 
-        if(!file_exists($this->path))
-        {
+        if (!file_exists($this->path)) {
             throw new Exception("Apache Tika JAR not found ({$this->path})");
         }
     }
 
     /**
-     * Configure and make a request and return its results
+     * Configure and make a request and return its results.
      *
-     * @param   string  $file
-     * @param   string  $type
-     * @return  string
-     * @throws  \Exception
+     * @param string $file
+     * @param string $type
+     *
+     * @return string
+     *
+     * @throws \Exception
      */
     protected function request($file, $type)
     {
         // check if is cached
-        if(isset($this->cache[sha1($file)][$type]))
-        {
+        if (isset($this->cache[sha1($file)][$type])) {
             return $this->cache[sha1($file)][$type];
         }
 
         // parameters for cURL request
         $arguments = [];
-        switch($type)
-        {
+        switch ($type) {
             case 'html':
                 $arguments[] = '--html';
                 break;
 
             case 'mime':
-                $arguments[] = "--detect";
+                $arguments[] = '--detect';
                 break;
 
             case 'lang':

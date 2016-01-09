@@ -1,91 +1,92 @@
-<?php namespace Vaites\ApacheTika\Metadata;
+<?php
+
+namespace Vaites\ApacheTika\Metadata;
 
 use DateTime;
 use DateTimeZone;
 
 /**
- * Metadata class for documents
+ * Metadata class for documents.
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @package Vaites\ApacheTika
  */
 class DocumentMetadata extends Metadata
 {
     /**
-     * Title (if not detected by Apache Tika, name without extension is used)
+     * Title (if not detected by Apache Tika, name without extension is used).
      *
      * @var string
      */
     public $title = null;
 
     /**
-     * Description
+     * Description.
      *
      * @var string
      */
     public $description = null;
 
     /**
-     * Keywords
+     * Keywords.
      *
      * @var string
      */
     public $keywords = [];
 
     /**
-     * Two-letter language code (ISO-639-1)
+     * Two-letter language code (ISO-639-1).
      *
      * @link https://en.wikipedia.org/wiki/ISO_639-1
+     *
      * @var string
      */
     public $language = null;
 
     /**
-     * Author
+     * Author.
      *
      * @var string
      */
     public $author = null;
 
     /**
-     * Software used to generate document
+     * Software used to generate document.
      *
      * @var string
      */
     public $generator = null;
 
     /**
-     * Number of pages
+     * Number of pages.
      *
      * @var int
      */
     public $pages = 0;
 
     /**
-     * Number of words
+     * Number of words.
      *
      * @var int
      */
     public $words = 0;
 
     /**
-     * Sets an attribute
+     * Sets an attribute.
      *
-     * @param   string  $key
-     * @param   mixed   $value
-     * @return  bool
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return bool
      */
     protected function setAttribute($key, $value)
     {
         $timezone = new DateTimeZone('UTC');
 
-        if(is_array($value))
-        {
+        if (is_array($value)) {
             $value = array_shift($value);
         }
 
-        switch(mb_strtolower($key))
-        {
+        switch (mb_strtolower($key)) {
             case 'title':
                 $this->title = $value;
                 break;
@@ -96,12 +97,9 @@ class DocumentMetadata extends Metadata
 
             case 'keyword':
             case 'keywords':
-                if(preg_match('/,/', $value))
-                {
+                if (preg_match('/,/', $value)) {
                     $value = preg_split('/\s*,\s*/', $value);
-                }
-                else
-                {
+                } else {
                     $value = preg_split('/\s+/', $value);
                 }
                 $this->keywords = array_unique($value);

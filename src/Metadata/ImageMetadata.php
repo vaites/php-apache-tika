@@ -1,49 +1,50 @@
-<?php namespace Vaites\ApacheTika\Metadata;
+<?php
+
+namespace Vaites\ApacheTika\Metadata;
 
 use DateTimeZone;
 
 /**
- * Metadata class for images
+ * Metadata class for images.
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @package Vaites\ApacheTika
  */
 class ImageMetadata extends Metadata
 {
     /**
-     * Image width in pixels
+     * Image width in pixels.
      *
      * @var int
      */
     public $width = 0;
 
     /**
-     * Image height in pixels
+     * Image height in pixels.
      *
      * @var int
      */
     public $height = 0;
 
     /**
-     * Lossy/Lossless
+     * Lossy/Lossless.
      *
      * @var bool
      */
     public $lossless = true;
 
     /**
-     * Sets an attribute
+     * Sets an attribute.
      *
-     * @param   string  $key
-     * @param   mixed   $value
-     * @return  bool
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return bool
      */
     protected function setAttribute($key, $value)
     {
         $timezone = new DateTimeZone('UTC');
 
-        switch(mb_strtolower($key))
-        {
+        switch (mb_strtolower($key)) {
             case 'compression lossless':
                 $this->lossless = ($value == 'true');
                 break;

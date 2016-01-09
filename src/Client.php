@@ -1,50 +1,52 @@
-<?php namespace Vaites\ApacheTika;
+<?php
+
+namespace Vaites\ApacheTika;
 
 use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
 
 /**
- * Apache Tika client interface
+ * Apache Tika client interface.
  *
  * @author  David Martínez <contacto@davidmartinez.net>
+ *
  * @link    http://wiki.apache.org/tika/TikaJAXRS
  * @link    https://tika.apache.org/1.10/formats.html
- * @package Vaites\ApacheTika
  */
 abstract class Client
 {
     /**
-     * Cached responses to avoid multiple request for the same file
+     * Cached responses to avoid multiple request for the same file.
      *
      * @var array
      */
     protected $cache = [];
 
     /**
-     * Get a class instance
+     * Get a class instance.
      *
-     * @param   string  $param  path or host
-     * @param   mixed   $extra  currently, only port for web client
-     * @return  \Vaites\ApacheTika\Client
+     * @param string $param path or host
+     * @param mixed  $extra currently, only port for web client
+     *
+     * @return \Vaites\ApacheTika\Client
      */
     public static function make($param = null, $extra = null)
     {
-        if(preg_match('/\.jar$/', func_get_arg(0)))
-        {
+        if (preg_match('/\.jar$/', func_get_arg(0))) {
             return new CLIClient($param);
-        }
-        else
-        {
+        } else {
             return new WebClient($param, $extra);
         }
     }
 
     /**
-     * Gets file metadata
+     * Gets file metadata.
      *
-     * @param   string  $file
-     * @return  \Vaites\ApacheTika\Metadata\Metadata
-     * @throws  \Exception
+     * @param string $file
+     *
+     * @return \Vaites\ApacheTika\Metadata\Metadata
+     *
+     * @throws \Exception
      */
     public function getMetadata($file)
     {
@@ -52,11 +54,13 @@ abstract class Client
     }
 
     /**
-     * Detect language
+     * Detect language.
      *
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @param string $file
+     *
+     * @return string
+     *
+     * @throws \Exception
      */
     public function getLanguage($file)
     {
@@ -64,11 +68,13 @@ abstract class Client
     }
 
     /**
-     * Detect MIME type
+     * Detect MIME type.
      *
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @param string $file
+     *
+     * @return string
+     *
+     * @throws \Exception
      */
     public function getMIME($file)
     {
@@ -76,11 +82,13 @@ abstract class Client
     }
 
     /**
-     * Extracts HTML
+     * Extracts HTML.
      *
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @param string $file
+     *
+     * @return string
+     *
+     * @throws \Exception
      */
     public function getHTML($file)
     {
@@ -88,11 +96,13 @@ abstract class Client
     }
 
     /**
-     * Extracts text
+     * Extracts text.
      *
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @param string $file
+     *
+     * @return string
+     *
+     * @throws \Exception
      */
     public function getText($file)
     {
