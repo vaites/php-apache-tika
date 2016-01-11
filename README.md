@@ -73,7 +73,7 @@ Or use to extract text from images:
 
     $text = $client->getText('/path/to/your/image');
     
-Intégrations
+Integrations
 -----
 
 - [Symfony2 Bundle](https://github.com/welcoMattic/ApacheTikaBundle)
