@@ -47,17 +47,19 @@ class WebClient extends Client
      */
     public function __construct($host = null, $port = null)
     {
-        if ($host) {
+        if($host)
+        {
             $this->host = $host;
         }
 
-        if ($port) {
+        if($port)
+        {
             $this->port = $port;
         }
 
         $this->exec([
             CURLOPT_TIMEOUT => 1,
-            CURLOPT_URL => "http://{$this->host}:{$this->port}/tika",
+            CURLOPT_URL     => "http://{$this->host}:{$this->port}/tika",
         ]);
     }
 
@@ -74,13 +76,15 @@ class WebClient extends Client
     protected function request($file, $type)
     {
         // check if is cached
-        if (isset($this->cache[sha1($file)][$type])) {
+        if(isset($this->cache[sha1($file)][$type]))
+        {
             return $this->cache[sha1($file)][$type];
         }
 
         // parameters for cURL request
         $headers = [];
-        switch ($type) {
+        switch($type)
+        {
             case 'html':
                 $resource = 'tika';
                 $headers[] = 'Accept: text/html';
@@ -118,18 +122,23 @@ class WebClient extends Client
         $options = [CURLOPT_PUT => true];
 
         // remote file options
-        if ($file && preg_match('/^http/', $file)) {
+        if($file && preg_match('/^http/', $file))
+        {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
         }
         // local file options
-        elseif ($file && file_exists($file) && is_readable($file)) {
+        elseif($file && file_exists($file) && is_readable($file))
+        {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
             $options[CURLOPT_INFILESIZE] = filesize($file);
-        } elseif ($type == 'version') {
+        }
+        elseif($type == 'version')
+        {
             $options = [CURLOPT_PUT => false];
         }
         // error
-        else {
+        else
+        {
             throw new Exception("File $file can't be opened");
         }
 
@@ -137,15 +146,17 @@ class WebClient extends Client
         $options[CURLOPT_HTTPHEADER] = $headers;
 
         // cURL init and options
-        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}"."/$resource";
+        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}" . "/$resource";
 
         // get the response and the HTTP status code
         list($response, $status) = $this->exec($options);
 
-        switch ($status) {
+        switch($status)
+        {
             // request completed successfully
             case 200:
-                if ($type == 'meta') {
+                if($type == 'meta')
+                {
                     $response = Metadata::make($response, $file);
                 }
                 break;
@@ -176,7 +187,8 @@ class WebClient extends Client
         }
 
         // cache certain responses
-        if (in_array($type, ['lang', 'meta'])) {
+        if(in_array($type, ['lang', 'meta']))
+        {
             $this->cache[sha1($file)][$type] = $response;
         }
 
@@ -197,21 +209,22 @@ class WebClient extends Client
         // cURL init and options
         $curl = curl_init();
         curl_setopt_array($curl,
-        [
-            CURLINFO_HEADER_OUT => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 5,
-        ] + $options);
+            [
+                CURLINFO_HEADER_OUT    => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT        => 5,
+            ] + $options);
 
         // get the response and the HTTP status code
         $response =
-        [
-            trim(curl_exec($curl)),
-            curl_getinfo($curl, CURLINFO_HTTP_CODE),
-        ];
+            [
+                trim(curl_exec($curl)),
+                curl_getinfo($curl, CURLINFO_HTTP_CODE),
+            ];
 
         // exception if cURL fails
-        if (curl_errno($curl)) {
+        if(curl_errno($curl))
+        {
             throw new Exception(curl_error($curl), curl_errno($curl));
         }
 

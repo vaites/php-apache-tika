@@ -32,9 +32,12 @@ abstract class Client
      */
     public static function make($param = null, $extra = null)
     {
-        if (preg_match('/\.jar$/', func_get_arg(0))) {
+        if(preg_match('/\.jar$/', func_get_arg(0)))
+        {
             return new CLIClient($param);
-        } else {
+        }
+        else
+        {
             return new WebClient($param, $extra);
         }
     }
