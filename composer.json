@@ -2,7 +2,7 @@
   "name": "vaites/php-apache-tika",
   "description": "Apache Tika bindings for PHP: extracts text from documents and images (with OCR), metadata and more...",
   "keywords": ["apache", "tika", "pdf", "doc", "docx", "ppt", "pptx", "odt", "office", "documents", "ocr"],
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "authors": [
     {
