@@ -38,6 +38,19 @@ class WebClient extends Client
     protected $port = 9998;
 
     /**
+     * cURL options
+     *
+     * @var array
+     */
+    protected $options =
+    [
+        CURLINFO_HEADER_OUT    => true,
+        CURLOPT_PUT            => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 5
+    ];
+
+    /**
      * Is server running?
      *
      * @param string $host
@@ -45,7 +58,7 @@ class WebClient extends Client
      *
      * @throws Exception
      */
-    public function __construct($host = null, $port = null)
+    public function __construct($host = null, $port = null, $options = [])
     {
         if($host)
         {
@@ -57,14 +70,83 @@ class WebClient extends Client
             $this->port = $port;
         }
 
-        $this->exec([
-            CURLOPT_TIMEOUT => 1,
-            CURLOPT_URL     => "http://{$this->host}:{$this->port}/tika",
-        ]);
+        foreach($options as $key => $value)
+        {
+            $this->options[$key] = $value;
+        }
     }
 
     /**
-     * Configure and make a request and return its results.
+     * Get the host
+     *
+     * @return null|string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Set the host
+     *
+     * @param   string $host
+     *
+     * @return null
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+    }
+
+    /**
+     * Get the port
+     *
+     * @return null|int
+     */
+    public function getPort()
+    {
+        return $this->port;
+    }
+
+    /**
+     * Set the port
+     *
+     * @param   int $port
+     *
+     * @return null
+     */
+    public function setPort($port)
+    {
+        $this->port = $port;
+    }
+
+    /**
+     * Get the options
+     *
+     * @return null|array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set the options
+     *
+     * @param   array $options
+     *
+     * @return null
+     */
+    public function setOptions($options)
+    {
+        foreach($options as $key => $value)
+        {
+            $this->options[$key] = $value;
+        }
+    }
+
+    /**
+     * Configure, make a request and return its results.
      *
      * @param string $file
      * @param string $type
@@ -118,8 +200,8 @@ class WebClient extends Client
                 throw new Exception("Unknown type $type");
         }
 
-        // cURL base options
-        $options = [CURLOPT_PUT => true];
+        // base options
+        $options = $this->options;
 
         // remote file options
         if($file && preg_match('/^http/', $file))
@@ -134,7 +216,7 @@ class WebClient extends Client
         }
         elseif($type == 'version')
         {
-            $options = [CURLOPT_PUT => false];
+            $options[CURLOPT_PUT] = false;
         }
         // error
         else
@@ -164,6 +246,11 @@ class WebClient extends Client
             // request completed sucessfully but result is empty
             case 204:
                 $response = null;
+                break;
+
+            //  method not allowed
+            case 405:
+                throw new Exception('Method not allowed');
                 break;
 
             //  unsupported media type
@@ -208,19 +295,14 @@ class WebClient extends Client
     {
         // cURL init and options
         $curl = curl_init();
-        curl_setopt_array($curl,
-            [
-                CURLINFO_HEADER_OUT    => true,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT        => 5,
-            ] + $options);
+        curl_setopt_array($curl, $options);
 
         // get the response and the HTTP status code
         $response =
-            [
-                trim(curl_exec($curl)),
-                curl_getinfo($curl, CURLINFO_HTTP_CODE),
-            ];
+        [
+            trim(curl_exec($curl)),
+            curl_getinfo($curl, CURLINFO_HTTP_CODE),
+        ];
 
         // exception if cURL fails
         if(curl_errno($curl))
