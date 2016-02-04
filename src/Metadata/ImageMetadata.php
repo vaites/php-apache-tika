@@ -44,7 +44,8 @@ class ImageMetadata extends Metadata
     {
         $timezone = new DateTimeZone('UTC');
 
-        switch (mb_strtolower($key)) {
+        switch(mb_strtolower($key))
+        {
             case 'compression lossless':
                 $this->lossless = ($value == 'true');
                 break;
@@ -57,13 +58,13 @@ class ImageMetadata extends Metadata
             case 'image height':
             case 'tiff:imageheigth':
             case 'tiff:imagelength':
-                $this->height = (int) $value;
+                $this->height = (int)$value;
                 break;
 
             case 'width':
             case 'image width':
             case 'tiff:imagewidth':
-                $this->width = (int) $value;
+                $this->width = (int)$value;
                 break;
 
             default:

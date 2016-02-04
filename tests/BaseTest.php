@@ -18,8 +18,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata test
      *
      * @dataProvider    fileProvider
-     * @param   string  $file
-     * @param   string  $class
+     *
+     * @param   string $file
+     * @param   string $class
      */
     public function testMetadata($file, $class = 'Metadata')
     {
@@ -30,8 +31,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
-     * @param   string  $class
+     *
+     * @param   string $file
+     * @param   string $class
      */
     public function testDocumentMetadata($file, $class = 'DocumentMetadata')
     {
@@ -42,7 +44,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata title test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentMetadataTitle($file)
     {
@@ -53,7 +56,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata author test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentMetadataAuthor($file)
     {
@@ -64,7 +68,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata dates test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentMetadataCreated($file)
     {
@@ -75,7 +80,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata dates test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentMetadataUpdated($file)
     {
@@ -86,7 +92,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata keywords test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentMetadataKeywords($file)
     {
@@ -97,7 +104,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Language test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentLanguage($file)
     {
@@ -108,7 +116,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * MIME test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentMIME($file)
     {
@@ -119,7 +128,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * HTML test
      *
      * @dataProvider    documentProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentHTML($file)
     {
@@ -130,7 +140,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Text test
      *
      * @dataProvider    fileProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testDocumentText($file)
     {
@@ -141,8 +152,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata test
      *
      * @dataProvider    imageProvider
-     * @param   string  $file
-     * @param   string  $class
+     *
+     * @param   string $file
+     * @param   string $class
      */
     public function testImageMetadata($file, $class = 'ImageMetadata')
     {
@@ -153,7 +165,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata width test
      *
      * @dataProvider    imageProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testImageMetadataWidth($file)
     {
@@ -166,7 +179,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * Metadata height test
      *
      * @dataProvider    imageProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testImageMetadataHeight($file)
     {
@@ -179,7 +193,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * OCR test
      *
      * @dataProvider    ocrProvider
-     * @param   string  $file
+     *
+     * @param   string $file
      */
     public function testImageOCR($file)
     {
@@ -241,7 +256,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * File provider using "samples" folder
      *
-     * @param   string  $sample
+     * @param   string $sample
+     *
      * @return  array
      */
     protected function samples($sample)

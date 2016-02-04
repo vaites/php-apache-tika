@@ -38,17 +38,17 @@ class WebClient extends Client
     protected $port = 9998;
 
     /**
-     * cURL options
+     * cURL options.
      *
      * @var array
      */
     protected $options =
-    [
-        CURLINFO_HEADER_OUT    => true,
-        CURLOPT_PUT            => true,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 5
-    ];
+        [
+            CURLINFO_HEADER_OUT    => true,
+            CURLOPT_PUT            => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 5,
+        ];
 
     /**
      * Is server running?
@@ -77,7 +77,7 @@ class WebClient extends Client
     }
 
     /**
-     * Get the host
+     * Get the host.
      *
      * @return null|string
      */
@@ -87,11 +87,9 @@ class WebClient extends Client
     }
 
     /**
-     * Set the host
+     * Set the host.
      *
-     * @param   string $host
-     *
-     * @return null
+     * @param string $host
      */
     public function setHost($host)
     {
@@ -99,7 +97,7 @@ class WebClient extends Client
     }
 
     /**
-     * Get the port
+     * Get the port.
      *
      * @return null|int
      */
@@ -109,11 +107,9 @@ class WebClient extends Client
     }
 
     /**
-     * Set the port
+     * Set the port.
      *
-     * @param   int $port
-     *
-     * @return null
+     * @param int $port
      */
     public function setPort($port)
     {
@@ -121,7 +117,7 @@ class WebClient extends Client
     }
 
     /**
-     * Get the options
+     * Get the options.
      *
      * @return null|array
      */
@@ -131,11 +127,9 @@ class WebClient extends Client
     }
 
     /**
-     * Set the options
+     * Set the options.
      *
-     * @param   array $options
-     *
-     * @return null
+     * @param array $options
      */
     public function setOptions($options)
     {
@@ -299,10 +293,10 @@ class WebClient extends Client
 
         // get the response and the HTTP status code
         $response =
-        [
-            trim(curl_exec($curl)),
-            curl_getinfo($curl, CURLINFO_HTTP_CODE),
-        ];
+            [
+                trim(curl_exec($curl)),
+                curl_getinfo($curl, CURLINFO_HTTP_CODE),
+            ];
 
         // exception if cURL fails
         if(curl_errno($curl))

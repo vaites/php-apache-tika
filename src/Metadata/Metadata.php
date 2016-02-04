@@ -52,17 +52,20 @@ abstract class Metadata
         $this->meta = $meta;
 
         // process each meta
-        foreach ($this->meta as $key => $value) {
+        foreach($this->meta as $key => $value)
+        {
             $this->setAttribute($key, $value);
         }
 
         // file name without extension if title is not detected
-        if (empty($this->title) && !is_null($file)) {
+        if(empty($this->title) && !is_null($file))
+        {
             $this->title = preg_replace('/\..+$/', '', basename($file));
         }
 
         // use creation date as last modified if not detected
-        if (empty($this->updated)) {
+        if(empty($this->updated))
+        {
             $this->updated = $this->created;
         }
     }
@@ -82,21 +85,28 @@ abstract class Metadata
         $meta = json_decode($response);
 
         // exceptions if metadata is not valid
-        if (json_last_error()) {
+        if(json_last_error())
+        {
             throw new Exception(json_last_error_msg());
-        } elseif (empty($meta)) {
+        }
+        elseif(empty($meta))
+        {
             throw new Exception('Empty response');
         }
 
         // get content type
-        if (is_array($meta->{'Content-Type'})) {
+        if(is_array($meta->{'Content-Type'}))
+        {
             $mime = current($meta->{'Content-Type'});
-        } else {
+        }
+        else
+        {
             $mime = $meta->{'Content-Type'};
         }
 
         // instance based on content type
-        switch (current(explode('/', $mime))) {
+        switch(current(explode('/', $mime)))
+        {
             case 'image':
                 $instance = new ImageMetadata($meta, $file);
                 break;

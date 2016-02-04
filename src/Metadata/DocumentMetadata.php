@@ -82,11 +82,13 @@ class DocumentMetadata extends Metadata
     {
         $timezone = new DateTimeZone('UTC');
 
-        if (is_array($value)) {
+        if(is_array($value))
+        {
             $value = array_shift($value);
         }
 
-        switch (mb_strtolower($key)) {
+        switch(mb_strtolower($key))
+        {
             case 'title':
                 $this->title = $value;
                 break;
@@ -97,9 +99,12 @@ class DocumentMetadata extends Metadata
 
             case 'keyword':
             case 'keywords':
-                if (preg_match('/,/', $value)) {
+                if(preg_match('/,/', $value))
+                {
                     $value = preg_split('/\s*,\s*/', $value);
-                } else {
+                }
+                else
+                {
                     $value = preg_split('/\s+/', $value);
                 }
                 $this->keywords = array_unique($value);
@@ -129,12 +134,12 @@ class DocumentMetadata extends Metadata
             case 'nbpage':
             case 'page-count':
             case 'xmptpg:npages':
-                $this->pages = (int) $value;
+                $this->pages = (int)$value;
                 break;
 
             case 'nbword':
             case 'word-count':
-                $this->words = (int) $value;
+                $this->words = (int)$value;
                 break;
 
             case 'creation-date':
