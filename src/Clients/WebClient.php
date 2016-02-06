@@ -43,12 +43,12 @@ class WebClient extends Client
      * @var array
      */
     protected $options =
-        [
-            CURLINFO_HEADER_OUT    => true,
-            CURLOPT_PUT            => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 5,
-        ];
+    [
+        CURLINFO_HEADER_OUT    => true,
+        CURLOPT_PUT            => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 5,
+    ];
 
     /**
      * Configure class and test if server is running

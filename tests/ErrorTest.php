@@ -11,23 +11,6 @@ use Vaites\ApacheTika\Client;
 class ErrorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test wrong server
-     */
-    public function testTikaConnection()
-    {
-        try
-        {
-            Client::make('localhost', 9999);
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Failed to connect to localhost', $exception->getMessage());
-        }
-    }
-
-    /**
      * Test wrong command line mode path
      */
     public function testTikaPath()
@@ -45,6 +28,23 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test wrong server
+     */
+    public function testTikaConnection()
+    {
+        try
+        {
+            Client::make('localhost', 9999);
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertEquals(7, $exception->getCode());
+        }
+    }
+
+    /**
      * Test nonexistent local file
      */
     public function testLocalFile()
@@ -58,7 +58,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('file.pdf can\'t be opened', $exception->getMessage());
+            $this->assertEquals(0, $exception->getCode());
         }
     }
 
@@ -76,7 +76,25 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('failed to open stream', $exception->getMessage());
+            $this->assertEquals(2, $exception->getCode());
+        }
+    }
+
+    /**
+     * Test wrong request options
+     */
+    public function testRequestOptions()
+    {
+        try
+        {
+            $client = Client::make('localhost', 9998, [CURLOPT_PROXY => 'localhost']);
+            $client->request('bad');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertEquals(7, $exception->getCode());
         }
     }
 
@@ -95,23 +113,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         catch(Exception $exception)
         {
             $this->assertContains('Unknown type bad', $exception->getMessage());
-        }
-    }
-    /**
-     * Test wrong request options
-     */
-    public function testRequestOptions()
-    {
-        try
-        {
-            $client = Client::make('localhost', 9998, [CURLOPT_PROXY => 'localhost']);
-            $client->request('bad');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Failed to connect to localhost', $exception->getMessage());
         }
     }
 }
