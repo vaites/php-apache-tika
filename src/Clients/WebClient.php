@@ -51,7 +51,7 @@ class WebClient extends Client
         ];
 
     /**
-     * Is server running?
+     * Configure class and test if server is running
      *
      * @param string $host
      * @param int    $port
@@ -74,6 +74,8 @@ class WebClient extends Client
         {
             $this->options[$key] = $value;
         }
+
+        $this->getVersion(); // exception if not running
     }
 
     /**
@@ -142,14 +144,14 @@ class WebClient extends Client
     /**
      * Configure, make a request and return its results.
      *
-     * @param string $file
      * @param string $type
+     * @param string $file
      *
      * @return string
      *
      * @throws \Exception
      */
-    protected function request($file, $type)
+    public function request($type, $file = null)
     {
         // check if is cached
         if(isset($this->cache[sha1($file)][$type]))
@@ -293,10 +295,10 @@ class WebClient extends Client
 
         // get the response and the HTTP status code
         $response =
-            [
-                trim(curl_exec($curl)),
-                curl_getinfo($curl, CURLINFO_HTTP_CODE),
-            ];
+        [
+            trim(curl_exec($curl)),
+            curl_getinfo($curl, CURLINFO_HTTP_CODE),
+        ];
 
         // exception if cURL fails
         if(curl_errno($curl))

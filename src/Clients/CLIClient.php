@@ -24,7 +24,7 @@ class CLIClient extends Client
     protected $path = null;
 
     /**
-     * Is server running?
+     * Configure client and test if file exists
      *
      * @param string $path
      *
@@ -34,7 +34,8 @@ class CLIClient extends Client
     {
         $this->path = realpath($path);
 
-        if (!file_exists($this->path)) {
+        if(!file_exists($this->path))
+        {
             throw new Exception("Apache Tika JAR not found ({$this->path})");
         }
     }
@@ -42,23 +43,25 @@ class CLIClient extends Client
     /**
      * Configure and make a request and return its results.
      *
-     * @param string $file
      * @param string $type
+     * @param string $file
      *
      * @return string
      *
      * @throws \Exception
      */
-    protected function request($file, $type)
+    public function request($type, $file = null)
     {
         // check if is cached
-        if (isset($this->cache[sha1($file)][$type])) {
+        if(isset($this->cache[sha1($file)][$type]))
+        {
             return $this->cache[sha1($file)][$type];
         }
 
-        // parameters for cURL request
+        // parameters for command
         $arguments = [];
-        switch ($type) {
+        switch($type)
+        {
             case 'html':
                 $arguments[] = '--html';
                 break;
@@ -88,31 +91,35 @@ class CLIClient extends Client
         }
 
         // invalid file
-        if ($file && !preg_match('/^http/', $file) && !file_exists($file)) {
+        if($file && !preg_match('/^http/', $file) && !file_exists($file))
+        {
             throw new Exception("File $file can't be opened");
         }
 
         // add last argument
-        if ($file) {
+        if($file)
+        {
             $arguments[] = "'$file'";
         }
 
         // build command
-        $command = "java -jar '{$this->path}' ".implode(' ', $arguments);
+        $command = "java -jar '{$this->path}' " . implode(' ', $arguments);
 
         // run command and process output
         $response = trim(shell_exec($command));
 
         // metadata response
-        if ($type == 'meta') {
+        if($type == 'meta')
+        {
             // fix for invalid? json returned only with images
-            $response = str_replace(basename($file).'"}{', '", ', $response);
+            $response = str_replace(basename($file) . '"}{', '", ', $response);
 
             $response = Metadata::make($response, $file);
         }
 
         // cache certain responses
-        if (in_array($type, ['lang', 'meta'])) {
+        if(in_array($type, ['lang', 'meta']))
+        {
             $this->cache[sha1($file)][$type] = $response;
         }
 

@@ -54,7 +54,7 @@ abstract class Client
      */
     public function getMetadata($file)
     {
-        return $this->request($file, 'meta');
+        return $this->request('meta', $file);
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class Client
      */
     public function getLanguage($file)
     {
-        return $this->request($file, 'lang');
+        return $this->request('lang', $file);
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class Client
      */
     public function getMIME($file)
     {
-        return $this->request($file, 'mime');
+        return $this->request('mime', $file);
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class Client
      */
     public function getHTML($file)
     {
-        return $this->request($file, 'html');
+        return $this->request('html', $file);
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class Client
      */
     public function getText($file)
     {
-        return $this->request($file, 'text');
+        return $this->request('text', $file);
     }
 
     /**
@@ -120,18 +120,18 @@ abstract class Client
      */
     public function getVersion()
     {
-        return $this->request(null, 'version');
+        return $this->request('version');
     }
 
     /**
      * Configure and make a request and return its results.
      *
-     * @param string $file
      * @param string $type
+     * @param string $file
      *
      * @return string
      *
      * @throws \Exception
      */
-    abstract protected function request($file, $type);
+    abstract public function request($type, $file);
 }
