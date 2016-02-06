@@ -229,44 +229,20 @@ class WebClient extends Client
         // get the response and the HTTP status code
         list($response, $status) = $this->exec($options);
 
-        switch($status)
+        // request completed successfully
+        if($status == 200 && $type == 'meta')
         {
-            // request completed successfully
-            case 200:
-                if($type == 'meta')
-                {
-                    $response = Metadata::make($response, $file);
-                }
-                break;
-
-            // request completed sucessfully but result is empty
-            case 204:
-                $response = null;
-                break;
-
-            //  method not allowed
-            case 405:
-                throw new Exception('Method not allowed');
-                break;
-
-            //  unsupported media type
-            case 415:
-                throw new Exception('Unsupported media type');
-                break;
-
-            //  unprocessable entity
-            case 422:
-                throw new Exception('Unprocessable document');
-                break;
-
-            // server error
-            case 500:
-                throw new Exception('Error while processing document');
-                break;
-
-            // unexpected
-            default:
-                throw new Exception("Unexpected response for /$resource ($status)");
+            $response = Metadata::make($response, $file);
+        }
+        // request completed successfully but result is empty
+        elseif($status == 200 || $status == 204)
+        {
+            $response = null;
+        }
+        // other status code is an error
+        else
+        {
+            $this->error($status, $resource);
         }
 
         // cache certain responses
@@ -307,5 +283,45 @@ class WebClient extends Client
         }
 
         return $response;
+    }
+
+    /**
+     * Throws an exception for an error status code
+     *
+     * @codeCoverageIgnore
+     *
+     * @param int       $status
+     * @param string    $resource
+     *
+     * @throws Exception
+     */
+    protected function error($status, $resource)
+    {
+        switch($status)
+        {
+            //  method not allowed
+            case 405:
+                throw new Exception('Method not allowed');
+                break;
+
+            //  unsupported media type
+            case 415:
+                throw new Exception('Unsupported media type');
+                break;
+
+            //  unprocessable entity
+            case 422:
+                throw new Exception('Unprocessable document');
+                break;
+
+            // server error
+            case 500:
+                throw new Exception('Error while processing document');
+                break;
+
+            // unexpected
+            default:
+                throw new Exception("Unexpected response for /$resource ($status)");
+        }
     }
 }
