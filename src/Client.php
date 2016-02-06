@@ -29,7 +29,7 @@ abstract class Client
      * @param int    $port    only port for web client
      * @param array  $options options for cURL request
      *
-     * @return \Vaites\ApacheTika\Client
+     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      */
     public static function make($param = null, $port = null, $options = [])
     {
