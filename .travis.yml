@@ -18,6 +18,9 @@ cache:
   directories:
   - $HOME/tika
 
+before_install:
+  - pip install codecov
+
 install:
   - composer install
 
@@ -26,6 +29,9 @@ before_script:
   - \[ -f $HOME/tika/tika-server.jar \] || wget -O $HOME/tika/tika-server.jar -nc http://mirrors.ibiblio.org/apache/tika/tika-server-1.11.jar
   - java -jar $HOME/tika/tika-server.jar 2> /dev/null &
   - sleep 10
+
+after_success:
+  - codecov
 
 notifications:
   email:

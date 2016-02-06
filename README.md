@@ -1,3 +1,7 @@
+[![Current release](https://img.shields.io/github/release/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/releases/latest)
+[![Build status](https://travis-ci.org/vaites/php-apache-tika.svg?branch=master)](https://travis-ci.org/vaites/php-apache-tika)
+[![Code coverage](https://img.shields.io/codecov/c/github/vaites/php-apache-tika.svg)](https://codecov.io/github/vaites/php-apache-tika)
+
 PHP Apache Tika
 ===============
 
