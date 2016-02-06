@@ -105,8 +105,31 @@ class CLIClient extends Client
         // build command
         $command = "java -jar '{$this->path}' " . implode(' ', $arguments);
 
-        // run command and process output
-        $response = trim(shell_exec($command));
+        // run command
+        $exit = -1;
+        $response = null;
+        $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', '/tmp/tika-error.log', 'a']];
+        $process = proc_open($command, $descriptors, $pipes);
+
+        // get output if command runs ok
+        if(is_resource($process)) 
+        {
+            fclose($pipes[0]);
+            $response = trim(stream_get_contents($pipes[1]));
+            fclose($pipes[1]);
+            $exit = proc_close($process);
+        }
+        // exception if command fails
+        else
+        {
+            throw new Exception("Error running command $command");
+        }
+
+        // exception if exit value is not zero
+        if($exit > 0)
+        {
+            throw new Exception("Unexpected exit value ($exit) for command $command");
+        }
 
         // metadata response
         if($type == 'meta')
