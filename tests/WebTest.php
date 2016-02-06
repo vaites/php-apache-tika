@@ -32,13 +32,13 @@ class WebTest extends BaseTest
      */
     public function testSettersGetters()
     {
-        self::$client = Client::make('10.0.0.37', 9999);
-        self::$client->setHost('localhost');
-        self::$client->setPort(9998);
-        self::$client->setOptions([CURLOPT_TIMEOUT => 10]);
+        $client = Client::make('localhost', 9998);
+        $client->setHost('127.0.0.1');
+        $client->setPort(9999);
+        $client->setOptions([CURLOPT_TIMEOUT => 10]);
 
-        $this->assertEquals('localhost', self::$client->getHost());
-        $this->assertEquals(9998, self::$client->getPort());
-        $this->assertEquals(10, self::$client->getOptions()[CURLOPT_TIMEOUT]);
+        $this->assertEquals('127.0.0.1', $client->getHost());
+        $this->assertEquals(9999, $client->getPort());
+        $this->assertEquals(10, $client->getOptions()[CURLOPT_TIMEOUT]);
     }
 }
