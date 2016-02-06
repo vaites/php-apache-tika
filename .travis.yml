@@ -1,4 +1,4 @@
-sudo: true
+sudo: required
 language: php
 
 php:
@@ -8,19 +8,13 @@ php:
   - 7.0
   - hhvm
 
-sudo: false
-
-addons:
-  apt:
-    packages:
-    - tesseract-ocr
-
 cache:
   directories:
   - $HOME/tika
 
 before_install:
-  - pip install codecov
+  - sudo pip install codecov
+  - sudo apt-get install tesseract-ocr
 
 install:
   - composer install
