@@ -168,14 +168,14 @@ class WebClient extends Client
                 $headers[] = 'Accept: text/html';
                 break;
 
+            case 'lang':
+                $resource = 'language/stream';
+                break;
+
             case 'mime':
                 $name = basename($file);
                 $resource = 'detect/stream';
                 $headers[] = "Content-Disposition: attachment, filename=$name";
-                break;
-
-            case 'lang':
-                $resource = 'language/stream';
                 break;
 
             case 'meta':
@@ -304,27 +304,27 @@ class WebClient extends Client
         {
             //  method not allowed
             case 405:
-                throw new Exception('Method not allowed');
+                throw new Exception('Method not allowed', 405);
                 break;
 
             //  unsupported media type
             case 415:
-                throw new Exception('Unsupported media type');
+                throw new Exception('Unsupported media type', 415);
                 break;
 
             //  unprocessable entity
             case 422:
-                throw new Exception('Unprocessable document');
+                throw new Exception('Unprocessable document', 422);
                 break;
 
             // server error
             case 500:
-                throw new Exception('Error while processing document');
+                throw new Exception('Error while processing document', 500);
                 break;
 
             // unexpected
             default:
-                throw new Exception("Unexpected response for /$resource ($status)");
+                throw new Exception("Unexpected response for /$resource ($status)", 501);
         }
     }
 }

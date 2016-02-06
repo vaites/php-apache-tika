@@ -63,6 +63,24 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test unsupported media type
+     */
+    public function testUnsupportedMedia()
+    {
+        try
+        {
+            $client = Client::make('localhost', 9998);
+            $client->getText(dirname(__DIR__) . '/samples/sample4.doc');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertEquals(415, $exception->getCode());
+        }
+    }
+
+    /**
      * Test nonexistent local file for all clients
      *
      * @dataProvider    clientProvider

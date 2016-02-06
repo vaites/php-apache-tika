@@ -66,12 +66,12 @@ class CLIClient extends Client
                 $arguments[] = '--html';
                 break;
 
-            case 'mime':
-                $arguments[] = '--detect';
-                break;
-
             case 'lang':
                 $arguments[] = '--language';
+                break;
+
+            case 'mime':
+                $arguments[] = '--detect';
                 break;
 
             case 'meta':
