@@ -230,12 +230,15 @@ class WebClient extends Client
         list($response, $status) = $this->exec($options);
 
         // request completed successfully
-        if($status == 200 && $type == 'meta')
+        if($status == 200)
         {
-            $response = Metadata::make($response, $file);
+            if($type == 'meta')
+            {
+                $response = Metadata::make($response, $file);
+            }
         }
         // request completed successfully but result is empty
-        elseif($status == 200 || $status == 204)
+        elseif($status == 204)
         {
             $response = null;
         }
