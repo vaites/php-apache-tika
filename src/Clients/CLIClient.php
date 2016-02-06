@@ -36,7 +36,7 @@ class CLIClient extends Client
 
         if(!file_exists($this->path))
         {
-            throw new Exception("Apache Tika JAR not found ({$this->path})");
+            throw new Exception("Apache Tika JAR not found ($path)");
         }
     }
 
@@ -90,10 +90,15 @@ class CLIClient extends Client
                 throw new Exception("Unknown type $type");
         }
 
-        // invalid file
+        // invalid local file
         if($file && !preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
+        }
+        // invalid remote file
+        elseif($file && !file_get_contents($file, 0, null, 0, 1))
+        {
+            throw new Exception("File $file can't be opened", 2);
         }
 
         // add last argument

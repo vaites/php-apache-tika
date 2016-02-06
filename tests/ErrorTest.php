@@ -13,7 +13,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     /**
      * Test wrong command line mode path
      */
-    public function testTikaPath()
+    public function testAppPath()
     {
         try
         {
@@ -30,7 +30,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     /**
      * Test wrong server
      */
-    public function testTikaConnection()
+    public function testServerConnection()
     {
         try
         {
@@ -41,42 +41,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         catch(Exception $exception)
         {
             $this->assertEquals(7, $exception->getCode());
-        }
-    }
-
-    /**
-     * Test nonexistent local file
-     */
-    public function testLocalFile()
-    {
-        try
-        {
-            $client = Client::make('localhost', 9998);
-            $client->getText('/nonexistent/path/to/file.pdf');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertEquals(0, $exception->getCode());
-        }
-    }
-
-    /**
-     * Test nonexistent remote file
-     */
-    public function testRemoteFile()
-    {
-        try
-        {
-            $client = Client::make('localhost', 9998);
-            $client->getText('http://localhost/nonexistent/path/to/file.pdf');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertEquals(2, $exception->getCode());
         }
     }
 
@@ -99,13 +63,58 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test wrong request type
+     * Test nonexistent local file for all clients
+     *
+     * @dataProvider    clientProvider
+     * @param   array   $parameters
      */
-    public function testRequestType()
+    public function testLocalFile($parameters)
     {
         try
         {
-            $client = Client::make('localhost', 9998);
+            $client = call_user_func_array(['Vaites\ApacheTika\Client', 'make'], $parameters);
+            $client->getText('/nonexistent/path/to/file.pdf');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertEquals(0, $exception->getCode());
+        }
+    }
+
+    /**
+     * Test nonexistent remote file for all clients
+     *
+     * @dataProvider    clientProvider
+     * @param   array   $parameters
+     */
+    public function testRemoteFile($parameters)
+    {
+        try
+        {
+            $client = call_user_func_array(['Vaites\ApacheTika\Client', 'make'], $parameters);
+            $client->getText('http://localhost/nonexistent/path/to/file.pdf');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertEquals(2, $exception->getCode());
+        }
+    }
+
+    /**
+     * Test wrong request type for all clients
+     *
+     * @dataProvider    clientProvider
+     * @param   array   $parameters
+     */
+    public function testRequestType($parameters)
+    {
+        try
+        {
+            $client = call_user_func_array(['Vaites\ApacheTika\Client', 'make'], $parameters);
             $client->request('bad');
 
             $this->fail();
@@ -114,5 +123,19 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         {
             $this->assertContains('Unknown type bad', $exception->getMessage());
         }
+    }
+
+    /**
+     * Client parameters provider
+     *
+     * @return array
+     */
+    public function clientProvider()
+    {
+        return
+        [
+            [[getenv('APACHE_TIKA_JARS') . '/tika-app-1.11.jar']],
+            [['localhost', 9998]]
+        ];
     }
 }

@@ -12,9 +12,6 @@ class CLITest extends BaseTest
      */
     public static function setUpBeforeClass()
     {
-        $travis = '/home/travis/tika/tika-app.jar';
-        $develop = dirname(__DIR__) . '/bin/tika-app-1.11.jar';
-
-        self::$client = Client::make(file_exists($travis) ? $travis : $develop);
+        self::$client = Client::make(getenv('APACHE_TIKA_JARS') . '/tika-app-1.11.jar');
     }
 }
