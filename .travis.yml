@@ -14,6 +14,7 @@ cache:
 
 before_install:
   - sudo pip install codecov
+  - sudo apt-get update
   - sudo apt-get install tesseract-ocr
 
 install:
