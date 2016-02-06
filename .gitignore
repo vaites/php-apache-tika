@@ -1,4 +1,5 @@
 .idea
 bin
 composer.lock
+reports
 vendor
