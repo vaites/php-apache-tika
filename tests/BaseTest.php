@@ -49,7 +49,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testDocumentMetadataTitle($file)
     {
-        $this->assertEquals(self::$client->getMetadata($file)->title, 'Lorem ipsum dolor sit amet');
+        $this->assertEquals('Lorem ipsum dolor sit amet', self::$client->getMetadata($file)->title);
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testDocumentMetadataAuthor($file)
     {
-        $this->assertEquals(self::$client->getMetadata($file)->author, 'David Martínez');
+        $this->assertEquals('David Martínez', self::$client->getMetadata($file)->author);
     }
 
     /**
