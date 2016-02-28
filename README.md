@@ -55,7 +55,7 @@ Usage
 
 Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-security/2015/08/13/5):
 
-    java -jar tika-server-1.11.jar
+    java -jar tika-server-1.12.jar
     
 Instantiate the class:
 

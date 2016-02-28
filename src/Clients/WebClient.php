@@ -12,7 +12,7 @@ use Vaites\ApacheTika\Metadata\Metadata;
  * @author  David Martínez <contacto@davidmartinez.net>
  *
  * @link    http://wiki.apache.org/tika/TikaJAXRS
- * @link    https://tika.apache.org/1.11/formats.html
+ * @link    https://tika.apache.org/1.12/formats.html
  */
 class WebClient extends Client
 {

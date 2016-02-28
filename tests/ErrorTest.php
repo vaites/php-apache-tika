@@ -152,7 +152,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         return
         [
-            [[getenv('APACHE_TIKA_JARS') . '/tika-app-1.11.jar']],
+            [[getenv('APACHE_TIKA_JARS') . '/tika-app-1.12.jar']],
             [['localhost', 9998]]
         ];
     }

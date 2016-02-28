@@ -18,11 +18,11 @@ before_install:
 install:
 - composer install
 before_script:
-- "\\[ -f $HOME/tika/tika-app-1.11.jar \\] || wget -O $HOME/tika/tika-app-1.11.jar
-  http://mirrors.ibiblio.org/apache/tika/tika-app-1.11.jar"
-- "\\[ -f $HOME/tika/tika-server-1.11.jar \\] || wget -O $HOME/tika/tika-server-1.11.jar
-  -nc http://mirrors.ibiblio.org/apache/tika/tika-server-1.11.jar"
-- java -jar $HOME/tika/tika-server-1.11.jar 2> /dev/null &
+- "\\[ -f $HOME/tika/tika-app-1.12.jar \\] || wget -O $HOME/tika/tika-app-1.12.jar
+  http://mirrors.ibiblio.org/apache/tika/tika-app-1.12.jar"
+- "\\[ -f $HOME/tika/tika-server-1.12.jar \\] || wget -O $HOME/tika/tika-server-1.12.jar
+  -nc http://mirrors.ibiblio.org/apache/tika/tika-server-1.12.jar"
+- java -jar $HOME/tika/tika-server-1.12.jar 2> /dev/null &
 - sleep 10
 after_success:
 - codecov
