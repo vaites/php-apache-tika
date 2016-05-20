@@ -12,6 +12,9 @@ class CLITest extends BaseTest
      */
     public static function setUpBeforeClass()
     {
-        self::$client = Client::make(getenv('APACHE_TIKA_JARS') . '/tika-app-1.12.jar');
+        $jars = getenv('APACHE_TIKA_JARS');
+        $version = getenv('APACHE_TIKA_VERSION');
+
+        self::$client = Client::make("$jars/tika-app-$version.jar");
     }
 }

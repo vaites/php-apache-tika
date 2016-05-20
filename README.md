@@ -24,6 +24,8 @@ Features
 * Standarized metadata for documents
 * Support for local and remote resources
 * No heavyweight library dependencies
+* Compatible with Apache Tika 1.7 or greater
+    * Tested up to 1.13
 
 Requirements
 ------------
@@ -55,7 +57,7 @@ Usage
 
 Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-security/2015/08/13/5):
 
-    java -jar tika-server-1.12.jar
+    java -jar tika-server-1.13.jar
     
 Instantiate the class:
 

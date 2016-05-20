@@ -210,7 +210,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         $version = self::$client->getVersion();
 
-        $this->assertEquals('Apache Tika 1.12', $version);
+        $this->assertEquals('Apache Tika ' . getenv('APACHE_TIKA_VERSION'), $version);
     }
 
     /**

@@ -1,6 +1,7 @@
 <phpunit bootstrap="vendor/autoload.php" colors="true">
     <php>
         <env name="APACHE_TIKA_JARS" value="bin"/>
+        <env name="APACHE_TIKA_VERSION" value="1.13"/>
     </php>
     <testsuites>
         <testsuite name="php-apache-tika">
