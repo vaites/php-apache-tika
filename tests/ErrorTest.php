@@ -17,13 +17,53 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            Client::make('/nonexistent/path/to/apache-tika.jar');
-
-            $this->fail();
+            $client = Client::make('/nonexistent/path/to/apache-tika.jar');
+            $client->getVersion();
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Apache Tika JAR not found', $exception->getMessage());
+            $this->assertContains('Unexpected exit value', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test unexpected exit value for command line mode
+     */
+    public function testAppExitValue()
+    {
+        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
+
+        try
+        {
+            $client = Client::make($path);
+
+            rename($path, $path . '.bak');
+
+            $client->getVersion();
+        }
+        catch(Exception $exception)
+        {
+            rename($path . '.bak', $path);
+
+            $this->assertContains('Unexpected exit value', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test invalid Java binary path for command line mode
+     */
+    public function testAppJavaBinary()
+    {
+        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
+
+        try
+        {
+            $client = Client::make($path, '/nonexistent/path/to/java');
+            $client->getVersion();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Unexpected exit value', $exception->getMessage());
         }
     }
 

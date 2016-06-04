@@ -210,6 +210,7 @@ class WebClient extends Client
             $options[CURLOPT_INFILE] = fopen($file, 'r');
             $options[CURLOPT_INFILESIZE] = filesize($file);
         }
+        // other options for specific requests
         elseif($type == 'version')
         {
             $options[CURLOPT_PUT] = false;

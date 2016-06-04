@@ -24,19 +24,30 @@ class CLIClient extends Client
     protected $path = null;
 
     /**
-     * Configure client and test if file exists
+     * Java binary path
+     *
+     * @var string
+     */
+    protected $java = null;
+
+    /**
+     * Configure client
      *
      * @param string $path
+     * @param string $java
      *
      * @throws Exception
      */
-    public function __construct($path = null)
+    public function __construct($path = null, $java = null)
     {
-        $this->path = realpath($path);
-
-        if(!file_exists($this->path))
+        if($path)
         {
-            throw new Exception("Apache Tika JAR not found ($path)");
+            $this->path = $path;
+        }
+
+        if($java)
+        {
+            $this->java = $java;
         }
     }
 
@@ -96,7 +107,7 @@ class CLIClient extends Client
             throw new Exception("File $file can't be opened");
         }
         // invalid remote file
-        elseif($file && !file_get_contents($file, 0, null, 0, 1))
+        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', @get_headers($file)[0]))
         {
             throw new Exception("File $file can't be opened", 2);
         }
@@ -108,7 +119,7 @@ class CLIClient extends Client
         }
 
         // build command
-        $command = "java -jar '{$this->path}' " . implode(' ', $arguments);
+        $command = ($this->java ?: 'java') . " -jar '{$this->path}' " . implode(' ', $arguments);
 
         // run command
         $exit = -1;
