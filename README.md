@@ -1,6 +1,8 @@
 [![Current release](https://img.shields.io/github/release/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/releases/latest)
+[![Package at Packagist](https://img.shields.io/packagist/v/vaites/php-apache-tika.svg)](https://packagist.org/packages/vaites/php-apache-tika)
 [![Build status](https://travis-ci.org/vaites/php-apache-tika.svg?branch=master)](https://travis-ci.org/vaites/php-apache-tika)
 [![Code coverage](https://img.shields.io/codecov/c/github/vaites/php-apache-tika.svg)](https://codecov.io/github/vaites/php-apache-tika)
+[![License](https://img.shields.io/github/license/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/blob/master/LICENSE)
 
 PHP Apache Tika
 ===============
@@ -8,7 +10,7 @@ PHP Apache Tika
 This tool provides [Apache Tika](https://tika.apache.org) bindings for PHP, allowing to extract text and metadata 
 from documents, images and other formats. 
 
-Two modes are supported:
+The following modes are supported:
 * **App mode**: run app JAR via command line interface
 * **Server mode**: make HTTP requests to [JSR 311 network server](http://wiki.apache.org/tika/TikaJAXRS)
 
@@ -41,7 +43,7 @@ Requirements
 Installation
 ------------
 
-Install using composer:
+Install using Composer:
 
     composer require vaites/php-apache-tika
 
