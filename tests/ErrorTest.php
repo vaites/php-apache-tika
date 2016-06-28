@@ -31,7 +31,8 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppExitValue()
     {
-        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
+        $version = current(Client::getSupportedVersions());
+        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . $version . '.jar';
 
         try
         {
@@ -54,7 +55,8 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppJavaBinary()
     {
-        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
+        $version = current(Client::getSupportedVersions());
+        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . $version . '.jar';
 
         try
         {
@@ -74,7 +76,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            Client::make('localhost', 9999);
+            Client::make('localhost', 9997);
 
             $this->fail();
         }
@@ -123,7 +125,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     /**
      * Test nonexistent local file for all clients
      *
-     * @dataProvider    clientProvider
+     * @dataProvider    parameterProvider
      * @param   array   $parameters
      */
     public function testLocalFile($parameters)
@@ -144,7 +146,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     /**
      * Test nonexistent remote file for all clients
      *
-     * @dataProvider    clientProvider
+     * @dataProvider    parameterProvider
      * @param   array   $parameters
      */
     public function testRemoteFile($parameters)
@@ -165,7 +167,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     /**
      * Test wrong request type for all clients
      *
-     * @dataProvider    clientProvider
+     * @dataProvider    parameterProvider
      * @param   array   $parameters
      */
     public function testRequestType($parameters)
@@ -188,12 +190,17 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function clientProvider()
+    public function parameterProvider()
     {
-        return
-        [
-            [[getenv('APACHE_TIKA_JARS') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar']],
-            [['localhost', 9998]]
-        ];
+        $parameters = [];
+        $port = 9998;
+
+        foreach(Client::getSupportedVersions() as $version)
+        {
+            $parameters[] = [[getenv('APACHE_TIKA_JARS') . '/tika-app-' . $version . '.jar']];
+            $parameters[] = [['localhost', $port++]];
+        }
+
+        return $parameters;
     }
 }

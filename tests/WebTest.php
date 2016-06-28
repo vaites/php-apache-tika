@@ -8,37 +8,47 @@ use Vaites\ApacheTika\Client;
 class WebTest extends BaseTest
 {
     /**
-     * Create shared instance of client
+     * Create shared instances of clients
      */
     public static function setUpBeforeClass()
     {
-        self::$client = Client::make('localhost');
+        foreach(Client::getSupportedVersions() as $index=>$version)
+        {
+            self::$clients[$version] = Client::make('localhost', 9998 + $index);
+        }
     }
 
     /**
      * cURL options test
+     *
+     * @dataProvider    versionProvider
      */
-    public function testCurlOptions()
+    public function testCurlOptions($version)
     {
-        self::$client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 5]);
+        static $port = 9998;
 
-        $options = self::$client->getOptions();
+        $client = Client::make('localhost', $port++, [CURLOPT_TIMEOUT => 5]);
+        $options = $client->getOptions();
 
         $this->assertEquals(5, $options[CURLOPT_TIMEOUT]);
     }
 
     /**
      * Setters and getters test
+     *
+     * @dataProvider    versionProvider
      */
-    public function testSettersGetters()
+    public function testSettersGetters($version)
     {
-        $client = Client::make('localhost', 9998);
+        static $port = 9998;
+
+        $client = Client::make('localhost', $port++);
         $client->setHost('127.0.0.1');
-        $client->setPort(9999);
+        $client->setPort(9997);
         $client->setOptions([CURLOPT_TIMEOUT => 10]);
 
         $this->assertEquals('127.0.0.1', $client->getHost());
-        $this->assertEquals(9999, $client->getPort());
+        $this->assertEquals(9997, $client->getPort());
         $this->assertEquals(10, $client->getOptions()[CURLOPT_TIMEOUT]);
     }
 }

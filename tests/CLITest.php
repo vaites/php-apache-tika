@@ -8,13 +8,15 @@ use Vaites\ApacheTika\Client;
 class CLITest extends BaseTest
 {
     /**
-     * Create shared instance of client
+     * Create shared instances of clients
      */
     public static function setUpBeforeClass()
     {
         $jars = getenv('APACHE_TIKA_JARS');
-        $version = getenv('APACHE_TIKA_VERSION');
 
-        self::$client = Client::make("$jars/tika-app-$version.jar");
+        foreach(Client::getSupportedVersions() as $version)
+        {
+            self::$clients[$version] = Client::make("$jars/tika-app-$version.jar");
+        }
     }
 }
