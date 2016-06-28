@@ -38,6 +38,13 @@ class WebClient extends Client
     protected $port = 9998;
 
     /**
+     * Number of retries on server error
+     *
+     * @var int
+     */
+    protected $retries = 3;
+
+    /**
      * cURL options.
      *
      * @var array
@@ -119,6 +126,26 @@ class WebClient extends Client
     }
 
     /**
+     * Get the number of retries.
+     *
+     * @return int
+     */
+    public function getRetries()
+    {
+        return $this->retries;
+    }
+
+    /**
+     * Set the number of retries.
+     *
+     * @param int $retries
+     */
+    public function setRetries($retries)
+    {
+        $this->retries = $retries;
+    }
+
+    /**
      * Get the options.
      *
      * @return null|array
@@ -153,10 +180,16 @@ class WebClient extends Client
      */
     public function request($type, $file = null)
     {
+        static $retries = [];
+
         // check if is cached
         if(isset($this->cache[sha1($file)][$type]))
         {
             return $this->cache[sha1($file)][$type];
+        }
+        elseif(!isset($retries[sha1($file)]))
+        {
+            $retries[sha1($file)] = $this->retries;
         }
 
         // parameters for cURL request
@@ -242,6 +275,13 @@ class WebClient extends Client
         elseif($status == 204)
         {
             $response = null;
+        }
+        // retry on request failed with error 500
+        elseif($status == 500 && $retries[sha1($file)]--)
+        {
+            usleep(100000);
+
+            $response = $this->request($type, $file);
         }
         // other status code is an error
         else
