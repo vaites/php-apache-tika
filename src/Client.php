@@ -16,6 +16,13 @@ use Vaites\ApacheTika\Clients\WebClient;
 abstract class Client
 {
     /**
+     * List of supported Apache Tika versions
+     *
+     * @var array
+     */
+    protected static $supportedVersions = ['1.7', '1.8', '1.9', '1.10', '1.11', '1.12', '1.13'];
+
+    /**
      * Cached responses to avoid multiple request for the same file.
      *
      * @var array
@@ -121,6 +128,16 @@ abstract class Client
     public function getVersion()
     {
         return $this->request('version');
+    }
+
+    /**
+     * Return the list of Apache Tika supported versions
+     *
+     * @return array
+     */
+    public static function getSupportedVersions()
+    {
+        return self::$supportedVersions;
     }
 
     /**
