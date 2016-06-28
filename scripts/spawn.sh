@@ -7,8 +7,14 @@ declare -a SUPPORTED_VERSIONS=("1.7" "1.8" "1.9" "1.10" "1.11" "1.12" "1.13")
 PORT=9998
 for VERSION in "${SUPPORTED_VERSIONS[@]}"
 do
-   java -jar "$JARS/tika-server-$VERSION.jar" -p $PORT 2> /dev/null &
-   ((PORT++))
+    RUNNING=`ps aux | grep -c tika-server-$VERSION`
+
+    if [ $RUNNING -lt 2 ]; then
+        java -jar "$JARS/tika-server-$VERSION.jar" -p $PORT 2> /dev/null &
+        ((PORT++))
+    else
+        echo "Tika Server $VERSION already running"
+    fi
 done
 
 sleep 10
