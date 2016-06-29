@@ -20,7 +20,7 @@ install:
 before_script:
 - ./scripts/download.sh
 - ./scripts/spawn.sh
-after_script
+after_script:
 - cat /tmp/tika-server-*.log
 after_success:
 - codecov
