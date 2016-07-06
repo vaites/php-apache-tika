@@ -10,11 +10,32 @@ use Vaites\ApacheTika\Client;
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Versions to test against
+     *
+     * @var array
+     */
+    protected static $versions = [];
+
+    /**
      * Shared client instances
      *
      * @var \Vaites\ApacheTika\Client[]
      */
     protected static $clients = [];
+
+    /**
+     * Get the list of versions to test against
+     *
+     * @param null|string $name
+     * @param array       $data
+     * @param string      $dataName
+     */
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+
+        self::$versions = array_reverse(Client::getSupportedVersions());
+    }
 
     /**
      * Metadata test
@@ -299,7 +320,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         $versions = [];
 
-        foreach(Client::getSupportedVersions() as $version)
+        foreach(self::$versions as $version)
         {
             $versions[$version] = [$version];
         }
@@ -320,7 +341,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         foreach(glob(dirname(__DIR__) . "/samples/$sample.*") as $sample)
         {
-            foreach(Client::getSupportedVersions() as $version)
+            foreach(self::$versions as $version)
             {
                 $samples[basename($sample) . " against v$version"] = [$version, $sample];
             }

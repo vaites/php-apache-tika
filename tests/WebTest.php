@@ -12,7 +12,7 @@ class WebTest extends BaseTest
      */
     public static function setUpBeforeClass()
     {
-        foreach(Client::getSupportedVersions() as $index=>$version)
+        foreach(self::$versions as $index=>$version)
         {
             self::$clients[$version] = Client::make('localhost', 9998 + $index);
         }

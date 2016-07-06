@@ -14,7 +14,7 @@ class CLITest extends BaseTest
     {
         $jars = getenv('APACHE_TIKA_JARS');
 
-        foreach(Client::getSupportedVersions() as $version)
+        foreach(self::$versions as $version)
         {
             self::$clients[$version] = Client::make("$jars/tika-app-$version.jar");
         }
