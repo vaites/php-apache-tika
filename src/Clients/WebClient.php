@@ -16,6 +16,8 @@ use Vaites\ApacheTika\Metadata\Metadata;
  */
 class WebClient extends Client
 {
+    const MODE = 'web';
+
     /**
      * Cached responses to avoid multiple request for the same file.
      *

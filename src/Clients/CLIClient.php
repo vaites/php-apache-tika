@@ -16,6 +16,8 @@ use Vaites\ApacheTika\Metadata\Metadata;
  */
 class CLIClient extends Client
 {
+    const MODE = 'cli';
+
     /**
      * Apache Tika app path.
      *

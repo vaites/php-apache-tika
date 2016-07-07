@@ -144,15 +144,15 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testDocumentLanguage($version, $file)
     {
-        if(version_compare($version, '1.9') >= 0)
-        {
-            $client = self::$clients[$version];
+        $client = self::$clients[$version];
 
-            $this->assertRegExp('/^[a-z]{2}$/', $client->getLanguage($file));
+        if($client::MODE == 'web' && version_compare($version, '1.9') < 0)
+        {
+            $this->markTestSkipped("Apache Tika $version lacks REST language identification");
         }
         else
         {
-            $this->markTestSkipped("Apache Tika $version lacks REST language identification");
+            $this->assertRegExp('/^[a-z]{2}$/', $client->getLanguage($file));
         }
     }
 
