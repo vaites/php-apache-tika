@@ -12,7 +12,7 @@ do
     if [ $RUNNING -lt 2 ]; then
         echo java -jar "$JARS/tika-server-$VERSION.jar" -p $PORT 2> /tmp/tika-server-$VERSION.log &
         ((PORT++))
-        #sleep 2
+        sleep 2
     else
         echo "Tika Server $VERSION already running"
     fi
