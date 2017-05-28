@@ -398,5 +398,7 @@ class WebClient extends Client
         {
             throw new Exception("File $file can't be opened");
         }
+
+        return $options;
     }
 }

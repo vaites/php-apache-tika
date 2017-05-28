@@ -2,8 +2,6 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
-use DateTimeZone;
-
 /**
  * Metadata class for images.
  *
