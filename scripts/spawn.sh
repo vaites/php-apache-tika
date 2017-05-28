@@ -10,7 +10,8 @@ do
     RUNNING=`ps aux | grep -c tika-server-$VERSION`
 
     if [ $RUNNING -lt 2 ]; then
-        echo java -jar "$JARS/tika-server-$VERSION.jar" -p $PORT 2> /tmp/tika-server-$VERSION.log &
+        echo "Starting Tika Server $VERSION"
+        java -jar "$JARS/tika-server-$VERSION.jar" -p $PORT 2> /tmp/tika-server-$VERSION.log &
         ((PORT++))
         sleep 2
     else
