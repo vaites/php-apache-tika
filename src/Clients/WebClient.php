@@ -195,66 +195,10 @@ class WebClient extends Client
         }
 
         // parameters for cURL request
-        $headers = [];
-        switch($type)
-        {
-            case 'html':
-                $resource = 'tika';
-                $headers[] = 'Accept: text/html';
-                break;
+        list($resource, $headers) = $this->getParameters($type, $file);
 
-            case 'lang':
-                $resource = 'language/stream';
-                break;
-
-            case 'mime':
-                $name = basename($file);
-                $resource = 'detect/stream';
-                $headers[] = "Content-Disposition: attachment, filename=$name";
-                break;
-
-            case 'meta':
-                $resource = 'meta';
-                $headers[] = 'Accept: application/json';
-                break;
-
-            case 'text':
-                $resource = 'tika';
-                $headers[] = 'Accept: text/plain';
-                break;
-
-            case 'version':
-                $resource = 'version';
-                break;
-
-            default:
-                throw new Exception("Unknown type $type");
-        }
-
-        // base options
-        $options = $this->options;
-
-        // remote file options
-        if($file && preg_match('/^http/', $file))
-        {
-            $options[CURLOPT_INFILE] = fopen($file, 'r');
-        }
-        // local file options
-        elseif($file && file_exists($file) && is_readable($file))
-        {
-            $options[CURLOPT_INFILE] = fopen($file, 'r');
-            $options[CURLOPT_INFILESIZE] = filesize($file);
-        }
-        // other options for specific requests
-        elseif($type == 'version')
-        {
-            $options[CURLOPT_PUT] = false;
-        }
-        // error
-        else
-        {
-            throw new Exception("File $file can't be opened");
-        }
+        // cURL options
+        $options = $this->getCurlOptions($type, $file);
 
         // sets headers
         $options[CURLOPT_HTTPHEADER] = $headers;
@@ -368,6 +312,91 @@ class WebClient extends Client
             // unexpected
             default:
                 throw new Exception("Unexpected response for /$resource ($status)", 501);
+        }
+    }
+
+    /**
+     * Get the parameters to make the request
+     *
+     * @param   string  $type
+     * @param   string  file
+     * @return  array
+     * @throws  Exception
+     */
+    protected function getParameters($type, $file = null)
+    {
+        $headers = [];
+        switch($type)
+        {
+            case 'html':
+                $resource = 'tika';
+                $headers[] = 'Accept: text/html';
+                break;
+
+            case 'lang':
+                $resource = 'language/stream';
+                break;
+
+            case 'mime':
+                $name = basename($file);
+                $resource = 'detect/stream';
+                $headers[] = "Content-Disposition: attachment, filename=$name";
+                break;
+
+            case 'meta':
+                $resource = 'meta';
+                $headers[] = 'Accept: application/json';
+                break;
+
+            case 'text':
+                $resource = 'tika';
+                $headers[] = 'Accept: text/plain';
+                break;
+
+            case 'version':
+                $resource = 'version';
+                break;
+
+            default:
+                throw new Exception("Unknown type $type");
+        }
+
+        return [$resource, $headers];
+    }
+
+    /**
+     * Get the cURL options
+     *
+     * @param   string  $type
+     * @param   string  file
+     * @return  array
+     * @throws  Exception
+     */
+    protected function getCurlOptions($type, $file = null)
+    {
+        // base options
+        $options = $this->options;
+
+        // remote file options
+        if($file && preg_match('/^http/', $file))
+        {
+            $options[CURLOPT_INFILE] = fopen($file, 'r');
+        }
+        // local file options
+        elseif($file && file_exists($file) && is_readable($file))
+        {
+            $options[CURLOPT_INFILE] = fopen($file, 'r');
+            $options[CURLOPT_INFILESIZE] = filesize($file);
+        }
+        // other options for specific requests
+        elseif($type == 'version')
+        {
+            $options[CURLOPT_PUT] = false;
+        }
+        // error
+        else
+        {
+            throw new Exception("File $file can't be opened");
         }
     }
 }

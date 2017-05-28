@@ -71,6 +71,98 @@ class CLIClient extends Client
             return $this->cache[sha1($file)][$type];
         }
 
+        // command arguments
+        $arguments = $this->getArguments($type, $file);
+
+        // invalid local file
+        if($file && !preg_match('/^http/', $file) && !file_exists($file))
+        {
+            throw new Exception("File $file can't be opened");
+        }
+        // invalid remote file
+        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
+        {
+            throw new Exception("File $file can't be opened", 2);
+        }
+
+        // add last argument
+        if($file)
+        {
+            $arguments[] = "'$file'";
+        }
+
+        // build command
+        $command = ($this->java ?: 'java') . " -jar '{$this->path}' " . implode(' ', $arguments);
+
+        // run command
+        $response = $this->exec($command);
+
+        // metadata response
+        if($type == 'meta')
+        {
+            // fix for invalid? json returned only with images
+            $response = str_replace(basename($file) . '"}{', '", ', $response);
+
+            $response = Metadata::make($response, $file);
+        }
+
+        // cache certain responses
+        if(in_array($type, ['lang', 'meta']))
+        {
+            $this->cache[sha1($file)][$type] = $response;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Run the command and return its results
+     *
+     * @param   string  $command
+     * @return  null|string
+     * @throws  Exception
+     */
+    protected function exec($command)
+    {
+        // run command
+        $exit = -1;
+        $response = null;
+        $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', '/tmp/tika-error.log', 'a']];
+        $process = proc_open($command, $descriptors, $pipes);
+
+        // get output if command runs ok
+        if(is_resource($process))
+        {
+            fclose($pipes[0]);
+            $response = trim(stream_get_contents($pipes[1]));
+            fclose($pipes[1]);
+            $exit = proc_close($process);
+        }
+        // exception if command fails
+        else
+        {
+            throw new Exception("Error running command $command");
+        }
+
+        // exception if exit value is not zero
+        if($exit > 0)
+        {
+            throw new Exception("Unexpected exit value ($exit) for command $command");
+        }
+
+        return $response;
+    }
+
+    /**
+     * Get the arguments to run the command
+     *
+     * @param   string  $type
+     * @param   string  file
+     * @return  array
+     * @throws  Exception
+     */
+    protected function getArguments($type, $file = null)
+    {
         // parameters for command
         $arguments = [];
         switch($type)
@@ -103,67 +195,6 @@ class CLIClient extends Client
                 throw new Exception("Unknown type $type");
         }
 
-        // invalid local file
-        if($file && !preg_match('/^http/', $file) && !file_exists($file))
-        {
-            throw new Exception("File $file can't be opened");
-        }
-        // invalid remote file
-        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
-        {
-            throw new Exception("File $file can't be opened", 2);
-        }
-
-        // add last argument
-        if($file)
-        {
-            $arguments[] = "'$file'";
-        }
-
-        // build command
-        $command = ($this->java ?: 'java') . " -jar '{$this->path}' " . implode(' ', $arguments);
-
-        // run command
-        $exit = -1;
-        $response = null;
-        $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', '/tmp/tika-error.log', 'a']];
-        $process = proc_open($command, $descriptors, $pipes);
-
-        // get output if command runs ok
-        if(is_resource($process)) 
-        {
-            fclose($pipes[0]);
-            $response = trim(stream_get_contents($pipes[1]));
-            fclose($pipes[1]);
-            $exit = proc_close($process);
-        }
-        // exception if command fails
-        else
-        {
-            throw new Exception("Error running command $command");
-        }
-
-        // exception if exit value is not zero
-        if($exit > 0)
-        {
-            throw new Exception("Unexpected exit value ($exit) for command $command");
-        }
-
-        // metadata response
-        if($type == 'meta')
-        {
-            // fix for invalid? json returned only with images
-            $response = str_replace(basename($file) . '"}{', '", ', $response);
-
-            $response = Metadata::make($response, $file);
-        }
-
-        // cache certain responses
-        if(in_array($type, ['lang', 'meta']))
-        {
-            $this->cache[sha1($file)][$type] = $response;
-        }
-
-        return $response;
+        return $arguments;
     }
 }
