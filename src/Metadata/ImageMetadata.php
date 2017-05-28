@@ -42,8 +42,6 @@ class ImageMetadata extends Metadata
      */
     protected function setAttribute($key, $value)
     {
-        $timezone = new DateTimeZone('UTC');
-
         switch(mb_strtolower($key))
         {
             case 'compression lossless':

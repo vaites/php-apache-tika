@@ -109,7 +109,7 @@ class CLIClient extends Client
             throw new Exception("File $file can't be opened");
         }
         // invalid remote file
-        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', @get_headers($file)[0]))
+        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
         {
             throw new Exception("File $file can't be opened", 2);
         }
