@@ -31,8 +31,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppExitValue()
     {
-        $version = current(Client::getSupportedVersions());
-        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . $version . '.jar';
+        $path = getenv('APACHE_TIKA_BINARIES') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
 
         try
         {
@@ -55,8 +54,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppJavaBinary()
     {
-        $version = current(Client::getSupportedVersions());
-        $path = getenv('APACHE_TIKA_JARS') . '/tika-app-' . $version . '.jar';
+        $path = getenv('APACHE_TIKA_BINARIES') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
 
         try
         {
@@ -192,15 +190,10 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function parameterProvider()
     {
-        $parameters = [];
-        $port = 9998;
-
-        foreach(Client::getSupportedVersions() as $version)
-        {
-            $parameters[] = [[getenv('APACHE_TIKA_JARS') . '/tika-app-' . $version . '.jar']];
-            $parameters[] = [['localhost', $port++]];
-        }
-
-        return $parameters;
+        return
+        [
+            [[getenv('APACHE_TIKA_BINARIES') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar']],
+            [['localhost', 9998]]
+        ];
     }
 }

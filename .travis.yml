@@ -4,7 +4,7 @@ php:
 - 5.5
 - 5.6
 - 7.0
-- hhvm
+- 7.1
 sudo: false
 addons:
   apt:
@@ -13,6 +13,16 @@ addons:
 cache:
   directories:
   - "$HOME/tika"
+env:
+  - APACHE_TIKA_VERSION=1.7
+  - APACHE_TIKA_VERSION=1.8
+  - APACHE_TIKA_VERSION=1.9
+  - APACHE_TIKA_VERSION=1.10
+  - APACHE_TIKA_VERSION=1.11
+  - APACHE_TIKA_VERSION=1.12
+  - APACHE_TIKA_VERSION=1.13
+  - APACHE_TIKA_VERSION=1.14
+  - APACHE_TIKA_VERSION=1.15
 before_install:
 - pip install --user codecov
 install:

@@ -2,39 +2,45 @@
 
 use PHPUnit_Framework_TestCase;
 
-use Vaites\ApacheTika\Client;
-
 /**
  * Common test functionality
  */
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Versions to test against
+     * Current tika version
      *
-     * @var array
+     * @var string
      */
-    protected static $versions = [];
+    protected static $version = null;
 
     /**
-     * Shared client instances
+     * Shared client instance
      *
-     * @var \Vaites\ApacheTika\Client[]
+     * @var \Vaites\ApacheTika\Client
      */
-    protected static $clients = [];
+    protected static $client = null;
 
     /**
-     * Get the list of versions to test against
+     * Binary path (jars)
      *
-     * @param null|string $name
-     * @param array       $data
-     * @param string      $dataName
+     * @var string
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected static $binaries = null;
+
+    /**
+     * Get env variables
+     *
+     * @param null      $name
+     * @param array     $data
+     * @param string    $dataName
+     */
+    public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        parent::__construct($name, $data, $dataName);
+        self::$version = getenv('APACHE_TIKA_VERSION');
+        self::$binaries = getenv('APACHE_TIKA_BINARIES');
 
-        self::$versions = array_reverse(Client::getSupportedVersions());
+        parent::__construct($name, $data, $dataName);
     }
 
     /**
@@ -45,11 +51,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param   string $file
      * @param   string $class
      */
-    public function testMetadata($version, $file, $class = 'Metadata')
+    public function testMetadata($file, $class = 'Metadata')
     {
-        $client = self::$clients[$version];
-
-        $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", $client->getMetadata($file));
+        $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
     }
 
     /**
@@ -60,9 +64,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param   string $file
      * @param   string $class
      */
-    public function testDocumentMetadata($version, $file, $class = 'DocumentMetadata')
+    public function testDocumentMetadata($file, $class = 'DocumentMetadata')
     {
-        $this->testMetadata($version, $file, $class);
+        $this->testMetadata($file, $class);
     }
 
     /**
@@ -72,11 +76,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentMetadataTitle($version, $file)
+    public function testDocumentMetadataTitle($file)
     {
-        $client = self::$clients[$version];
-        
-        $this->assertEquals('Lorem ipsum dolor sit amet', $client->getMetadata($file)->title);
+        $this->assertEquals('Lorem ipsum dolor sit amet', self::$client->getMetadata($file)->title);
     }
 
     /**
@@ -86,11 +88,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentMetadataAuthor($version, $file)
+    public function testDocumentMetadataAuthor($file)
     {
-        $client = self::$clients[$version];
-
-        $this->assertEquals('David Martínez', $client->getMetadata($file)->author);
+        $this->assertEquals('David Martínez', self::$client->getMetadata($file)->author);
     }
 
     /**
@@ -100,11 +100,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentMetadataCreated($version, $file)
+    public function testDocumentMetadataCreated($file)
     {
-        $client = self::$clients[$version];
-
-        $this->assertInstanceOf('DateTime', $client->getMetadata($file)->created);
+        $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->created);
     }
 
     /**
@@ -114,11 +112,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentMetadataUpdated($version, $file)
+    public function testDocumentMetadataUpdated($file)
     {
-        $client = self::$clients[$version];
-
-        $this->assertInstanceOf('DateTime', $client->getMetadata($file)->updated);
+        $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->updated);
     }
 
     /**
@@ -128,11 +124,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentMetadataKeywords($version, $file)
+    public function testDocumentMetadataKeywords($file)
     {
-        $client = self::$clients[$version];
-
-        $this->assertContains('ipsum', $client->getMetadata($file)->keywords);
+        $this->assertContains('ipsum', self::$client->getMetadata($file)->keywords);
     }
 
     /**
@@ -142,17 +136,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentLanguage($version, $file)
+    public function testDocumentLanguage($file)
     {
-        $client = self::$clients[$version];
+        $client =& self::$client;
 
-        if($client::MODE == 'web' && version_compare($version, '1.9') < 0)
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') < 0)
         {
-            $this->markTestSkipped("Apache Tika $version lacks REST language identification");
+            $this->markTestSkipped('Apache Tika ' . self::$version . 'lacks REST language identification');
         }
         else
         {
-            $this->assertRegExp('/^[a-z]{2}$/', $client->getLanguage($file));
+            $this->assertRegExp('/^[a-z]{2}$/', self::$client->getLanguage($file));
         }
     }
 
@@ -163,11 +157,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentMIME($version, $file)
+    public function testDocumentMIME($file)
     {
-        $client = self::$clients[$version];
-
-        $this->assertNotEmpty($client->getMIME($file));
+        $this->assertNotEmpty(self::$client->getMIME($file));
     }
 
     /**
@@ -177,11 +169,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentHTML($version, $file)
+    public function testDocumentHTML($file)
     {
-        $client = self::$clients[$version];
-
-        $this->assertContains('Zenonis est, inquam, hoc Stoici', $client->getHTML($file));
+        $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
     }
 
     /**
@@ -191,11 +181,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testDocumentText($version, $file)
+    public function testDocumentText($file)
     {
-        $client = self::$clients[$version];
-
-        $this->assertContains('Zenonis est, inquam, hoc Stoici', $client->getText($file));
+        $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
     }
 
     /**
@@ -206,9 +194,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param   string $file
      * @param   string $class
      */
-    public function testImageMetadata($version, $file, $class = 'ImageMetadata')
+    public function testImageMetadata($file, $class = 'ImageMetadata')
     {
-        $this->testMetadata($version, $file, $class);
+        $this->testMetadata($file, $class);
     }
 
     /**
@@ -218,11 +206,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testImageMetadataWidth($version, $file)
+    public function testImageMetadataWidth($file)
     {
-        $client = self::$clients[$version];
-
-        $meta = $client->getMetadata($file);
+        $meta = self::$client->getMetadata($file);
 
         $this->assertEquals(1600, $meta->width, basename($file));
     }
@@ -234,11 +220,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testImageMetadataHeight($version, $file)
+    public function testImageMetadataHeight($file)
     {
-        $client = self::$clients[$version];
-
-        $meta = $client->getMetadata($file);
+        $meta = self::$client->getMetadata($file);
 
         $this->assertEquals(900, $meta->height, basename($file));
     }
@@ -250,25 +234,19 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      */
-    public function testImageOCR($version, $file)
+    public function testImageOCR($file)
     {
-        $client = self::$clients[$version];
-
-        $text = $client->getText($file);
+        $text = self::$client->getText($file);
 
         $this->assertRegExp('/voluptate/i', $text);
     }
 
     /**
      * Version test
-     *
-     * @dataProvider    versionProvider
      */
-    public function testVersion($version)
+    public function testVersion()
     {
-        $client = self::$clients[$version];
-
-        $this->assertEquals("Apache Tika $version", $client->getVersion());
+        $this->assertEquals('Apache Tika ' . self::$version, self::$client->getVersion());
     }
 
     /**
@@ -312,23 +290,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Compatible versions provider
-     *
-     * @return array
-     */
-    public function versionProvider()
-    {
-        $versions = [];
-
-        foreach(self::$versions as $version)
-        {
-            $versions[$version] = [$version];
-        }
-
-        return $versions;
-    }
-
-    /**
      * File provider using "samples" folder
      *
      * @param   string $sample
@@ -341,10 +302,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         foreach(glob(dirname(__DIR__) . "/samples/$sample.*") as $sample)
         {
-            foreach(self::$versions as $version)
-            {
-                $samples[basename($sample) . " against v$version"] = [$version, $sample];
-            }
+            $samples[basename($sample) . " against v" . self::$version] = [$sample];
         }
 
         return $samples;

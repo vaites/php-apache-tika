@@ -7,27 +7,22 @@ use Vaites\ApacheTika\Client;
  */
 class WebTest extends BaseTest
 {
+    protected static $process = null;
+
     /**
-     * Create shared instances of clients
+     * Start Tika server and create shared instance of clients
      */
     public static function setUpBeforeClass()
     {
-        foreach(self::$versions as $index=>$version)
-        {
-            self::$clients[$version] = Client::make('localhost', 9998 + $index);
-        }
+        self::$client = Client::make('localhost', 9998);
     }
 
     /**
      * cURL options test
-     *
-     * @dataProvider    versionProvider
      */
-    public function testCurlOptions($version)
+    public function testCurlOptions()
     {
-        static $port = 9998;
-
-        $client = Client::make('localhost', $port++, [CURLOPT_TIMEOUT => 5]);
+        $client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 5]);
         $options = $client->getOptions();
 
         $this->assertEquals(5, $options[CURLOPT_TIMEOUT]);
@@ -35,14 +30,10 @@ class WebTest extends BaseTest
 
     /**
      * Setters and getters test
-     *
-     * @dataProvider    versionProvider
      */
-    public function testSettersGetters($version)
+    public function testSettersGetters()
     {
-        static $port = 9998;
-
-        $client = Client::make('localhost', $port++);
+        $client = Client::make('localhost', 9998);
         $client->setHost('127.0.0.1');
         $client->setPort(9997);
         $client->setOptions([CURLOPT_TIMEOUT => 10]);
