@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PORT=9998
-BINARIES=${APACHE_TIKA_JARS:-bin}
+BINARIES=${APACHE_TIKA_BINARIES:-bin}
 VERSION=${APACHE_TIKA_VERSION:-"1.15"}
 
 RUNNING=`ps aux | grep -c tika-server-$VERSION`
