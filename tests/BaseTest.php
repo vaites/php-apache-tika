@@ -302,7 +302,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         foreach(glob(dirname(__DIR__) . "/samples/$sample.*") as $sample)
         {
-            $samples[basename($sample) . " against v" . self::$version] = [$sample];
+            $samples[basename($sample)] = [$sample];
         }
 
         return $samples;
