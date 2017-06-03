@@ -187,6 +187,10 @@ class CLIClient extends Client
                 $arguments[] = '--text';
                 break;
 
+            case 'text-main':
+                $arguments[] = '--text-main';
+                break;
+
             case 'version':
                 $arguments[] = '--version';
                 break;

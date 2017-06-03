@@ -121,6 +121,20 @@ abstract class Client
     }
 
     /**
+     * Extracts main text.
+     *
+     * @param string $file
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    public function getMainText($file)
+    {
+        return $this->request('text-main', $file);
+    }
+
+    /**
      * Returns current Tika version.
      *
      * @return string

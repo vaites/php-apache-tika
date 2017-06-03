@@ -187,6 +187,27 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Main text test
+     *
+     * @dataProvider    fileProvider
+     *
+     * @param   string $file
+     */
+    public function testDocumentMainText($file)
+    {
+        $client =& self::$client;
+
+        if($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
+        {
+            $this->markTestSkipped('Apache Tika ' . self::$version . 'lacks main content extraction');
+        }
+        else
+        {
+            $this->assertContains('Sed quia studebat laudi et dignitati', self::$client->getMainText($file));
+        }
+    }
+
+    /**
      * Metadata test
      *
      * @dataProvider    imageProvider

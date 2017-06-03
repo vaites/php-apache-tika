@@ -353,6 +353,11 @@ class WebClient extends Client
                 $headers[] = 'Accept: text/plain';
                 break;
 
+            case 'text-main':
+                $resource = 'tika/main';
+                $headers[] = 'Accept: text/plain';
+                break;
+
             case 'version':
                 $resource = 'version';
                 break;
