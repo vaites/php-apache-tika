@@ -46,7 +46,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Metadata test
      *
-     * @dataProvider    fileProvider
+     * @dataProvider    documentProvider
      *
      * @param   string $file
      * @param   string $class
@@ -177,7 +177,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Text test
      *
-     * @dataProvider    fileProvider
+     * @dataProvider    documentProvider
      *
      * @param   string $file
      */
@@ -189,7 +189,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Main text test
      *
-     * @dataProvider    fileProvider
+     * @dataProvider    documentProvider
      *
      * @param   string $file
      */
@@ -203,7 +203,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         }
         else
         {
-            $this->assertContains('Sed quia studebat laudi et dignitati', self::$client->getMainText($file));
+            $this->assertContains('Lorem ipsum dolor sit amet', self::$client->getMainText($file));
         }
     }
 
@@ -268,16 +268,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     public function testVersion()
     {
         $this->assertEquals('Apache Tika ' . self::$version, self::$client->getVersion());
-    }
-
-    /**
-     * Main file provider
-     *
-     * @return  array
-     */
-    public function fileProvider()
-    {
-        return $this->samples('sample1');
     }
 
     /**
