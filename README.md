@@ -2,7 +2,7 @@
 [![Package at Packagist](https://img.shields.io/packagist/v/vaites/php-apache-tika.svg)](https://packagist.org/packages/vaites/php-apache-tika)
 [![Build status](https://travis-ci.org/vaites/php-apache-tika.svg?branch=master)](https://travis-ci.org/vaites/php-apache-tika)
 [![Code coverage](https://img.shields.io/codecov/c/github/vaites/php-apache-tika.svg)](https://codecov.io/github/vaites/php-apache-tika)
-[![Code insight](https://img.shields.io/sensiolabs/i/ec066502-0fde-4455-9fc3-8e9fe6867834.svg?maxAge=2592000)](https://insight.sensiolabs.com/projects/ec066502-0fde-4455-9fc3-8e9fe6867834)
+[![Code insight](https://img.shields.io/sensiolabs/i/ec066502-0fde-4455-9fc3-8e9fe6867834.svg)](https://insight.sensiolabs.com/projects/ec066502-0fde-4455-9fc3-8e9fe6867834)
 [![License](https://img.shields.io/github/license/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/blob/master/LICENSE)
 
 PHP Apache Tika
@@ -28,7 +28,7 @@ Features
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.7 or greater
-    * Tested up to 1.14
+    * Tested up to 1.15
 
 Requirements
 ------------
@@ -60,7 +60,7 @@ Usage
 
 Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-security/2015/08/13/5):
 
-    java -jar tika-server-1.14.jar
+    java -jar tika-server-1.15.jar
     
 Instantiate the class:
 
@@ -85,7 +85,7 @@ Or use to extract text from images:
 Tests
 -----
 
-Tests are designed to cover all features for all supported versions of Apache Tika (currently from 1.7 to 1.14) in 
+Tests are designed to cover all features for all supported versions of Apache Tika (currently from 1.7 to 1.15) in 
 app mode and server mode.
 
 There are a few samples to test against:
