@@ -100,10 +100,13 @@ class WebClient extends Client
      * Set the host
      *
      * @param   string  $host
+     * @return  $this
      */
     public function setHost($host)
     {
         $this->host = $host;
+
+        return $this;
     }
 
     /**
@@ -120,10 +123,13 @@ class WebClient extends Client
      * Set the port
      *
      * @param   int     $port
+     * @return  $this
      */
     public function setPort($port)
     {
         $this->port = $port;
+
+        return $this;
     }
 
     /**
@@ -140,10 +146,13 @@ class WebClient extends Client
      * Set the number of retries
      *
      * @param   int     $retries
+     * @return  $this
      */
     public function setRetries($retries)
     {
         $this->retries = $retries;
+
+        return $this;
     }
 
     /**
@@ -160,6 +169,7 @@ class WebClient extends Client
      * Set the options
      *
      * @param   array   $options
+     * @return  $this
      */
     public function setOptions($options)
     {
@@ -167,6 +177,8 @@ class WebClient extends Client
         {
             $this->options[$key] = $value;
         }
+
+        return $this;
     }
 
     /**

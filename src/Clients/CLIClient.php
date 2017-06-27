@@ -155,7 +155,7 @@ class CLIClient extends Client
      * Get the arguments to run the command
      *
      * @param   string  $type
-     * @param   string  file
+     * @param   string  $file
      * @return  array
      * @throws  Exception
      */

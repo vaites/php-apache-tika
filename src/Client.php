@@ -9,7 +9,6 @@ use Vaites\ApacheTika\Clients\WebClient;
  * Apache Tika client interface
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- *
  * @link    http://wiki.apache.org/tika/TikaJAXRS
  * @link    https://tika.apache.org/1.10/formats.html
  */
@@ -39,9 +38,12 @@ abstract class Client
      */
     public static function make($param = null, $port = null, $options = [])
     {
-        if (preg_match('/\.jar$/', func_get_arg(0))) {
+        if (preg_match('/\.jar$/', func_get_arg(0)))
+        {
             return new CLIClient($param);
-        } else {
+        }
+        else
+            {
             return new WebClient($param, $port, $options);
         }
     }
