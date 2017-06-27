@@ -6,7 +6,7 @@ use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
 
 /**
- * Apache Tika client interface.
+ * Apache Tika client interface
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  *
@@ -30,34 +30,28 @@ abstract class Client
     protected $cache = [];
 
     /**
-     * Get a class instance.
+     * Get a class instance
      *
-     * @param string $param   path or host
-     * @param int    $port    only port for web client
-     * @param array  $options options for cURL request
-     *
-     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @param   string  $param      path or host
+     * @param   int     $port       only port for web client
+     * @param   array   $options    options for cURL request
+     * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      */
     public static function make($param = null, $port = null, $options = [])
     {
-        if(preg_match('/\.jar$/', func_get_arg(0)))
-        {
+        if (preg_match('/\.jar$/', func_get_arg(0))) {
             return new CLIClient($param);
-        }
-        else
-        {
+        } else {
             return new WebClient($param, $port, $options);
         }
     }
 
     /**
-     * Gets file metadata.
+     * Gets file metadata
      *
-     * @param string $file
-     *
-     * @return \Vaites\ApacheTika\Metadata\Metadata
-     *
-     * @throws \Exception
+     * @param   string  $file
+     * @return  \Vaites\ApacheTika\Metadata\Metadata
+     * @throws  \Exception
      */
     public function getMetadata($file)
     {
@@ -65,13 +59,11 @@ abstract class Client
     }
 
     /**
-     * Detect language.
+     * Detect language
      *
-     * @param string $file
-     *
-     * @return string
-     *
-     * @throws \Exception
+     * @param   string  $file
+     * @return  string
+     * @throws  \Exception
      */
     public function getLanguage($file)
     {
@@ -79,12 +71,10 @@ abstract class Client
     }
 
     /**
-     * Detect MIME type.
+     * Detect MIME type
      *
-     * @param string $file
-     *
-     * @return string
-     *
+     * @param   string  $file
+     * @return  string
      * @throws \Exception
      */
     public function getMIME($file)
@@ -93,12 +83,10 @@ abstract class Client
     }
 
     /**
-     * Extracts HTML.
+     * Extracts HTML
      *
      * @param string $file
-     *
      * @return string
-     *
      * @throws \Exception
      */
     public function getHTML($file)
@@ -107,13 +95,11 @@ abstract class Client
     }
 
     /**
-     * Extracts text.
+     * Extracts text
      *
-     * @param string $file
-     *
-     * @return string
-     *
-     * @throws \Exception
+     * @param   string  $file
+     * @return  string
+     * @throws  \Exception
      */
     public function getText($file)
     {
@@ -121,13 +107,11 @@ abstract class Client
     }
 
     /**
-     * Extracts main text.
+     * Extracts main text
      *
-     * @param string $file
-     *
-     * @return string
-     *
-     * @throws \Exception
+     * @param   string  $file
+     * @return  string
+     * @throws  \Exception
      */
     public function getMainText($file)
     {
@@ -135,7 +119,7 @@ abstract class Client
     }
 
     /**
-     * Returns current Tika version.
+     * Returns current Tika version
      *
      * @return string
      */
@@ -157,12 +141,10 @@ abstract class Client
     /**
      * Configure and make a request and return its results.
      *
-     * @param string $type
-     * @param string $file
-     *
-     * @return string
-     *
-     * @throws \Exception
+     * @param   string  $type
+     * @param   string  $file
+     * @return  string
+     * @throws  \Exception
      */
     abstract public function request($type, $file);
 }

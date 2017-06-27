@@ -3,14 +3,14 @@
 namespace Vaites\ApacheTika\Clients;
 
 use Exception;
+
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
- * Apache Tika command line interface client.
+ * Apache Tika command line interface client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- *
  * @link    http://wiki.apache.org/tika/TikaJAXRS
  * @link    https://tika.apache.org/1.12/formats.html
  */
@@ -19,7 +19,7 @@ class CLIClient extends Client
     const MODE = 'cli';
 
     /**
-     * Apache Tika app path.
+     * Apache Tika app path
      *
      * @var string
      */
@@ -35,8 +35,8 @@ class CLIClient extends Client
     /**
      * Configure client
      *
-     * @param string $path
-     * @param string $java
+     * @param   string  $path
+     * @param   string  $java
      *
      * @throws Exception
      */
@@ -54,14 +54,12 @@ class CLIClient extends Client
     }
 
     /**
-     * Configure and make a request and return its results.
+     * Configure and make a request and return its results
      *
-     * @param string $type
-     * @param string $file
-     *
-     * @return string
-     *
-     * @throws \Exception
+     * @param   string  $type
+     * @param   string  $file
+     * @return  string
+     * @throws  \Exception
      */
     public function request($type, $file = null)
     {
@@ -120,7 +118,7 @@ class CLIClient extends Client
      *
      * @param   string  $command
      * @return  null|string
-     * @throws  Exception
+     * @throws  \Exception
      */
     protected function exec($command)
     {

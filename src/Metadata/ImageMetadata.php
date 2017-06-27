@@ -3,21 +3,21 @@
 namespace Vaites\ApacheTika\Metadata;
 
 /**
- * Metadata class for images.
+ * Metadata class for images
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
 class ImageMetadata extends Metadata
 {
     /**
-     * Image width in pixels.
+     * Image width in pixels
      *
      * @var int
      */
     public $width = 0;
 
     /**
-     * Image height in pixels.
+     * Image height in pixels
      *
      * @var int
      */
@@ -31,7 +31,7 @@ class ImageMetadata extends Metadata
     public $lossless = true;
 
     /**
-     * Sets an attribute.
+     * Sets an attribute
      *
      * @param string $key
      * @param mixed  $value

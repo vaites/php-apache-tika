@@ -6,14 +6,14 @@ use DateTime;
 use DateTimeZone;
 
 /**
- * Metadata class for documents.
+ * Metadata class for documents
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
 class DocumentMetadata extends Metadata
 {
     /**
-     * Title (if not detected by Apache Tika, name without extension is used).
+     * Title (if not detected by Apache Tika, name without extension is used)
      *
      * @var string
      */
@@ -27,14 +27,14 @@ class DocumentMetadata extends Metadata
     public $description = null;
 
     /**
-     * Keywords.
+     * Keywords
      *
      * @var string
      */
     public $keywords = [];
 
     /**
-     * Two-letter language code (ISO-639-1).
+     * Two-letter language code (ISO-639-1)
      *
      * @link https://en.wikipedia.org/wiki/ISO_639-1
      *
@@ -43,21 +43,21 @@ class DocumentMetadata extends Metadata
     public $language = null;
 
     /**
-     * Author.
+     * Author
      *
      * @var string
      */
     public $author = null;
 
     /**
-     * Software used to generate document.
+     * Software used to generate document
      *
      * @var string
      */
     public $generator = null;
 
     /**
-     * Number of pages.
+     * Number of pages
      *
      * @var int
      */
@@ -71,12 +71,11 @@ class DocumentMetadata extends Metadata
     public $words = 0;
 
     /**
-     * Sets an attribute.
+     * Sets an attribute
      *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
+     * @param   string  $key
+     * @param   mixed   $value
+     * @return  bool
      */
     protected function setAttribute($key, $value)
     {

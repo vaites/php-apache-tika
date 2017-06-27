@@ -5,46 +5,45 @@ namespace Vaites\ApacheTika\Metadata;
 use Exception;
 
 /**
- * Standarized metadata class with common attributes for all document types.
+ * Standarized metadata class with common attributes for all document types
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
 abstract class Metadata
 {
     /**
-     * MIME type.
+     * MIME type
      *
      * @var string
      */
     public $mime = null;
 
     /**
-     * Date created.
+     * Date created
      *
      * @var \DateTime
      */
     public $created = null;
 
     /**
-     * Date updated or last modified.
+     * Date updated or last modified
      *
      * @var \DateTime
      */
     public $updated = null;
 
     /**
-     * RAW attributes returned by Apache Tika.
+     * RAW attributes returned by Apache Tika
      *
      * @var array
      */
     public $meta = [];
 
     /**
-     * Parse Apache Tika response filling all properties.
+     * Parse Apache Tika response filling all properties
      *
-     * @param string $meta
-     * @param string $file
-     *
+     * @param   string  $meta
+     * @param   string  $file
      * @throws \Exception
      */
     public function __construct($meta, $file)
@@ -71,14 +70,12 @@ abstract class Metadata
     }
 
     /**
-     * Return an instance of Metadata based on content type.
+     * Return an instance of Metadata based on content type
      *
-     * @param string $response
-     * @param string $file
-     *
-     * @return \Vaites\ApacheTika\Metadata\Metadata
-     *
-     * @throws \Exception
+     * @param   string  $response
+     * @param   string  $file
+     * @return  \Vaites\ApacheTika\Metadata\Metadata
+     * @throws  \Exception
      */
     public static function make($response, $file)
     {
@@ -119,12 +116,11 @@ abstract class Metadata
     }
 
     /**
-     * Sets an attribute.
+     * Sets an attribute
      *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
+     * @param   string  $key
+     * @param   mixed   $value
+     * @return  bool
      */
     abstract protected function setAttribute($key, $value);
 }

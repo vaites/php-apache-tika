@@ -3,14 +3,14 @@
 namespace Vaites\ApacheTika\Clients;
 
 use Exception;
+
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
- * Apache Tika web client.
+ * Apache Tika web client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- *
  * @link    http://wiki.apache.org/tika/TikaJAXRS
  * @link    https://tika.apache.org/1.12/formats.html
  */
@@ -19,21 +19,21 @@ class WebClient extends Client
     const MODE = 'web';
 
     /**
-     * Cached responses to avoid multiple request for the same file.
+     * Cached responses to avoid multiple request for the same file
      *
      * @var array
      */
     protected $cache = [];
 
     /**
-     * Apache Tika server host.
+     * Apache Tika server host
      *
      * @var string
      */
     protected $host = '127.0.0.1';
 
     /**
-     * Apache Tika server port.
+     * Apache Tika server port
      *
      * @var int
      */
@@ -47,7 +47,7 @@ class WebClient extends Client
     protected $retries = 3;
 
     /**
-     * cURL options.
+     * cURL options
      *
      * @var array
      */
@@ -62,10 +62,9 @@ class WebClient extends Client
     /**
      * Configure class and test if server is running
      *
-     * @param string $host
-     * @param int    $port
-     *
-     * @throws Exception
+     * @param   string  $host
+     * @param   int     $port
+     * @throws  \Exception
      */
     public function __construct($host = null, $port = null, $options = [])
     {
@@ -88,9 +87,9 @@ class WebClient extends Client
     }
 
     /**
-     * Get the host.
+     * Get the host
      *
-     * @return null|string
+     * @return  null|string
      */
     public function getHost()
     {
@@ -98,9 +97,9 @@ class WebClient extends Client
     }
 
     /**
-     * Set the host.
+     * Set the host
      *
-     * @param string $host
+     * @param   string  $host
      */
     public function setHost($host)
     {
@@ -108,9 +107,9 @@ class WebClient extends Client
     }
 
     /**
-     * Get the port.
+     * Get the port
      *
-     * @return null|int
+     * @return  null|int
      */
     public function getPort()
     {
@@ -118,9 +117,9 @@ class WebClient extends Client
     }
 
     /**
-     * Set the port.
+     * Set the port
      *
-     * @param int $port
+     * @param   int     $port
      */
     public function setPort($port)
     {
@@ -128,9 +127,9 @@ class WebClient extends Client
     }
 
     /**
-     * Get the number of retries.
+     * Get the number of retries
      *
-     * @return int
+     * @return  int
      */
     public function getRetries()
     {
@@ -138,9 +137,9 @@ class WebClient extends Client
     }
 
     /**
-     * Set the number of retries.
+     * Set the number of retries
      *
-     * @param int $retries
+     * @param   int     $retries
      */
     public function setRetries($retries)
     {
@@ -148,9 +147,9 @@ class WebClient extends Client
     }
 
     /**
-     * Get the options.
+     * Get the options
      *
-     * @return null|array
+     * @return  null|array
      */
     public function getOptions()
     {
@@ -158,9 +157,9 @@ class WebClient extends Client
     }
 
     /**
-     * Set the options.
+     * Set the options
      *
-     * @param array $options
+     * @param   array   $options
      */
     public function setOptions($options)
     {
@@ -171,14 +170,12 @@ class WebClient extends Client
     }
 
     /**
-     * Configure, make a request and return its results.
+     * Configure, make a request and return its results
      *
-     * @param string $type
-     * @param string $file
-     *
-     * @return string
-     *
-     * @throws \Exception
+     * @param   string  $type
+     * @param   string  $file
+     * @return  string
+     * @throws  \Exception
      */
     public function request($type, $file = null)
     {
@@ -245,13 +242,11 @@ class WebClient extends Client
     }
 
     /**
-     * Make a request to Apache Tika Server.
+     * Make a request to Apache Tika Server
      *
-     * @param array $options
-     *
-     * @return array
-     *
-     * @throws Exception
+     * @param   array   $options
+     * @return  array
+     * @throws  \Exception
      */
     protected function exec(array $options = [])
     {
@@ -280,10 +275,9 @@ class WebClient extends Client
      *
      * @codeCoverageIgnore
      *
-     * @param int       $status
-     * @param string    $resource
-     *
-     * @throws Exception
+     * @param   int       $status
+     * @param   string    $resource
+     * @throws  \Exception
      */
     protected function error($status, $resource)
     {
@@ -321,7 +315,7 @@ class WebClient extends Client
      * @param   string  $type
      * @param   string  file
      * @return  array
-     * @throws  Exception
+     * @throws  \Exception
      */
     protected function getParameters($type, $file = null)
     {
@@ -375,7 +369,7 @@ class WebClient extends Client
      * @param   string  $type
      * @param   string  file
      * @return  array
-     * @throws  Exception
+     * @throws  \Exception
      */
     protected function getCurlOptions($type, $file = null)
     {
