@@ -1,4 +1,6 @@
-<?php namespace Vaites\ApacheTika\Tests;
+<?php
+
+namespace Vaites\ApacheTika\Tests;
 
 use PHPUnit_Framework_TestCase;
 
@@ -15,6 +17,13 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected static $version = null;
 
     /**
+     * Binary path (jars)
+     *
+     * @var string
+     */
+    protected static $binaries = null;
+
+    /**
      * Shared client instance
      *
      * @var \Vaites\ApacheTika\Client
@@ -22,11 +31,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected static $client = null;
 
     /**
-     * Binary path (jars)
+     * Shared variable to test callbacks
      *
-     * @var string
+     * @var mixed
      */
-    protected static $binaries = null;
+    public static $shared = null;
 
     /**
      * Get env variables
@@ -41,6 +50,14 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
 
         parent::__construct($name, $data, $dataName);
+    }
+
+    /**
+     * Version test
+     */
+    public function testVersion()
+    {
+        $this->assertEquals('Apache Tika ' . self::$version, self::$client->getVersion());
     }
 
     /**
@@ -263,11 +280,48 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Version test
+     * Closure callback test
+     *
+     * @dataProvider    callbackProvider
+     *
+     * @param   string $file
      */
-    public function testVersion()
+    public function testClosureCallback($file)
     {
-        $this->assertEquals('Apache Tika ' . self::$version, self::$client->getVersion());
+        BaseTest::$shared = 0;
+
+        self::$client->getText($file, function($chunk) use(&$count)
+        {
+            BaseTest::$shared++;
+        });
+
+        $this->assertGreaterThan(1, BaseTest::$shared);
+    }
+
+    /**
+     * Callable callback test
+     *
+     * @dataProvider    callbackProvider
+     *
+     * @param   string $file
+     */
+    public function testCallableCallback($file)
+    {
+        BaseTest::$shared = 0;
+
+        self::$client->getText($file, [$this, 'callableCallback']);
+
+        $this->assertGreaterThan(1, BaseTest::$shared);
+    }
+
+    /**
+     * Static method to test callback
+     *
+     * @param   string  $chunk
+     */
+    public static function callableCallback($chunk)
+    {
+        BaseTest::$shared++;
     }
 
     /**
@@ -291,7 +345,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * File provider for OCR
+     * File provider for OCR testing
      *
      * @return array
      */
@@ -301,10 +355,19 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * File provider for callback testing
+     *
+     * @return array
+     */
+    public function callbackProvider()
+    {
+        return $this->samples('sample5');
+    }
+
+    /**
      * File provider using "samples" folder
      *
      * @param   string $sample
-     *
      * @return  array
      */
     protected function samples($sample)

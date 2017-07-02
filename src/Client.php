@@ -2,6 +2,9 @@
 
 namespace Vaites\ApacheTika;
 
+use Closure;
+use Exception;
+
 use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
 
@@ -22,11 +25,32 @@ abstract class Client
     protected static $supportedVersions = ['1.7', '1.8', '1.9', '1.10', '1.11', '1.12', '1.13', '1.14', '1.15'];
 
     /**
+     * Response using callbacks
+     *
+     * @var string
+     */
+    protected $response = null;
+
+    /**
      * Cached responses to avoid multiple request for the same file.
      *
      * @var array
      */
     protected $cache = [];
+
+    /**
+     * Callback called on secuential read
+     *
+     * @var \Closure
+     */
+    protected $callback = null;
+
+    /**
+     * Size of chunks for callback
+     *
+     * @var int
+     */
+    protected $chunkSize = 1024 * 1024;
 
     /**
      * Get a class instance
@@ -43,9 +67,82 @@ abstract class Client
             return new CLIClient($param);
         }
         else
-            {
+        {
             return new WebClient($param, $port, $options);
         }
+    }
+
+    /**
+     * Get the callback
+     *
+     * @return  \Closure|null
+     */
+    public function getCallback()
+    {
+        return $this->callback;
+    }
+
+    /**
+     * Set the callback (callable or closure) for call on secuential read
+     *
+     * @param   mixed   $callback
+     * @return  $this
+     * @throws  \Exception
+     */
+    public function setCallback($callback)
+    {
+        if(is_callable($callback))
+        {
+            $this->callback = function($chunk) use($callback)
+            {
+                return call_user_func_array($callback, [$chunk]);
+            };
+        }
+        elseif($callback instanceof Closure)
+        {
+            $this->callback = $callback;
+        }
+        else
+        {
+            throw new Exception('Invalid callback');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the chunk size
+     *
+     * @return  int
+     */
+    public function getChunkSize()
+    {
+        return $this->chunkSize;
+    }
+
+    /**
+     * Set the chunk size for secuential read
+     *
+     * @param   int     $size
+     * @return  $this
+     * @throws  \Exception
+     */
+    public function setChunkSize($size)
+    {
+        if(static::MODE == 'cli' && is_numeric($size))
+        {
+            $this->chunkSize = (int)$size;
+        }
+        elseif(static::MODE == 'web')
+        {
+            throw new Exception('Chunk size is not supported on web mode');
+        }
+        else
+        {
+            throw new Exception("$size is not a valid chunk size");
+        }
+
+        return $this;
     }
 
     /**
@@ -87,12 +184,18 @@ abstract class Client
     /**
      * Extracts HTML
      *
-     * @param string $file
-     * @return string
-     * @throws \Exception
+     * @param   string  $file
+     * @param   mixed   $callback
+     * @return  string
+     * @throws  \Exception
      */
-    public function getHTML($file)
+    public function getHTML($file, $callback = null)
     {
+        if(!is_null($callback))
+        {
+            $this->setCallback($callback);
+        }
+
         return $this->request('html', $file);
     }
 
@@ -100,11 +203,17 @@ abstract class Client
      * Extracts text
      *
      * @param   string  $file
+     * @param   mixed   $callback
      * @return  string
      * @throws  \Exception
      */
-    public function getText($file)
+    public function getText($file, $callback = null)
     {
+        if(!is_null($callback))
+        {
+            $this->setCallback($callback);
+        }
+
         return $this->request('text', $file);
     }
 
@@ -112,11 +221,17 @@ abstract class Client
      * Extracts main text
      *
      * @param   string  $file
+     * @param   mixed   $callback
      * @return  string
      * @throws  \Exception
      */
-    public function getMainText($file)
+    public function getMainText($file, $callback = null)
     {
+        if(!is_null($callback))
+        {
+            $this->setCallback($callback);
+        }
+
         return $this->request('text-main', $file);
     }
 

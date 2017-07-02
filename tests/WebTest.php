@@ -1,4 +1,6 @@
-<?php namespace Vaites\ApacheTika\Tests;
+<?php
+
+namespace Vaites\ApacheTika\Tests;
 
 use Vaites\ApacheTika\Client;
 

@@ -11,6 +11,35 @@ use Vaites\ApacheTika\Client;
 class ErrorTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Current tika version
+     *
+     * @var string
+     */
+    protected static $version = null;
+
+    /**
+     * Binary path (jars)
+     *
+     * @var string
+     */
+    protected static $binaries = null;
+
+    /**
+     * Get env variables
+     *
+     * @param null      $name
+     * @param array     $data
+     * @param string    $dataName
+     */
+    public function __construct($name = null, array $data = array(), $dataName = '')
+    {
+        self::$version = getenv('APACHE_TIKA_VERSION');
+        self::$binaries = getenv('APACHE_TIKA_BINARIES');
+
+        parent::__construct($name, $data, $dataName);
+    }
+
+    /**
      * Test wrong command line mode path
      */
     public function testAppPath()
@@ -31,7 +60,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppExitValue()
     {
-        $path = getenv('APACHE_TIKA_BINARIES') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
+        $path = self::$binaries . '/tika-app-' . self::$version . '.jar';
 
         try
         {
@@ -54,7 +83,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppJavaBinary()
     {
-        $path = getenv('APACHE_TIKA_BINARIES') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar';
+        $path = self::$binaries . '/tika-app-' . self::$version . '.jar';
 
         try
         {
@@ -121,9 +150,58 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test invalid callback
+     */
+    public function testInvalidCallback()
+    {
+        try
+        {
+            $client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar');
+            $client->setCallback('unknown_function');
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Invalid callback', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test invalid chunk size
+     */
+    public function testInvalidChunkSize()
+    {
+        try
+        {
+            $client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar');
+            $client->setChunkSize('string');
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('is not a valid chunk size', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test invalid chunk size
+     */
+    public function testUnsupportedChunkSize()
+    {
+        try
+        {
+            $client = Client::make('localhost', 9998);
+            $client->setChunkSize(1024);
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Chunk size is not supported', $exception->getMessage());
+        }
+    }
+
+    /**
      * Test nonexistent local file for all clients
      *
      * @dataProvider    parameterProvider
+     * 
      * @param   array   $parameters
      */
     public function testLocalFile($parameters)
@@ -145,6 +223,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      * Test nonexistent remote file for all clients
      *
      * @dataProvider    parameterProvider
+     *
      * @param   array   $parameters
      */
     public function testRemoteFile($parameters)
@@ -166,6 +245,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      * Test wrong request type for all clients
      *
      * @dataProvider    parameterProvider
+     *
      * @param   array   $parameters
      */
     public function testRequestType($parameters)
@@ -192,7 +272,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         return
         [
-            [[getenv('APACHE_TIKA_BINARIES') . '/tika-app-' . getenv('APACHE_TIKA_VERSION') . '.jar']],
+            [[self::$binaries . '/tika-app-' . self::$version . '.jar']],
             [['localhost', 9998]]
         ];
     }

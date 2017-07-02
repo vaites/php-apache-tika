@@ -266,12 +266,16 @@ class WebClient extends Client
         $curl = curl_init();
         curl_setopt_array($curl, $options);
 
-        // get the response and the HTTP status code
-        $response =
-        [
-            trim(curl_exec($curl)),
-            curl_getinfo($curl, CURLINFO_HTTP_CODE),
-        ];
+        // make the request
+        if(is_null($this->callback))
+        {
+            $this->response = curl_exec($curl);
+        }
+        else
+        {
+            $this->response = '';
+            curl_exec($curl);
+        }
 
         // exception if cURL fails
         if(curl_errno($curl))
@@ -279,7 +283,8 @@ class WebClient extends Client
             throw new Exception(curl_error($curl), curl_errno($curl));
         }
 
-        return $response;
+        // return the response and the status code
+        return [trim($this->response), curl_getinfo($curl, CURLINFO_HTTP_CODE)];
     }
 
     /**
@@ -387,6 +392,22 @@ class WebClient extends Client
     {
         // base options
         $options = $this->options;
+
+        // callback
+        if(!is_null($this->callback))
+        {
+            $callback = $this->callback;
+
+            $options[CURLOPT_WRITEFUNCTION] = function($handler, $data) use($callback)
+            {
+                $this->response .= $data;
+
+                $callback($data);
+
+                // safe because cURL must receive the number of *bytes* written
+                return strlen($data);
+            };
+        }
 
         // remote file options
         if($file && preg_match('/^http/', $file))

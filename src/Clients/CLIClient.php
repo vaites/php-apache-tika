@@ -124,15 +124,24 @@ class CLIClient extends Client
     {
         // run command
         $exit = -1;
-        $response = null;
         $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', '/tmp/tika-error.log', 'a']];
         $process = proc_open($command, $descriptors, $pipes);
+        $callback = $this->callback;
 
         // get output if command runs ok
         if(is_resource($process))
         {
             fclose($pipes[0]);
-            $response = trim(stream_get_contents($pipes[1]));
+            $this->response = '';
+            while($chunk = stream_get_line($pipes[1], $this->chunkSize))
+            {
+                if(!is_null($callback))
+                {
+                    $callback($chunk);
+                }
+
+                $this->response .= $chunk;
+            }
             fclose($pipes[1]);
             $exit = proc_close($process);
         }
@@ -148,7 +157,7 @@ class CLIClient extends Client
             throw new Exception("Unexpected exit value ($exit) for command $command");
         }
 
-        return $response;
+        return trim($this->response);
     }
 
     /**
