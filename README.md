@@ -28,7 +28,7 @@ Features
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.7 or greater
-    * Tested up to 1.14
+    * Tested up to 1.15
 
 Requirements
 ------------
@@ -54,13 +54,14 @@ If you want to use OCR you must install [Tesseract](https://github.com/tesseract
 * **Debian/Ubuntu**: `sudo apt-get install tesseract-ocr`
 * **Mac OS X**: `brew install tesseract` (using [Homebrew](http://brew.sh))
 
+The library assumes `tesseract` binary is in path, so you can compile it yourself or install using any other method. 
 
 Usage
 -----
 
 Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-security/2015/08/13/5):
 
-    java -jar tika-server-1.14.jar
+    java -jar tika-server-1.15.jar
     
 Instantiate the class:
 
@@ -94,6 +95,7 @@ There are a few samples to test against:
 * **sample2**: image metadata 
 * **sample3**: text recognition
 * **sample4**: unsupported media
+* **sample5**: huge text for callbacks 
     
 Integrations
 -----
