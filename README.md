@@ -34,6 +34,7 @@ Requirements
 ------------
 
 * PHP 5.4 or greater
+    * cURL extension
 * Apache Tika 1.7 or greater
 * Oracle Java or OpenJDK 
     * Java 6 for Tika up to 1.9
