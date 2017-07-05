@@ -41,7 +41,7 @@ class CommonTest extends PHPUnit_Framework_TestCase
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
-        self::$client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar');
+        self::$client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar', 'java');
 
         parent::__construct($name, $data, $dataName);
     }

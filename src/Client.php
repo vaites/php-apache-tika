@@ -55,20 +55,20 @@ abstract class Client
     /**
      * Get a class instance
      *
-     * @param   string  $param      path or host
-     * @param   int     $port       only port for web client
+     * @param   string  $param1     path or host
+     * @param   int     $param2     Java binary path or port for web client
      * @param   array   $options    options for cURL request
      * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      */
-    public static function make($param = null, $port = null, $options = [])
+    public static function make($param1 = null, $param2 = null, $options = [])
     {
         if (preg_match('/\.jar$/', func_get_arg(0)))
         {
-            return new CLIClient($param);
+            return new CLIClient($param1, $param2);
         }
         else
         {
-            return new WebClient($param, $port, $options);
+            return new WebClient($param1, $param2, $options);
         }
     }
 
