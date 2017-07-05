@@ -91,16 +91,16 @@ abstract class Client
      */
     public function setCallback($callback)
     {
-        if(is_callable($callback))
+        if($callback instanceof Closure)
+        {
+            $this->callback = $callback;
+        }
+        elseif(is_callable($callback))
         {
             $this->callback = function($chunk) use($callback)
             {
                 return call_user_func_array($callback, [$chunk]);
             };
-        }
-        elseif($callback instanceof Closure)
-        {
-            $this->callback = $callback;
         }
         else
         {

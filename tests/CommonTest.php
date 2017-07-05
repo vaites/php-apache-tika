@@ -57,16 +57,6 @@ class CommonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set callback (callable) test
-     */
-    public function testSetCallableCallback()
-    {
-        self::$client->setCallback('trim');
-
-        $this->assertInstanceOf('Closure', self::$client->getCallback()); // callable is converted to closure
-    }
-
-    /**
      * Set callback (closure) test
      */
     public function testSetClosureCallback()
@@ -77,5 +67,23 @@ class CommonTest extends PHPUnit_Framework_TestCase
         });
 
         $this->assertInstanceOf('Closure', self::$client->getCallback());
+    }
+
+    /**
+     * Set callback (callable) test
+     */
+    public function testSetCallableCallback()
+    {
+        self::$client->setCallback('trim');
+
+        $this->assertInstanceOf('Closure', self::$client->getCallback()); // callable is converted to closure
+    }
+
+    /**
+     * Get supported versions test
+     */
+    public function testGetSupportedVersions()
+    {
+        $this->assertTrue(in_array('1.10', Client::getSupportedVersions()));
     }
 }

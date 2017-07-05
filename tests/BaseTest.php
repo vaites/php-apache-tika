@@ -280,6 +280,63 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Text callback test
+     *
+     * @dataProvider    callbackProvider
+     *
+     * @param   string $file
+     */
+    public function testTextCallback($file)
+    {
+        BaseTest::$shared = 0;
+
+        self::$client->getText($file, function($chunk)
+        {
+            BaseTest::$shared++;
+        });
+
+        $this->assertGreaterThan(1, BaseTest::$shared);
+    }
+
+    /**
+     * Main text callback test
+     *
+     * @dataProvider    callbackProvider
+     *
+     * @param   string $file
+     */
+    public function testMainTextCallback($file)
+    {
+        BaseTest::$shared = 0;
+
+        self::$client->getText($file, function($chunk)
+        {
+            BaseTest::$shared++;
+        });
+
+        $this->assertGreaterThan(1, BaseTest::$shared);
+    }
+
+    /**
+     * Main text callback test
+     *
+     * @dataProvider    callbackProvider
+     *
+     * @param   string $file
+     */
+    public function testHtmlCallback($file)
+    {
+        BaseTest::$shared = 0;
+
+        self::$client->getText($file, function($chunk)
+        {
+            BaseTest::$shared++;
+        });
+
+        $this->assertGreaterThan(1, BaseTest::$shared);
+    }
+
+    /**
      * Closure callback test
      *
      * @dataProvider    callbackProvider
@@ -290,7 +347,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         BaseTest::$shared = 0;
 
-        self::$client->getText($file, function($chunk) use(&$count)
+        self::$client->getText($file, function($chunk)
         {
             BaseTest::$shared++;
         });
