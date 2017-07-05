@@ -50,7 +50,7 @@ abstract class Client
      *
      * @var int
      */
-    protected $chunkSize = 1024 * 1024;
+    protected $chunkSize = 1048576;
 
     /**
      * Get a class instance
