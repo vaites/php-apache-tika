@@ -7,6 +7,7 @@ VERSION=${APACHE_TIKA_VERSION:-"1.15"}
 RUNNING=`ps aux | grep -c tika-server-$VERSION`
 
 if [ $RUNNING -lt 2 ]; then
+    java -version
     echo "Starting Tika Server $VERSION"
     java -jar "$BINARIES/tika-server-$VERSION.jar" -p $PORT 2> /tmp/tika-server-$VERSION.log &
     ((PORT++))
