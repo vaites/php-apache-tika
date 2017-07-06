@@ -9,6 +9,7 @@ sudo: false
 addons:
   apt:
     packages:
+    - oracle-java8-set-default
     - tesseract-ocr
 cache:
   directories:

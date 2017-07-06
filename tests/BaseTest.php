@@ -304,14 +304,22 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testMainTextCallback($file)
     {
-        BaseTest::$shared = 0;
+        $client =& self::$client;
 
-        self::$client->getMainText($file, function($chunk)
+        if($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
         {
-            BaseTest::$shared++;
-        });
+            $this->markTestSkipped('Apache Tika ' . self::$version . 'lacks main content extraction');
+        }
+        else
+        {
+            BaseTest::$shared = 0;
 
-        $this->assertGreaterThan(1, BaseTest::$shared);
+            self::$client->getMainText($file, function ($chunk) {
+                BaseTest::$shared++;
+            });
+
+            $this->assertGreaterThan(1, BaseTest::$shared);
+        }
     }
 
     /**
