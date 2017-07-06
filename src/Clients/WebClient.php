@@ -78,9 +78,9 @@ class WebClient extends Client
             $this->port = $port;
         }
 
-        foreach($options as $key => $value)
+        if(!empty($options))
         {
-            $this->options[$key] = $value;
+            $this->setOptions($options);
         }
 
         $this->getVersion(); // exception if not running

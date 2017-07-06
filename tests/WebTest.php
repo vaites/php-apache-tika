@@ -51,4 +51,15 @@ class WebTest extends BaseTest
 
         $this->assertEquals(9997, $client->getPort());
     }
+
+    /**
+     * Set retries test
+     */
+    public function testRetriesPort()
+    {
+        $client = Client::make('localhost', 9998);
+        $client->setRetries(5);
+
+        $this->assertEquals(5, $client->getRetries());
+    }
 }
