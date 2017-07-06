@@ -159,7 +159,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         if($client::MODE == 'web' && version_compare(self::$version, '1.9') < 0)
         {
-            $this->markTestSkipped('Apache Tika ' . self::$version . 'lacks REST language identification');
+            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks REST language identification');
         }
         else
         {
@@ -234,7 +234,16 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testImageMetadata($file, $class = 'ImageMetadata')
     {
-        $this->testMetadata($file, $class);
+        $client =& self::$client;
+
+        if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got ','> when parsing some images');
+        }
+        else
+        {
+            $this->testMetadata($file, $class);
+        }
     }
 
     /**
@@ -246,9 +255,18 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testImageMetadataWidth($file)
     {
-        $meta = self::$client->getMetadata($file);
+        $client =& self::$client;
 
-        $this->assertEquals(1600, $meta->width, basename($file));
+        if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got ','> when parsing some images');
+        }
+        else
+        {
+            $meta = self::$client->getMetadata($file);
+
+            $this->assertEquals(1600, $meta->width, basename($file));
+        }
     }
 
     /**
@@ -260,9 +278,18 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testImageMetadataHeight($file)
     {
-        $meta = self::$client->getMetadata($file);
+        $client =& self::$client;
 
-        $this->assertEquals(900, $meta->height, basename($file));
+        if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got ','> when parsing some images');
+        }
+        else
+        {
+            $meta = self::$client->getMetadata($file);
+
+            $this->assertEquals(900, $meta->height, basename($file));
+        }
     }
 
     /**
