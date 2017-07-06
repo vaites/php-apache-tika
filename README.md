@@ -97,6 +97,15 @@ There are a few samples to test against:
 * **sample3**: text recognition
 * **sample4**: unsupported media
 * **sample5**: huge text for callbacks 
+
+Issues
+------------
+
+There are some issues found during tests, not related with this library:
+
+* 1.9 version running Java 7 on server mode throws random error 500 (*Unexpected RuntimeException*)
+* 1.14 version on server mode throws random errors (*Expected ';', got ','> when parsing some images*) when parsing
+image metadata
     
 Integrations
 -----

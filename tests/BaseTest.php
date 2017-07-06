@@ -238,7 +238,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
         {
-            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got ','> when parsing some images');
+            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
         }
         else
         {
@@ -259,7 +259,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
         {
-            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got ','> when parsing some images');
+            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
         }
         else
         {
@@ -282,7 +282,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
         {
-            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got ','> when parsing some images');
+            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
         }
         else
         {
