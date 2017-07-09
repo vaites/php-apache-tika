@@ -301,9 +301,18 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testImageOCR($file)
     {
-        $text = self::$client->getText($file);
+        $client =& self::$client;
 
-        $this->assertRegExp('/voluptate/i', $text);
+        if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
+        }
+        else
+        {
+            $text = self::$client->getText($file);
+
+            $this->assertRegExp('/voluptate/i', $text);
+        }
     }
 
     /**
