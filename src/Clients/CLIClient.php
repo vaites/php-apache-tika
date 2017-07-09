@@ -69,19 +69,11 @@ class CLIClient extends Client
             return $this->cache[sha1($file)][$type];
         }
 
+        // check the request
+        parent::checkRequest($type, $file);
+
         // command arguments
         $arguments = $this->getArguments($type, $file);
-
-        // invalid local file
-        if($file && !preg_match('/^http/', $file) && !file_exists($file))
-        {
-            throw new Exception("File $file can't be opened");
-        }
-        // invalid remote file
-        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
-        {
-            throw new Exception("File $file can't be opened", 2);
-        }
 
         // add last argument
         if($file)

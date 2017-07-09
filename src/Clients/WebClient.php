@@ -203,6 +203,9 @@ class WebClient extends Client
             $retries[sha1($file)] = $this->retries;
         }
 
+        // check the request
+        parent::checkRequest($type, $file);
+
         // parameters for cURL request
         list($resource, $headers) = $this->getParameters($type, $file);
 

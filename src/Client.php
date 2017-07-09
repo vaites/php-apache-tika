@@ -256,6 +256,27 @@ abstract class Client
     }
 
     /**
+     * Check the request before executing
+     *
+     * @param   string  $type
+     * @param   string  $file
+     * @throws  \Exception
+     */
+    public function checkRequest($type, $file)
+    {
+        // invalid local file
+        if($file && !preg_match('/^http/', $file) && !file_exists($file))
+        {
+            throw new Exception("File $file can't be opened");
+        }
+        // invalid remote file
+        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
+        {
+            throw new Exception("File $file can't be opened", 2);
+        }
+    }
+
+    /**
      * Configure and make a request and return its results.
      *
      * @param   string  $type
