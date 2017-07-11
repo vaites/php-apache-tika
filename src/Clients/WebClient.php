@@ -228,6 +228,12 @@ class WebClient extends Client
             {
                 $response = Metadata::make($response, $file);
             }
+
+            // cache certain responses
+            if(in_array($type, ['lang', 'meta']))
+            {
+                $this->cache[sha1($file)][$type] = $response;
+            }
         }
         // request completed successfully but result is empty
         elseif($status == 204)
@@ -237,20 +243,12 @@ class WebClient extends Client
         // retry on request failed with error 500
         elseif($status == 500 && $retries[sha1($file)]--)
         {
-            usleep(100000);
-
             $response = $this->request($type, $file);
         }
         // other status code is an error
         else
         {
             $this->error($status, $resource);
-        }
-
-        // cache certain responses
-        if(in_array($type, ['lang', 'meta']))
-        {
-            $this->cache[sha1($file)][$type] = $response;
         }
 
         return $response;
