@@ -16,7 +16,7 @@ class WebTest extends BaseTest
      */
     public static function setUpBeforeClass()
     {
-        self::$client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 15]);
+        self::$client = Client::make('localhost', 9998);
     }
 
     /**
@@ -24,10 +24,10 @@ class WebTest extends BaseTest
      */
     public function testCurlOptions()
     {
-        $client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 5]);
+        $client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 3]);
         $options = $client->getOptions();
 
-        $this->assertEquals(5, $options[CURLOPT_TIMEOUT]);
+        $this->assertEquals(3, $options[CURLOPT_TIMEOUT]);
     }
 
     /**
