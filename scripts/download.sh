@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-LATEST="1.15"
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
 
-declare -a SUPPORTED_VERSIONS=("1.7" "1.8" "1.9" "1.10" "1.11" "1.12" "1.13" "1.14" "1.15")
+declare -a SUPPORTED_VERSIONS=("1.7" "1.8" "1.9" "1.10" "1.11" "1.12" "1.13" "1.14" "1.15" "1.16")
+
+LATEST=${SUPPORTED_VERSIONS[-1]}
 
 mkdir --parents $BINARIES
 

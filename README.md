@@ -28,7 +28,7 @@ Features
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.7 or greater
-    * Tested up to 1.15
+    * Tested up to 1.16
 
 Requirements
 ------------
@@ -62,7 +62,7 @@ Usage
 
 Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-security/2015/08/13/5):
 
-    java -jar tika-server-1.15.jar
+    java -jar tika-server-x.xx.jar
     
 Instantiate the class:
 
@@ -87,9 +87,7 @@ Or use to extract text from images:
 Tests
 -----
 
-Tests are designed to cover all features for all supported versions of Apache Tika (currently from 1.7 to 1.15) in 
-app mode and server mode.
-
+Tests are designed to **cover all features for all supported versions** of Apache Tika in app mode and server mode. 
 There are a few samples to test against:
 
 * **sample1**: document metadata and text extraction
@@ -104,8 +102,7 @@ Issues
 There are some issues found during tests, not related with this library:
 
 * 1.9 version running Java 7 on server mode throws random error 500 (*Unexpected RuntimeException*)
-* 1.14 version on server mode throws random errors (*Expected ';', got ','> when parsing some images*) when parsing
-image metadata
+* 1.14 version on server mode throws random errors (*Expected ';', got ','*) when parsing image metadata
     
 Integrations
 -----
