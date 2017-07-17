@@ -209,7 +209,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Syntax error', $exception->getMessage());
+            $this->assertEquals(JSON_ERROR_SYNTAX, $exception->getCode());
         }
     }
 

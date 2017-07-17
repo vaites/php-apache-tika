@@ -82,9 +82,13 @@ abstract class Metadata
         $meta = json_decode($response);
 
         // exceptions if metadata is not valid
-        if(json_last_error())
+        if(json_last_error() && function_exists('json_last_error_msg'))
         {
-            throw new Exception(json_last_error_msg());
+            throw new Exception(json_last_error_msg(), json_last_error());
+        }
+        elseif(json_last_error())
+        {
+            throw new Exception('Error parsing JSON response', json_last_error());
         }
         elseif(empty($meta))
         {
