@@ -1,5 +1,5 @@
 [![Current release](https://img.shields.io/github/release/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/releases/latest)
-[![Package at Packagist](https://img.shields.io/packagist/v/vaites/php-apache-tika.svg)](https://packagist.org/packages/vaites/php-apache-tika)
+[![Package at Packagist](https://img.shields.io/packagist/dt/vaites/php-apache-tika.svg)](https://packagist.org/packages/vaites/php-apache-tika)
 [![Build status](https://travis-ci.org/vaites/php-apache-tika.svg?branch=master)](https://travis-ci.org/vaites/php-apache-tika)
 [![Code coverage](https://img.shields.io/codecov/c/github/vaites/php-apache-tika.svg)](https://codecov.io/github/vaites/php-apache-tika)
 [![Code insight](https://img.shields.io/sensiolabs/i/ec066502-0fde-4455-9fc3-8e9fe6867834.svg)](https://insight.sensiolabs.com/projects/ec066502-0fde-4455-9fc3-8e9fe6867834)
@@ -16,6 +16,10 @@ The following modes are supported:
 * **Server mode**: make HTTP requests to [JSR 311 network server](http://wiki.apache.org/tika/TikaJAXRS)
 
 Server mode is recommended because is 5 times faster, but some shared hosts don't allow run processes in background.
+
+Although the library contains a list of supported versions, any version of Apache Tika should be compatible as long as
+backward compatibility is maintained by Tika team. Therefore, it is not necessary to wait for an update of the library 
+to work with the new versions of the tool.
 
 Features
 --------
@@ -103,6 +107,7 @@ There are some issues found during tests, not related with this library:
 
 * 1.9 version running Java 7 on server mode throws random error 500 (*Unexpected RuntimeException*)
 * 1.14 version on server mode throws random errors (*Expected ';', got ','*) when parsing image metadata
+* Tesseract slows down document parsing as described in [TIKA-2359](https://issues.apache.org/jira/browse/TIKA-2359)
     
 Integrations
 -----
