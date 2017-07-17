@@ -42,25 +42,22 @@ class ImageMetadata extends Metadata
     {
         switch(mb_strtolower($key))
         {
-            case 'compression lossless':
-                $this->lossless = ($value == 'true');
-                break;
-
             case 'compression':
-                $this->lossless = ($value == 'Uncompressed');
+            case 'compression lossless':
+                $this->lossless = ($value == 'true' || $value == 'Uncompressed');
                 break;
 
             case 'height':
             case 'image height':
             case 'tiff:imageheigth':
             case 'tiff:imagelength':
-                $this->height = (int)$value;
+                $this->height = (int) $value;
                 break;
 
             case 'width':
             case 'image width':
             case 'tiff:imagewidth':
-                $this->width = (int)$value;
+                $this->width = (int) $value;
                 break;
 
             default:

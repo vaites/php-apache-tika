@@ -38,7 +38,8 @@ Requirements
 ------------
 
 * PHP 5.4 or greater
-    * cURL extension
+    * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
+    * [cURL extension](http://php.net/manual/en/book.curl.php)
 * Apache Tika 1.7 or greater
 * Oracle Java or OpenJDK 
     * Java 6 for Tika up to 1.9
