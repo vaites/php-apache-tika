@@ -60,8 +60,6 @@ class WebTest extends BaseTest
         $client = Client::make('localhost', 9998);
         $client->setRetries(5);
 
-        die(var_dump($client->getOptions()));
-
         $this->assertEquals(5, $client->getRetries());
     }
 }
