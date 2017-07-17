@@ -133,12 +133,12 @@ class DocumentMetadata extends Metadata
             case 'nbpage':
             case 'page-count':
             case 'xmptpg:npages':
-                $this->pages = (int)$value;
+                $this->pages = (int) $value;
                 break;
 
             case 'nbword':
             case 'word-count':
-                $this->words = (int)$value;
+                $this->words = (int) $value;
                 break;
 
             case 'creation-date':

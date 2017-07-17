@@ -4,6 +4,7 @@ use Exception;
 use PHPUnit_Framework_TestCase;
 
 use Vaites\ApacheTika\Client;
+use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
  * Error tests
@@ -194,6 +195,36 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         catch(Exception $exception)
         {
             $this->assertContains('Chunk size is not supported', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test invalid metadata
+     */
+    public function testInvalidMetadata()
+    {
+        try
+        {
+            $metadata = Metadata::make('InvalidJsonString', './samples/sample1.doc');
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Syntax error', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test empty metadata
+     */
+    public function testEmptyMetadata()
+    {
+        try
+        {
+            $metadata = Metadata::make('', './samples/sample1.doc');
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Empty response', $exception->getMessage());
         }
     }
 
