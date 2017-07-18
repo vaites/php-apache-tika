@@ -79,6 +79,13 @@ abstract class Metadata
      */
     public static function make($response, $file)
     {
+        // an empty response throws an error
+        if(empty($response) || trim($response) == '')
+        {
+            throw new Exception('Empty response');
+        }
+
+        // decode the JSON response
         $meta = json_decode($response);
 
         // exceptions if metadata is not valid
@@ -89,10 +96,6 @@ abstract class Metadata
         elseif(json_last_error())
         {
             throw new Exception('Error parsing JSON response', json_last_error());
-        }
-        elseif(empty($meta))
-        {
-            throw new Exception('Empty response');
         }
 
         // get content type
