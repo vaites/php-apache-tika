@@ -37,6 +37,6 @@ after_script:
 after_success:
 - codecov
 notifications:
-  email: false
-  slack:
-    secure: BPS7hweVVEOCIIpD8/F8GlK0aIqklxLei8reO0K4yxNFgjYrVpuNLORO+Lq6g58oHPEykwCUKH6adnqADbyxRimi8y3yMnuW7/Y/ZKlmSIvPCQBijWrr+3/zAzU9aIdF2pL5wU8+m1rARpATDR2JzKmHotaeFZ5o5U3wPhO7CKdBYDQzvpfEl9xNAqdhgZTi5S4m0CNSX6wHVmFYz292PFZtldzX2LNHJor+qS3PHmZ3Mv2sqbAFhOgCrzrToYybaKAAP71XrefXb9+ITjABXZXNWrXJzYfYEr/RJUxxR6IdlrQdIZb7DJegD8VWyvDmr9dVuZIAuhulAjBBvWn1GUVNTd0BrO/XDq6oc3r4TtjkdPgLcwcn9Qsmm/0QGa6Fi4zj4ohhFEa0jGKmAT3EgHcrncnScBRnaD72Sh67U2M/66MHKWZA8BfXi0bGabk7J6N3+rvFOHz0wKW96u3kwCP5G3vEi6jPmb/CIJTm8f6+2S8mTAHOeqFKBQMndgrIoTGbmx/1O9KbByF/pbwdCv356U2dqsxFeNg2C1zRGaYMKKms9p270FlphR7TvjFrMS5BtEVU0GKEi3Dy3HuNEMulAdDWRGeik1Xcvud5gvxb+ntj0ZyydLhlS0GUTkpLzGNOuLLG+xTUMzy/IUI8at7tMzgEPR1oMDaRg1z/JNA=
+  email: 
+    recipients:
+      - contacto@davidmartinez.net
