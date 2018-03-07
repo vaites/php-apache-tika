@@ -32,7 +32,7 @@ Features
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.7 or greater
-    * Tested up to 1.16
+    * Tested up to 1.17
 
 Requirements
 ------------

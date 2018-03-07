@@ -25,6 +25,7 @@ env:
   - APACHE_TIKA_VERSION=1.14
   - APACHE_TIKA_VERSION=1.15
   - APACHE_TIKA_VERSION=1.16
+  - APACHE_TIKA_VERSION=1.17
 before_install:
 - pip install --user codecov
 install:
