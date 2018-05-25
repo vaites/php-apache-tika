@@ -69,6 +69,10 @@ Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-securi
 
     java -jar tika-server-x.xx.jar
     
+If you are using JRE instead of JDK, you must run if you have Java 9 or greater:
+
+    java --add-modules java.se.ee -jar tika-server-x.xx.jar
+    
 Instantiate the class:
 
     $client = \Vaites\ApacheTika\Client::make('localhost', 9998);           // server mode (default)
