@@ -46,7 +46,6 @@ Requirements
     * Java 7 for Tika 1.10 or greater
 * [Tesseract](https://github.com/tesseract-ocr/tesseract) (optional for OCR recognition)
     
-
 Installation
 ------------
 
@@ -92,6 +91,10 @@ Or use to extract text from images:
     $metadata = $client->getMetadata('/path/to/your/image');
 
     $text = $client->getText('/path/to/your/image');
+    
+You can use an URL instead of a file path and the library will download the file and pass it to Apache Tika. There's 
+**no need** to add `-enableUnsecureFeatures -enableFileUrl` to command line when starting the server, as described 
+[here](https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes).
     
 Tests
 -----
