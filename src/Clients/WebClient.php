@@ -265,7 +265,12 @@ class WebClient extends Client
     {
         // cURL init and options
         $curl = curl_init();
-        curl_setopt_array($curl, $options);
+
+        // we avoid curl_setopt_array($curl, $options) because extrange Windows behaviour (issue #8)
+        foreach($options as $option => $value)
+        {
+            curl_setopt($curl, $option, $value);
+        }
 
         // make the request
         if(is_null($this->callback))
