@@ -378,6 +378,18 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Remote file test
+     *
+     * @dataProvider    remoteProvider
+     *
+     * @param   string $file
+     */
+    public function testRemoteDocumentText($file)
+    {
+        $this->assertContains('This is a small demonstration .pdf file', self::$client->getText($file));
+    }
+
+    /**
      * Static method to test callback
      *
      * @param   string  $chunk
@@ -425,6 +437,21 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     public function callbackProvider()
     {
         return $this->samples('sample5');
+    }
+
+    /**
+     * File provider for remote testing
+     *
+     * @return array
+     */
+    public function remoteProvider()
+    {
+        return
+        [
+            [
+                'http://www.africau.edu/images/default/sample.pdf'
+            ]
+        ];
     }
 
     /**
