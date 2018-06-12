@@ -78,11 +78,12 @@ class CLIClient extends Client
         // add last argument
         if($file)
         {
-            $arguments[] = "'$file'";
+            $arguments[] = escapeshellarg($file);
         }
 
         // build command
-        $command = ($this->java ?: 'java') . " -jar '{$this->path}' " . implode(' ', $arguments);
+        $jar = escapeshellarg($this->path);
+        $command = ($this->java ?: 'java') . " -jar $jar " . implode(' ', $arguments);
 
         // run command
         $response = $this->exec($command);
