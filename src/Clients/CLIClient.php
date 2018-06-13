@@ -78,11 +78,12 @@ class CLIClient extends Client
         // add last argument
         if($file)
         {
-            $arguments[] = "'$file'";
+            $arguments[] = escapeshellarg($file);
         }
 
         // build command
-        $command = ($this->java ?: 'java') . " -jar '{$this->path}' " . implode(' ', $arguments);
+        $jar = escapeshellarg($this->path);
+        $command = ($this->java ?: 'java') . " -jar $jar " . implode(' ', $arguments);
 
         // run command
         $response = $this->exec($command);
@@ -116,7 +117,8 @@ class CLIClient extends Client
     {
         // run command
         $exit = -1;
-        $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', '/tmp/tika-error.log', 'a']];
+        $logfile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tika-error.log';
+        $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', $logfile, 'a']];
         $process = proc_open($command, $descriptors, $pipes);
         $callback = $this->callback;
 
