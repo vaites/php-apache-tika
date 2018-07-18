@@ -5,8 +5,7 @@
 [![Code insight](https://img.shields.io/sensiolabs/i/ec066502-0fde-4455-9fc3-8e9fe6867834.svg)](https://insight.sensiolabs.com/projects/ec066502-0fde-4455-9fc3-8e9fe6867834)
 [![License](https://img.shields.io/github/license/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/blob/master/LICENSE)
 
-PHP Apache Tika
-===============
+# PHP Apache Tika
 
 This tool provides [Apache Tika](https://tika.apache.org) bindings for PHP, allowing to extract text and metadata 
 from documents, images and other formats. 
@@ -21,8 +20,7 @@ Although the library contains a list of supported versions, any version of Apach
 backward compatibility is maintained by Tika team. Therefore, it is not necessary to wait for an update of the library 
 to work with the new versions of the tool.
 
-Features
---------
+## Features
 
 * Simple class interface to Apache Tika features:
     * Text and HTML extraction
@@ -34,8 +32,7 @@ Features
 * Compatible with Apache Tika 1.7 or greater
     * Tested up to 1.18
 
-Requirements
-------------
+## Requirements
 
 * PHP 5.4 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
@@ -46,8 +43,7 @@ Requirements
     * Java 7 for Tika 1.10 or greater
 * [Tesseract](https://github.com/tesseract-ocr/tesseract) (optional for OCR recognition)
     
-Installation
-------------
+## Installation
 
 Install using Composer:
 
@@ -61,8 +57,7 @@ If you want to use OCR you must install [Tesseract](https://github.com/tesseract
 
 The library assumes `tesseract` binary is in path, so you can compile it yourself or install using any other method. 
 
-Usage
------
+## Usage
 
 Start Apache Tika server with [caution](http://www.openwall.com/lists/oss-security/2015/08/13/5):
 
@@ -95,9 +90,61 @@ Or use to extract text from images:
 You can use an URL instead of a file path and the library will download the file and pass it to Apache Tika. There's 
 **no need** to add `-enableUnsecureFeatures -enableFileUrl` to command line when starting the server, as described 
 [here](https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes).
+
+### Methods
+
+Tika related methods:
+
+    $client->getMetadata($file);
+    $client->getLanguage($file);
+    $client->getMIME($file);
+    $client->getHTML($file);
+    $client->getText($file);
+    $client->getMainText($file);
     
-Tests
------
+Get the version of current Tika app/server:
+
+    $client->getVersion();
+    
+Get the full list of Apacke Tika supported versions:
+
+    $client->getSupportedVersions();
+
+Set/get a callback for sequential read of response:
+
+    $client->setCallback($callback);
+    $client->getCallback();
+    
+Set/get the chunk size for secuential read:
+
+    $client->setChunkSize($size);
+    $client->getChunkSize();
+    
+Set/get JAR/Java paths (only CLI mode):
+
+    $client->setPath($path);
+    $client->getPath();
+    
+    $client->setJava($java);
+    $client->getJava();
+    
+Set/get host properties (only server mode):
+
+    $client->setHost($host);
+    $client->getHost();
+    
+    $client->setPort($port);
+    $client->getPort();
+    
+    $client->setRetries($retries);
+    $client->getRetries();
+    
+Set/get [cURL client options](http://php.net/manual/en/function.curl-setopt.php) (only server mode):
+
+    $client->setOptions($options);
+    $client->getOptions();
+    
+## Tests
 
 Tests are designed to **cover all features for all supported versions** of Apache Tika in app mode and server mode. 
 There are a few samples to test against:
@@ -108,8 +155,7 @@ There are a few samples to test against:
 * **sample4**: unsupported media
 * **sample5**: huge text for callbacks 
 
-Issues
-------------
+## Issues
 
 There are some issues found during tests, not related with this library:
 
@@ -117,7 +163,6 @@ There are some issues found during tests, not related with this library:
 * 1.14 version on server mode throws random errors (*Expected ';', got ','*) when parsing image metadata
 * Tesseract slows down document parsing as described in [TIKA-2359](https://issues.apache.org/jira/browse/TIKA-2359)
     
-Integrations
------
+## Integrations
 
 - [Symfony2 Bundle](https://github.com/welcoMattic/ApacheTikaBundle)
