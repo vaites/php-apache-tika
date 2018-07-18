@@ -216,7 +216,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         if($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
         {
-            $this->markTestSkipped('Apache Tika ' . self::$version . 'lacks main content extraction');
+            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks main content extraction');
         }
         else
         {
@@ -344,7 +344,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         if($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
         {
-            $this->markTestSkipped('Apache Tika ' . self::$version . 'lacks main content extraction');
+            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks main content extraction');
         }
         else
         {

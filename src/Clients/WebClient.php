@@ -54,6 +54,7 @@ class WebClient extends Client
     protected $options =
     [
         CURLINFO_HEADER_OUT    => true,
+        CURLOPT_HTTPHEADER     => [],
         CURLOPT_PUT            => true,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT        => 5,
@@ -213,7 +214,10 @@ class WebClient extends Client
         $options = $this->getCurlOptions($type, $file);
 
         // sets headers
-        $options[CURLOPT_HTTPHEADER] = $headers;
+        foreach($headers as $header)
+        {
+            $options[CURLOPT_HTTPHEADER][] = $header;
+        }
 
         // cURL init and options
         $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}" . "/$resource";

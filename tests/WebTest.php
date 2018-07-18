@@ -31,6 +31,19 @@ class WebTest extends BaseTest
     }
 
     /**
+     * cURL headers test
+     */
+    public function testCurlHeaders()
+    {
+        $header = 'Content-Type: image/jpeg';
+
+        $client = Client::make('localhost', 9998, [CURLOPT_HTTPHEADER => [$header]]);
+        $options = $client->getOptions();
+
+        $this->assertContains($header, $options[CURLOPT_HTTPHEADER]);
+    }
+
+    /**
      * Set host test
      */
     public function testSetHost()
