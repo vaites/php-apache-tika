@@ -44,13 +44,59 @@ class CLIClient extends Client
     {
         if($path)
         {
-            $this->path = $path;
+            $this->setPath($path);
         }
 
         if($java)
         {
-            $this->java = $java;
+            $this->setJava($java);
         }
+    }
+
+    /**
+     * Get the path
+     *
+     * @return  null|string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Set the path
+     *
+     * @param   string  $path
+     * @return  $this
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get the Java path
+     *
+     * @return  null|int
+     */
+    public function getJava()
+    {
+        return $this->java;
+    }
+
+    /**
+     * Set the Java path
+     *
+     * @param   string    $java
+     * @return  $this
+     */
+    public function setJava($java)
+    {
+        $this->java = $java;
+
+        return $this;
     }
 
     /**

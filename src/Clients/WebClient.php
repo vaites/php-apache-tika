@@ -71,12 +71,12 @@ class WebClient extends Client
     {
         if($host)
         {
-            $this->host = $host;
+            $this->setHost($host);
         }
 
         if($port)
         {
-            $this->port = $port;
+            $this->setPort($port);
         }
 
         if(!empty($options))
