@@ -67,10 +67,20 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      * @param   string $class
+     * @throws  \Exception
      */
     public function testMetadata($file, $class = 'Metadata')
     {
-        $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
+        $client =& self::$client;
+
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        else
+        {
+            $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
+        }
     }
 
     /**
@@ -80,6 +90,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      * @param   string $class
+     * @throws  \Exception
      */
     public function testDocumentMetadata($file, $class = 'DocumentMetadata')
     {
@@ -92,6 +103,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentMetadataTitle($file)
     {
@@ -104,6 +116,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentMetadataAuthor($file)
     {
@@ -116,6 +129,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentMetadataCreated($file)
     {
@@ -128,6 +142,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentMetadataUpdated($file)
     {
@@ -140,6 +155,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentMetadataKeywords($file)
     {
@@ -152,6 +168,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentLanguage($file)
     {
@@ -173,6 +190,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentMIME($file)
     {
@@ -185,6 +203,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentHTML($file)
     {
@@ -197,10 +216,20 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentText($file)
     {
-        $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
+        $client =& self::$client;
+
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        else
+        {
+            $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
+        }
     }
 
     /**
@@ -209,6 +238,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    documentProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testDocumentMainText($file)
     {
@@ -231,12 +261,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @param   string $file
      * @param   string $class
+     * @throws  \Exception
      */
     public function testImageMetadata($file, $class = 'ImageMetadata')
     {
         $client =& self::$client;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        elseif($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
         {
             $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
         }
@@ -252,6 +287,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    imageProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testImageMetadataWidth($file)
     {
@@ -275,6 +311,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    imageProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testImageMetadataHeight($file)
     {
@@ -298,12 +335,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    ocrProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testImageOCR($file)
     {
         $client =& self::$client;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        elseif($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
         {
             $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
         }
@@ -321,6 +363,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    callbackProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testTextCallback($file)
     {
@@ -337,6 +380,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    callbackProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testMainTextCallback($file)
     {
@@ -364,6 +408,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    callbackProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testHtmlCallback($file)
     {
@@ -383,10 +428,20 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @dataProvider    remoteProvider
      *
      * @param   string $file
+     * @throws  \Exception
      */
     public function testRemoteDocumentText($file)
     {
-        $this->assertContains('This is a small demonstration .pdf file', self::$client->getText($file));
+        $client =& self::$client;
+
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        else
+        {
+            $this->assertContains('This is a small demonstration .pdf file', self::$client->getText($file));
+        }
     }
 
     /**
