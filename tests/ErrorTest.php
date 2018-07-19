@@ -61,7 +61,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppExitValue()
     {
-        $path = self::$binaries . '/tika-app-' . self::$version . '.jar';
+        $path = self::getPathForVersion(self::$version);
 
         try
         {
@@ -84,7 +84,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testAppJavaBinary()
     {
-        $path = self::$binaries . '/tika-app-' . self::$version . '.jar';
+        $path = self::getPathForVersion(self::$version);
 
         try
         {
@@ -94,6 +94,24 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         catch(Exception $exception)
         {
             $this->assertContains('Unexpected exit value', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test wrong command execution
+     */
+    public function testExecCommand()
+    {
+        $path = self::getPathForVersion(self::$version);
+
+        try
+        {
+            $client = Client::make($path);
+            $client->exec('');
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Error running command', $exception->getMessage());
         }
     }
 
@@ -303,8 +321,19 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         return
         [
-            [[self::$binaries . '/tika-app-' . self::$version . '.jar']],
+            [[self::getPathForVersion(self::$version)]],
             [['localhost', 9998]]
         ];
+    }
+
+    /**
+     * Get the full path of Tika app for a specified version
+     *
+     * @param   string  $version
+     * @return  string
+     */
+    private static function getPathForVersion($version)
+    {
+        return self::$binaries . "/tika-app-{$version}.jar";
     }
 }

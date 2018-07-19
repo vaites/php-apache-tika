@@ -159,7 +159,7 @@ class CLIClient extends Client
      * @return  null|string
      * @throws  \Exception
      */
-    protected function exec($command)
+    public function exec($command)
     {
         // run command
         $exit = -1;
