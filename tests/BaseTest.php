@@ -492,14 +492,23 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testHtmlCallback($file)
     {
-        BaseTest::$shared = 0;
+        $client =& self::$client;
 
-        self::$client->getHtml($file, function($chunk)
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
         {
-            BaseTest::$shared++;
-        });
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        else
+        {
+            BaseTest::$shared = 0;
 
-        $this->assertGreaterThan(1, BaseTest::$shared);
+            self::$client->getHtml($file, function($chunk)
+            {
+                BaseTest::$shared++;
+            });
+
+            $this->assertGreaterThan(1, BaseTest::$shared);
+        }
     }
 
     /**
