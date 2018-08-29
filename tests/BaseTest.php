@@ -447,11 +447,20 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testTextCallback($file)
     {
-        BaseTest::$shared = 0;
+        $client =& self::$client;
+        
+    if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        else
+        {
+            BaseTest::$shared = 0;
 
-        self::$client->getText($file, [$this, 'callableCallback']);
+            self::$client->getText($file, [$this, 'callableCallback']);
 
-        $this->assertGreaterThan(1, BaseTest::$shared);
+            $this->assertGreaterThan(1, BaseTest::$shared);
+        }
     }
 
     /**
