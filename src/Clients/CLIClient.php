@@ -185,11 +185,6 @@ class CLIClient extends Client
             fclose($pipes[1]);
             $exit = proc_close($process);
         }
-        // exception if command fails
-        else
-        {
-            throw new Exception("Error running command $command");
-        }
 
         // exception if exit value is not zero
         if($exit > 0)

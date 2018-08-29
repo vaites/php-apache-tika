@@ -98,24 +98,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test wrong command execution
-     */
-    public function testExecCommand()
-    {
-        $path = self::getPathForVersion(self::$version);
-
-        try
-        {
-            $client = Client::make($path);
-            $client->exec('');
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Error running command', $exception->getMessage());
-        }
-    }
-
-    /**
      * Test wrong server
      */
     public function testServerConnection()

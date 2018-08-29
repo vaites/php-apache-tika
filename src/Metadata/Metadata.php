@@ -89,24 +89,15 @@ abstract class Metadata
         $meta = json_decode($response);
 
         // exceptions if metadata is not valid
-        if(json_last_error() && function_exists('json_last_error_msg'))
+        if(json_last_error())
         {
-            throw new Exception(json_last_error_msg(), json_last_error());
-        }
-        elseif(json_last_error())
-        {
-            throw new Exception('Error parsing JSON response', json_last_error());
+            $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Error parsing JSON response';
+
+            throw new Exception($message, json_last_error());
         }
 
         // get content type
-        if(is_array($meta->{'Content-Type'}))
-        {
-            $mime = current($meta->{'Content-Type'});
-        }
-        else
-        {
-            $mime = $meta->{'Content-Type'};
-        }
+        $mime = is_array($meta->{'Content-Type'}) ? current($meta->{'Content-Type'}) : $meta->{'Content-Type'};
 
         // instance based on content type
         switch(current(explode('/', $mime)))
