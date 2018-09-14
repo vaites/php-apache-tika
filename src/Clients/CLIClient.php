@@ -140,6 +140,12 @@ class CLIClient extends Client
             // fix for invalid? json returned only with images
             $response = str_replace(basename($file) . '"}{', '", ', $response);
 
+            // on Windows, response comes in another charset
+            if(defined('PHP_WINDOWS_VERSION_MAJOR'))
+            {
+                $response = utf8_encode($response);
+            }
+
             $response = Metadata::make($response, $file);
         }
 
