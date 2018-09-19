@@ -142,6 +142,13 @@ $client->setChunkSize($size);
 $client->getChunkSize();
 ```
     
+Enable/disable the internal remote file downloader:
+
+```php
+$client->setDownloadRemote(true);
+$client->getDownloadRemote();
+```
+    
 Set/get JAR/Java paths (only CLI mode):
 
 ```php
