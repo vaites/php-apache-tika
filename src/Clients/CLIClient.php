@@ -131,8 +131,6 @@ class CLIClient extends Client
         $jar = escapeshellarg($this->path);
         $command = ($this->java ?: 'java') . " -jar $jar " . implode(' ', $arguments);
 
-        die($command);
-
         // run command
         $response = $this->exec($command);
 
