@@ -229,6 +229,28 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test wrong request type for all clients
+     *
+     * @dataProvider    parameterProvider
+     *
+     * @param   array   $parameters
+     */
+    public function testRequestType($parameters)
+    {
+        try
+        {
+            $client = call_user_func_array(['Vaites\ApacheTika\Client', 'make'], $parameters);
+            $client->request('bad');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Unknown type bad', $exception->getMessage());
+        }
+    }
+
+    /**
      * Test nonexistent local file for all clients
      *
      * @dataProvider    parameterProvider
@@ -269,28 +291,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         catch(Exception $exception)
         {
             $this->assertEquals(2, $exception->getCode());
-        }
-    }
-
-    /**
-     * Test wrong request type for all clients
-     *
-     * @dataProvider    parameterProvider
-     *
-     * @param   array   $parameters
-     */
-    public function testRequestType($parameters)
-    {
-        try
-        {
-            $client = call_user_func_array(['Vaites\ApacheTika\Client', 'make'], $parameters);
-            $client->request('bad');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Unknown type bad', $exception->getMessage());
         }
     }
 

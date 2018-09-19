@@ -521,7 +521,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Remote file test
+     * Remote file test with integrated download
      *
      * @dataProvider    remoteProvider
      *
@@ -538,7 +538,31 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         }
         else
         {
-            $this->assertContains('This is a small demonstration .pdf file', self::$client->getText($file));
+            $this->assertContains('This is a small demonstration .pdf file', $client->getText($file));
+        }
+    }
+
+    /**
+     * Remote file test with
+     *
+     * @dataProvider    remoteProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testDirectRemoteDocumentText($file)
+    {
+        $client =& self::$client;
+
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        else
+        {
+            $client->setDownloadRemote(false);
+
+            $this->assertContains('This is a small demonstration .pdf file', $client->getText($file));
         }
     }
 

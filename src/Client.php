@@ -56,6 +56,13 @@ abstract class Client
     protected $chunkSize = 1048576;
 
     /**
+     * Remote download flag
+     *
+     * @var bool
+     */
+    protected $downloadRemote = false;
+
+    /**
      * Get a class instance
      *
      * @param   string  $param1     path or host
@@ -145,6 +152,29 @@ abstract class Client
         {
             throw new Exception("$size is not a valid chunk size");
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the remote download flag
+     *
+     * @return  bool
+     */
+    public function getDownloadRemote()
+    {
+        return $this->downloadRemote;
+    }
+
+    /**
+     * Set the remote download flag
+     *
+     * @param   bool    $download
+     * @return  $this
+     */
+    public function setDownloadRemote($download)
+    {
+        $this->downloadRemote = (bool) $download;
 
         return $this;
     }
@@ -265,6 +295,7 @@ abstract class Client
      *
      * @param   string  $type
      * @param   string  $file
+     * @return  string
      * @throws  \Exception
      */
     public function checkRequest($type, $file)
@@ -279,6 +310,54 @@ abstract class Client
         {
             throw new Exception("File $file can't be opened", 2);
         }
+        // download remote file if required only for
+        elseif($file && preg_match('/^http/', $file) && $this->downloadRemote)
+        {
+            $file = $this->downloadFile($file);
+        }
+
+        return $file;
+    }
+
+    /**
+     * Download file to a temporary folder
+     *
+     * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
+     * @param   string  $file
+     * @return  string
+     * @throws  \Exception
+     */
+    protected function downloadFile($file)
+    {
+        $dest = tempnam(sys_get_temp_dir(), 'TIKA');
+
+        $fp = fopen($dest, 'w+');
+
+        if($fp === false)
+        {
+            throw new Exception("$dest can't be opened");
+        }
+
+        $ch = curl_init($file);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_exec($ch);
+
+        if(curl_errno($ch))
+        {
+            throw new Exception(curl_error($ch));
+        }
+
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        if($code != 200)
+        {
+            throw new Exception("$file can't be downloaded", $code);
+        }
+
+        return $dest;
     }
 
     /**

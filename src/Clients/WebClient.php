@@ -84,6 +84,8 @@ class WebClient extends Client
             $this->setOptions($options);
         }
 
+        $this->setDownloadRemote(true);
+
         $this->getVersion(); // exception if not running
     }
 
@@ -205,7 +207,7 @@ class WebClient extends Client
         }
 
         // check the request
-        parent::checkRequest($type, $file);
+        $file = parent::checkRequest($type, $file);
 
         // parameters for cURL request
         list($resource, $headers) = $this->getParameters($type, $file);
@@ -339,6 +341,7 @@ class WebClient extends Client
     /**
      * Get the parameters to make the request
      *
+     * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
      * @param   string  $type
      * @param   string  file
      * @return  array
@@ -347,6 +350,12 @@ class WebClient extends Client
     protected function getParameters($type, $file = null)
     {
         $headers = [];
+
+        if(!empty($file) && preg_match('/^http/', $file))
+        {
+            $headers[] = "fileUrl:$file";
+        }
+
         switch($type)
         {
             case 'html':
@@ -422,7 +431,7 @@ class WebClient extends Client
         // remote file options
         if($file && preg_match('/^http/', $file))
         {
-            $options[CURLOPT_INFILE] = fopen($file, 'r');
+            //
         }
         // local file options
         elseif($file && file_exists($file) && is_readable($file))
@@ -435,7 +444,7 @@ class WebClient extends Client
         {
             $options[CURLOPT_PUT] = false;
         }
-        // error
+        // file not accesible
         else
         {
             throw new Exception("File $file can't be opened");

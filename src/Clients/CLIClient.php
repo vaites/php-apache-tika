@@ -116,7 +116,7 @@ class CLIClient extends Client
         }
 
         // check the request
-        parent::checkRequest($type, $file);
+        $file = parent::checkRequest($type, $file);
 
         // command arguments
         $arguments = $this->getArguments($type, $file);
@@ -130,6 +130,8 @@ class CLIClient extends Client
         // build command
         $jar = escapeshellarg($this->path);
         $command = ($this->java ?: 'java') . " -jar $jar " . implode(' ', $arguments);
+
+        die($command);
 
         // run command
         $response = $this->exec($command);
