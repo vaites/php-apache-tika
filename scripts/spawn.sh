@@ -6,8 +6,14 @@ VERSION=${APACHE_TIKA_VERSION:-"1.19"}
 
 RUNNING=$(ps aux | grep -c tika-server-$VERSION)
 
+if ! type "javac" 2> /dev/null; then
+    JAVA='java --add-modules java.se.ee'
+else
+    JAVA='java'
+fi
+
 if [ $RUNNING -lt 2 ]; then
-    java -version
+    $JAVA -version
     echo "Starting Tika Server $VERSION"
 
     if [ "$1" == "--foreground" ]; then
@@ -17,9 +23,9 @@ if [ $RUNNING -lt 2 ]; then
     fi
 
     if [ $(echo "$VERSION > 1.14" | bc) -gt 0 ]; then
-        COMMAND="java -jar $BINARIES/tika-server-$VERSION.jar -p $PORT -enableUnsecureFeatures -enableFileUrl"
+        COMMAND="$JAVA -jar $BINARIES/tika-server-$VERSION.jar -p $PORT -enableUnsecureFeatures -enableFileUrl"
     else
-        COMMAND="java -jar $BINARIES/tika-server-$VERSION.jar -p $PORT"
+        COMMAND="$JAVA -jar $BINARIES/tika-server-$VERSION.jar -p $PORT"
     fi
 
     if [ $MODE == "background" ]; then
