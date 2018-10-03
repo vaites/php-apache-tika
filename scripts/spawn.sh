@@ -22,11 +22,14 @@ if [ $RUNNING -lt 2 ]; then
         MODE="background"
     fi
 
-    if [ $(echo "$VERSION > 1.14" | bc) -gt 0 ]; then
+    if [ $(php -r "echo version_compare('$VERSION', '1.14', '>') ? 'true' : 'false';") == "true" ]; then
         COMMAND="$JAVA -jar $BINARIES/tika-server-$VERSION.jar -p $PORT -enableUnsecureFeatures -enableFileUrl"
     else
         COMMAND="$JAVA -jar $BINARIES/tika-server-$VERSION.jar -p $PORT"
     fi
+
+    echo $COMMAND;
+    exit;
 
     if [ $MODE == "background" ]; then
         $COMMAND  2> /tmp/tika-server-$VERSION.log &

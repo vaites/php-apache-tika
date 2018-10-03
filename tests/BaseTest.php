@@ -558,7 +558,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         {
             $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
         }
-        elseif($client::MODE == 'web' && version_compare(self::$version, '1.14') < 0)
+        elseif($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
         {
             $this->markTestSkipped('Apache Tika between 1.10 and 1.14 doesn\'t supports unsecure features');
         }
