@@ -28,9 +28,6 @@ if [ $RUNNING -lt 2 ]; then
         COMMAND="$JAVA -jar $BINARIES/tika-server-$VERSION.jar -p $PORT"
     fi
 
-    echo $COMMAND;
-    exit;
-
     if [ $MODE == "background" ]; then
         $COMMAND  2> /tmp/tika-server-$VERSION.log &
         sleep 5
