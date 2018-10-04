@@ -543,7 +543,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Remote file test with
+     * Remote file test with internal downloader
      *
      * @dataProvider    remoteProvider
      *
@@ -568,6 +568,36 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
             $this->assertContains('This is a small demonstration .pdf file', $client->getText($file));
         }
+    }
+
+    /**
+     * Test available detectors
+     *
+     * @throws  \Exception
+     */
+    public function testAvailableDetectors()
+    {
+        $this->assertContains('org.apache.tika.mime.MimeTypes', self::$client->getAvailableDetectors());
+    }
+
+    /**
+     * Test available parsers
+     *
+     * @throws  \Exception
+     */
+    public function testAvailableParsers()
+    {
+        $this->assertContains('org.apache.tika.parser.DefaultParser', self::$client->getAvailableParsers());
+    }
+
+    /**
+     * Test supported MIME types
+     *
+     * @throws  \Exception
+     */
+    public function testSupportedMIMETypes()
+    {
+        $this->assertContains('application/x-pdf', self::$client->getSupportedMIMETypes());
     }
 
     /**

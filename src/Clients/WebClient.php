@@ -192,7 +192,7 @@ class WebClient extends Client
      */
     public function setOption($key, $value)
     {
-        if(in_array($key, [CURLINFO_HEADER_OUT, CURLOPT_HTTPHEADER, CURLOPT_PUT, CURLOPT_RETURNTRANSFER]))
+        if(in_array($key, [CURLINFO_HEADER_OUT, CURLOPT_PUT, CURLOPT_RETURNTRANSFER]))
         {
             throw new Exception("Value for cURL option $key cannot be modified", 3);
         }
@@ -447,8 +447,11 @@ class WebClient extends Client
                 $headers[] = 'Accept: text/plain';
                 break;
 
+            case 'detectors':
+            case 'parsers':
+            case 'mime-types':
             case 'version':
-                $resource = 'version';
+                $resource = $type;
                 break;
 
             default:
@@ -499,7 +502,7 @@ class WebClient extends Client
             $options[CURLOPT_INFILESIZE] = filesize($file);
         }
         // other options for specific requests
-        elseif($type == 'version')
+        elseif(in_array($type,  ['detectors', 'mime-types', 'parsers', 'version']))
         {
             $options[CURLOPT_PUT] = false;
         }

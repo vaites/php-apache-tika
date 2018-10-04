@@ -239,6 +239,18 @@ class CLIClient extends Client
                 $arguments[] = '--text-main';
                 break;
 
+            case 'mime-types':
+                $arguments[] = '--list-supported-types';
+                break;
+
+            case 'detectors':
+                $arguments[] = '--list-detectors';
+                break;
+
+            case 'parsers':
+                $arguments[] = '--list-parsers';
+                break;
+
             case 'version':
                 $arguments[] = '--version';
                 break;

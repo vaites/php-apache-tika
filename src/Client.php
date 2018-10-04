@@ -270,6 +270,39 @@ abstract class Client
     }
 
     /**
+     * Returns the supported MIME types
+     *
+     * @return  string
+     * @throws  \Exception
+     */
+    public function getSupportedMIMETypes()
+    {
+        return $this->request('mime-types');
+    }
+
+    /**
+     * Returns the available detectors
+     *
+     * @return  string
+     * @throws  \Exception
+     */
+    public function getAvailableDetectors()
+    {
+        return $this->request('detectors');
+    }
+
+    /**
+     * Returns the available parsers
+     *
+     * @return  string
+     * @throws  \Exception
+     */
+    public function getAvailableParsers()
+    {
+        return $this->request('parsers');
+    }
+
+    /**
      * Returns current Tika version
      *
      * @return  string

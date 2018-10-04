@@ -36,6 +36,7 @@ class CommonTest extends PHPUnit_Framework_TestCase
      * @param null      $name
      * @param array     $data
      * @param string    $dataName
+     * @throws \Exception
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
