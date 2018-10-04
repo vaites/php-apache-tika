@@ -344,18 +344,23 @@ abstract class Client
      */
     public function checkRequest($type, $file)
     {
+        // no checks for getters
+        if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
+        {
+            //
+        }
         // invalid local file
-        if($file && !preg_match('/^http/', $file) && !file_exists($file))
+        elseif(!preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
         }
         // invalid remote file
-        elseif($file && preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
+        elseif(preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
         {
             throw new Exception("File $file can't be opened", 2);
         }
-        // download remote file if required only for
-        elseif($file && preg_match('/^http/', $file) && $this->downloadRemote)
+        // download remote file if required only for integrated downloader
+        elseif(preg_match('/^http/', $file) && $this->downloadRemote)
         {
             $file = $this->downloadFile($file);
         }
