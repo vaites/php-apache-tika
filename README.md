@@ -109,7 +109,7 @@ Here are the full list of available methods
 
 #### Common
 
-Tika related methods:
+Tika file related methods:
 
 ```php
 $client->getMetadata($file);
@@ -120,16 +120,20 @@ $client->getText($file);
 $client->getMainText($file);
 ```
     
-Get the version of current Tika app/server:
+Other Tika related methods:
 
 ```php
+$client->getSupportedMIMETypes();
+$client->getAvailableDetectors();
+$client->getAvailableParsers();
 $client->getVersion();
 ```
     
-Get the full list of Apacke Tika supported versions:
+Supported versions related methods:
 
 ```php
 $client->getSupportedVersions();
+$client->isVersionSupported($version);
 ```
 
 Set/get a callback for sequential read of response:

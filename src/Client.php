@@ -324,6 +324,17 @@ abstract class Client
     }
 
     /**
+     * Checks if a specific version is supported
+     *
+     * @param   string  $version
+     * @return  bool
+     */
+    public static function isVersionSupported($version)
+    {
+        return in_array($version, self::getSupportedVersions());
+    }
+
+    /**
      * Check the request before executing
      *
      * @param   string  $type
