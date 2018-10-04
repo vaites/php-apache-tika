@@ -133,6 +133,21 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test invalidrequest options
+     */
+    public function testRequestRestrictedOptions()
+    {
+        try
+        {
+            $client = Client::make('localhost', 9998, [CURLOPT_PUT => false]);
+        }
+        catch(Exception $exception)
+        {
+            $this->assertEquals(3, $exception->getCode());
+        }
+    }
+
+    /**
      * Test unsupported media type
      */
     public function testUnsupportedMedia()

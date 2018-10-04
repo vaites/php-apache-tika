@@ -47,7 +47,7 @@ class WebClient extends Client
     protected $retries = 3;
 
     /**
-     * cURL options
+     * Default cURL options
      *
      * @var array
      */
@@ -65,6 +65,7 @@ class WebClient extends Client
      *
      * @param   string  $host
      * @param   int     $port
+     * @param   array   $options
      * @throws  \Exception
      */
     public function __construct($host = null, $port = null, $options = [])
@@ -159,7 +160,7 @@ class WebClient extends Client
     }
 
     /**
-     * Get the options
+     * Get all the options
      *
      * @return  null|array
      */
@@ -169,17 +170,75 @@ class WebClient extends Client
     }
 
     /**
-     * Set the options
+     * Get an specified option
+     *
+     * @param   string  $key
+     * @return  mixed
+     */
+    public function getOption($key)
+    {
+        return isset($this->options[$key]) ? $this->options[$key] : null;
+    }
+
+    /**
+     * Set a cURL option to be set with curl_setopt()
+     *
+     * @link    http://php.net/manual/en/curl.constants.php
+     * @link    http://php.net/manual/en/function.curl-setopt.php
+     * @param   string  $key
+     * @param   mixed   $value
+     * @return  $this
+     * @throws  \Exception
+     */
+    public function setOption($key, $value)
+    {
+        if(in_array($key, [CURLINFO_HEADER_OUT, CURLOPT_HTTPHEADER, CURLOPT_PUT, CURLOPT_RETURNTRANSFER]))
+        {
+            throw new Exception("Value for cURL option $key cannot be modified", 3);
+        }
+
+        $this->options[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Set the cURL options
      *
      * @param   array   $options
      * @return  $this
+     * @throws  \Exception
      */
     public function setOptions($options)
     {
         foreach($options as $key => $value)
         {
-            $this->options[$key] = $value;
+            $this->setOption($key, $value);
         }
+
+        return $this;
+    }
+
+    /**
+     * Get the timeout value for cURL
+     *
+     * @return  int
+     */
+    public function getTimeout()
+    {
+        return $this->getOption(CURLOPT_TIMEOUT);
+    }
+
+    /**
+     * Set the timeout value for cURL
+     *
+     * @param   int     $value
+     * @return  $this
+     * @throws  \Exception
+     */
+    public function setTimeout($value)
+    {
+        $this->setOption(CURLOPT_TIMEOUT, (int) $value);
 
         return $this;
     }

@@ -105,6 +105,10 @@ You can use an URL instead of a file path and the library will download the file
 
 ### Methods
 
+Here are the full list of available methods
+
+#### Common
+
 Tika related methods:
 
 ```php
@@ -148,6 +152,8 @@ Enable/disable the internal remote file downloader:
 $client->setDownloadRemote(true);
 $client->getDownloadRemote();
 ```
+
+#### Command line client
     
 Set/get JAR/Java paths (only CLI mode):
 
@@ -158,8 +164,10 @@ $client->getPath();
 $client->setJava($java);
 $client->getJava();
 ```
+
+#### Web client
     
-Set/get host properties (only server mode):
+Set/get host properties
 
 ```php
 $client->setHost($host);
@@ -172,11 +180,20 @@ $client->setRetries($retries);
 $client->getRetries();
 ```
     
-Set/get [cURL client options](http://php.net/manual/en/function.curl-setopt.php) (only server mode):
+Set/get [cURL client options](http://php.net/manual/en/function.curl-setopt.php)
 
 ```php
 $client->setOptions($options);
 $client->getOptions();
+$client->setOption($option, $value);
+$client->getOption($option);
+```
+
+Set/get cURL client common options:
+
+```php
+$client->setTimeout($seconds);
+$client->getTimeout();
 ```
 
 ## Tests

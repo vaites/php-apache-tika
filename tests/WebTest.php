@@ -20,7 +20,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * cURL options test
+     * cURL multiple options test
      */
     public function testCurlOptions()
     {
@@ -28,6 +28,26 @@ class WebTest extends BaseTest
         $options = $client->getOptions();
 
         $this->assertEquals(3, $options[CURLOPT_TIMEOUT]);
+    }
+
+    /**
+     * cURL single option test
+     */
+    public function testCurlSingleOption()
+    {
+        $client = Client::make('localhost', 9998)->setOption(CURLOPT_TIMEOUT, 3);
+
+        $this->assertEquals(3, $client->getOption(CURLOPT_TIMEOUT));
+    }
+
+    /**
+     * cURL timeout option test
+     */
+    public function testCurlTimeoutOption()
+    {
+        $client = Client::make('localhost', 9998)->setTimeout(3);
+
+        $this->assertEquals(3, $client->getTimeout());
     }
 
     /**
