@@ -115,11 +115,11 @@ class CLIClient extends Client
             return $this->cache[sha1($file)][$type];
         }
 
-        // check the request
-        $file = parent::checkRequest($type, $file);
-
         // command arguments
         $arguments = $this->getArguments($type, $file);
+
+        // check the request
+        $file = parent::checkRequest($type, $file);
 
         // add last argument
         if($file)
