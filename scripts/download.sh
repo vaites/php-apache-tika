@@ -2,15 +2,9 @@
 
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
 VERSION=${APACHE_TIKA_VERSION:-"1.19"}
-LATEST="1.19"
+MIRROR="https://archive.apache.org"
 
 mkdir --parents $BINARIES
-
-if [ $VERSION == $LATEST ]; then
-   MIRROR="http://www-us.apache.org"
-else
-   MIRROR="https://archive.apache.org"
-fi
 
 if [ ! -f "$BINARIES/tika-app-$VERSION.jar" ]; then
     wget "$MIRROR/dist/tika/tika-app-$VERSION.jar" -O "$BINARIES/tika-app-$VERSION.jar"
