@@ -30,7 +30,7 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.7 or greater
-    * Tested up to 1.19.1
+    * Tested up to 1.20
 
 ## Requirements
 
