@@ -73,7 +73,7 @@ abstract class Client
      */
     public static function make($param1 = null, $param2 = null, $options = [])
     {
-        if (preg_match('/\.jar$/', func_get_arg(0)))
+        if (func_num_args() > 0 && preg_match('/\.jar$/', func_get_arg(0)))
         {
             return new CLIClient($param1, $param2);
         }

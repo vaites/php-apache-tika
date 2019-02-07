@@ -40,6 +40,13 @@ class WebClient extends Client
     protected $port = 9998;
 
     /**
+     * Apache Tika server base URL
+     *
+     * @var string
+     */
+    protected $baseUrl = null;
+
+    /**
      * Number of retries on server error
      *
      * @var int
@@ -86,8 +93,6 @@ class WebClient extends Client
         }
 
         $this->setDownloadRemote(true);
-
-        $this->getVersion(); // exception if not running
     }
 
     /**
@@ -134,6 +139,30 @@ class WebClient extends Client
         $this->port = $port;
 
         return $this;
+    }
+
+    /**
+     * Gets the base URL
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        if ($this->baseUrl !== null) {
+            return $this->baseUrl;
+        } else {
+            return "http://{$this->host}:{$this->port}/";
+        }
+    }
+
+    /**
+     * Set the base URL
+     *
+     * @param string $baseUrl
+     */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
     }
 
     /**
@@ -281,7 +310,7 @@ class WebClient extends Client
         }
 
         // cURL init and options
-        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}" . "/$resource";
+        $options[CURLOPT_URL] = rtrim($this->getBaseUrl(), '/') . "/$resource";
 
         // get the response and the HTTP status code
         list($response, $status) = $this->exec($options);
