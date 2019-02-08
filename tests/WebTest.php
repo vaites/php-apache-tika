@@ -86,9 +86,29 @@ class WebTest extends BaseTest
     }
 
     /**
+     * Set url host test
+     */
+    public function testSetUrlHost()
+    {
+        $client = Client::make('http://localhost:9998');
+
+        $this->assertEquals('localhost', $client->getHost());
+    }
+
+    /**
+     * Set url port test
+     */
+    public function testSetUrlPort()
+    {
+        $client = Client::make('http://localhost:9998');
+
+        $this->assertEquals(9998, $client->getPort());
+    }
+
+    /**
      * Set retries test
      */
-    public function testRetriesPort()
+    public function testSetRetries()
     {
         $client = Client::make('localhost', 9998);
         $client->setRetries(5);

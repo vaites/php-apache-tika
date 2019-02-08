@@ -180,6 +180,9 @@ $client->getHost();
 $client->setPort($port);
 $client->getPort();
 
+$client->setUrl($url);
+$client->getUrl();
+
 $client->setRetries($retries);
 $client->getRetries();
 ```

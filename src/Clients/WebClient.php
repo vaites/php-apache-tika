@@ -30,14 +30,14 @@ class WebClient extends Client
      *
      * @var string
      */
-    protected $host = '127.0.0.1';
+    protected $host = null;
 
     /**
      * Apache Tika server port
      *
      * @var int
      */
-    protected $port = 9998;
+    protected $port = null;
 
     /**
      * Number of retries on server error
@@ -57,7 +57,7 @@ class WebClient extends Client
         CURLOPT_HTTPHEADER     => [],
         CURLOPT_PUT            => true,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 5,
+        CURLOPT_TIMEOUT        => 5
     ];
 
     /**
@@ -70,7 +70,11 @@ class WebClient extends Client
      */
     public function __construct($host = null, $port = null, $options = [])
     {
-        if($host)
+        if($host && filter_var($host, FILTER_VALIDATE_URL))
+        {
+            $this->setUrl($host);
+        }
+        elseif($host)
         {
             $this->setHost($host);
         }
@@ -88,6 +92,36 @@ class WebClient extends Client
         $this->setDownloadRemote(true);
 
         $this->getVersion(); // exception if not running
+    }
+
+    /**
+     * Get the base URL
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return sprintf('http://%s:%d', $this->host, $this->port ?: 9998);
+    }
+
+    /**
+     * Set the host and port using an URL
+     *
+     * @param   string  $url
+     * @return $this
+     */
+    public function setUrl($url)
+    {
+        $url = parse_url($url);
+
+        $this->setHost($url['host']);
+
+        if(!empty($url['port']))
+        {
+            $this->setPort($url['port']);
+        }
+
+        return $this;
     }
 
     /**
@@ -281,7 +315,7 @@ class WebClient extends Client
         }
 
         // cURL init and options
-        $options[CURLOPT_URL] = "http://{$this->host}:{$this->port}" . "/$resource";
+        $options[CURLOPT_URL] = $this->getUrl() . "/$resource";
 
         // get the response and the HTTP status code
         list($response, $status) = $this->exec($options);
