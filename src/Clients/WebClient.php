@@ -70,7 +70,7 @@ class WebClient extends Client
      */
     public function __construct($host = null, $port = null, $options = [])
     {
-        if($host && filter_var($host, FILTER_VALIDATE_URL))
+        if(is_string($host) && filter_var($host, FILTER_VALIDATE_URL))
         {
             $this->setUrl($host);
         }
@@ -79,7 +79,7 @@ class WebClient extends Client
             $this->setHost($host);
         }
 
-        if($port)
+        if(is_numeric($port))
         {
             $this->setPort($port);
         }
@@ -116,7 +116,7 @@ class WebClient extends Client
 
         $this->setHost($url['host']);
 
-        if(!empty($url['port']))
+        if(isset($url['port']))
         {
             $this->setPort($url['port']);
         }
@@ -436,7 +436,7 @@ class WebClient extends Client
      *
      * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
      * @param   string  $type
-     * @param   string  file
+     * @param   string  $file
      * @return  array
      * @throws  \Exception
      */
