@@ -22,19 +22,19 @@ class CLITest extends BaseTest
      */
     public function testSetPath()
     {
-        $client = Client::make(self::getPathForVersion('1.0'));
+        $client = Client::make(self::getPathForVersion(self::$version));
 
-        $this->assertEquals(self::getPathForVersion('1.0'), $client->getPath());
+        $this->assertEquals(self::getPathForVersion(self::$version), $client->getPath());
     }
 
     /**
      * Set Java test
      */
-    public function testSetPort()
+    public function testSetBinary()
     {
-        $client = Client::make(self::getPathForVersion('1.0'), '/opt/jdk/bin/java');
+        $client = Client::make(self::getPathForVersion(self::$version), '/usr/bin/java');
 
-        $this->assertEquals('/opt/jdk/bin/java', $client->getJava());
+        $this->assertEquals('/usr/bin/java', $client->getJava());
     }
 
     /**

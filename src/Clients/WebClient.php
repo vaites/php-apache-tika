@@ -287,7 +287,13 @@ class WebClient extends Client
      */
     public function check()
     {
-        $this->getVersion(); // throws an exception if server is unreachable or can't connect
+        if(self::$checked == false)
+        {
+            // throws an exception if server is unreachable or can't connect
+            $this->getVersion();
+
+            self::$checked = true;
+        }
     }
 
     /**
@@ -301,6 +307,9 @@ class WebClient extends Client
     public function request($type, $file = null)
     {
         static $retries = [];
+
+        // check if not checked
+        $this->check();
 
         // check if is cached
         if(isset($this->cache[sha1($file)][$type]))

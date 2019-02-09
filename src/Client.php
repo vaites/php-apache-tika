@@ -36,6 +36,13 @@ abstract class Client
     protected static $check = true;
 
     /**
+     * Checked flag
+     *
+     * @var bool
+     */
+    protected static $checked = false;
+
+    /**
      * Response using callbacks
      *
      * @var string

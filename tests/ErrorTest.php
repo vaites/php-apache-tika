@@ -47,7 +47,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $client = Client::make('/nonexistent/path/to/apache-tika.jar');
+            $client = Client::prepare('/nonexistent/path/to/apache-tika.jar');
             $client->getVersion();
         }
         catch(Exception $exception)
@@ -82,13 +82,13 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     /**
      * Test invalid Java binary path for command line mode
      */
-    public function testAppJavaBinary()
+    public function testJavaBinary()
     {
         $path = self::getPathForVersion(self::$version);
 
         try
         {
-            $client = Client::make($path, '/nonexistent/path/to/java');
+            $client = Client::prepare($path, '/nonexistent/path/to/java');
             $client->getVersion();
         }
         catch(Exception $exception)
@@ -104,7 +104,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            Client::make('localhost', 9997);
+            Client::make('http://localhost:9997');
 
             $this->fail();
         }
@@ -235,7 +235,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $metadata = Metadata::make('', './samples/sample1.doc');
+            Metadata::make('', './samples/sample1.doc');
         }
         catch(Exception $exception)
         {
