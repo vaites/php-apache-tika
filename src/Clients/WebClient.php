@@ -91,7 +91,7 @@ class WebClient extends Client
 
         $this->setDownloadRemote(true);
 
-        if(self::$check == true)
+        if(self::$check === true)
         {
             $this->check();
         }
@@ -287,7 +287,7 @@ class WebClient extends Client
      */
     public function check()
     {
-        if(self::$checked == false)
+        if(self::$checked === false)
         {
             // throws an exception if server is unreachable or can't connect
             $this->getVersion();

@@ -52,7 +52,7 @@ class CLIClient extends Client
             $this->setJava($java);
         }
 
-        if(self::$check == true)
+        if(self::$check === true)
         {
             $this->check();
         }
@@ -112,7 +112,7 @@ class CLIClient extends Client
      */
     public function check()
     {
-        if(self::$checked == false)
+        if(self::$checked === false)
         {
             // Java command must not return an error
             exec(($this->java ?: 'java') . ' -version 2> /dev/null', $output, $return);
