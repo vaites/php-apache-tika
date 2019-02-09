@@ -91,7 +91,10 @@ class WebClient extends Client
 
         $this->setDownloadRemote(true);
 
-        $this->getVersion(); // exception if not running
+        if(self::$check == true)
+        {
+            $this->check();
+        }
     }
 
     /**
@@ -275,6 +278,16 @@ class WebClient extends Client
         $this->setOption(CURLOPT_TIMEOUT, (int) $value);
 
         return $this;
+    }
+
+    /**
+     * Check if server is running
+     *
+     * @throws \Exception
+     */
+    public function check()
+    {
+        $this->getVersion(); // throws an exception if server is unreachable or can't connect
     }
 
     /**

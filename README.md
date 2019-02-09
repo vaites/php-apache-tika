@@ -73,11 +73,25 @@ If you are using JRE instead of JDK, you must run if you have Java 9 or greater:
 java --add-modules java.se.ee -jar tika-server-x.xx.jar
 ```
 
-Instantiate the class:
+Instantiate the class, checking if JAR exists or server is running:
 
 ```php
 $client = \Vaites\ApacheTika\Client::make('localhost', 9998);           // server mode (default)
 $client = \Vaites\ApacheTika\Client::make('/path/to/tika-app.jar');     // app mode 
+```
+
+If you want to use dependency injection, serialize the class or just delay the check:
+
+```php
+$client = \Vaites\ApacheTika\Client::prepare('localhost', 9998);
+$client = \Vaites\ApacheTika\Client::prepare('/path/to/tika-app.jar'); 
+```
+
+You can use an URL too:
+
+```php
+$client = \Vaites\ApacheTika\Client::make('http://localhost:9998');
+$client = \Vaites\ApacheTika\Client::prepare('http://localhost:9998');
 ```
 
 Use the class to extract text from documents:

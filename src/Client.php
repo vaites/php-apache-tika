@@ -29,6 +29,13 @@ abstract class Client
     ];
 
     /**
+     * Verify JAR or server connection on constructor
+     *
+     * @var bool
+     */
+    protected static $check = true;
+
+    /**
      * Response using callbacks
      *
      * @var string
@@ -64,7 +71,7 @@ abstract class Client
     protected $downloadRemote = false;
 
     /**
-     * Get a class instance
+     * Get a class instance throwing an exception if check fails
      *
      * @param   string  $param1     path or host
      * @param   int     $param2     Java binary path or port for web client
@@ -82,6 +89,22 @@ abstract class Client
         {
             return new WebClient($param1, $param2, $options);
         }
+    }
+
+    /**
+     * Get a class instance delaying the check
+     *
+     * @param   string  $param1     path or host
+     * @param   int     $param2     Java binary path or port for web client
+     * @param   array   $options    options for cURL request
+     * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @throws  \Exception
+     */
+    public static function prepare($param1 = null, $param2 = null, $options = [])
+    {
+        self::$check = false;
+
+        return self::make($param1, $param2, $options);
     }
 
     /**
@@ -409,6 +432,13 @@ abstract class Client
 
         return $dest;
     }
+
+    /**
+     * Check Java binary, JAR path or server connection
+     *
+     * @return  void
+     */
+    abstract public function check();
 
     /**
      * Configure and make a request and return its results.

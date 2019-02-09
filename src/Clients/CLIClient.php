@@ -51,6 +51,11 @@ class CLIClient extends Client
         {
             $this->setJava($java);
         }
+
+        if(self::$check == true)
+        {
+            $this->check();
+        }
     }
 
     /**
@@ -97,6 +102,25 @@ class CLIClient extends Client
         $this->java = $java;
 
         return $this;
+    }
+
+    /**
+     * Check Java binary, JAR path or server connection
+     *
+     * @return  void
+     * @throws  \Exception
+     */
+    public function check()
+    {
+        exec(($this->java ?: 'java') . ' -version 2> /dev/null', $output, $return);
+        if($return != 0)
+        {
+            throw new Exception('Java command not found');
+        }
+        elseif(file_exists($this->path) == false)
+        {
+            throw new Exception('Apache Tika app JAR not found');
+        }
     }
 
     /**
