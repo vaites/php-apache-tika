@@ -521,7 +521,7 @@ class WebClient extends Client
      * Get the cURL options
      *
      * @param   string  $type
-     * @param   string  file
+     * @param   string  $file
      * @return  array
      * @throws  \Exception
      */

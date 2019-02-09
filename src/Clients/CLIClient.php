@@ -121,7 +121,7 @@ class CLIClient extends Client
                 throw new Exception('Java command not found');
             }
             // JAR path must exists
-            elseif(file_exists($this->path) == false)
+            elseif(file_exists($this->path) === false)
             {
                 throw new Exception('Apache Tika app JAR not found');
             }
