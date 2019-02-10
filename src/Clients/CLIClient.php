@@ -112,7 +112,7 @@ class CLIClient extends Client
      */
     public function check()
     {
-        if(self::$checked === false)
+        if(self::isChecked() === false)
         {
             // Java command must not return an error
             exec(($this->java ?: 'java') . ' -version 2> /dev/null', $output, $return);
@@ -126,7 +126,7 @@ class CLIClient extends Client
                 throw new Exception('Apache Tika app JAR not found');
             }
 
-            self::$checked = true;
+            self::setChecked(true);
         }
     }
 

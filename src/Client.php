@@ -355,6 +355,26 @@ abstract class Client
     }
 
     /**
+     * Sets the checked flag
+     *
+     * @param $checked
+     */
+    public static function setChecked($checked)
+    {
+        self::$checked = (bool) $checked;
+    }
+
+    /**
+     * Checks if instance is checked
+     *
+     * @return  bool
+     */
+    public static function isChecked()
+    {
+        return self::$checked;
+    }
+
+    /**
      * Checks if a specific version is supported
      *
      * @param   string  $version

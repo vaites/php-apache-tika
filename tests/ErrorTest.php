@@ -104,7 +104,9 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            Client::make('http://localhost:9997');
+            Client::setChecked(true);
+            $client = Client::prepare('localhost', 9997);
+            $client->getVersion();
 
             $this->fail();
         }
@@ -121,14 +123,15 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $client = Client::make('localhost', 9998, [CURLOPT_PROXY => 'localhost']);
+            Client::setChecked(true);
+            $client = Client::prepare('localhost', 9998, [CURLOPT_PROXY => 'localhost']);
             $client->request('bad');
 
             $this->fail();
         }
         catch(Exception $exception)
         {
-            $this->assertEquals(7, $exception->getCode());
+            $this->assertContains('Unknown type bad', $exception->getMessage());
         }
     }
 
