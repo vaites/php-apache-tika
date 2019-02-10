@@ -289,10 +289,10 @@ class WebClient extends Client
     {
         if(self::isChecked() === false)
         {
-            // throws an exception if server is unreachable or can't connect
-            $this->getVersion();
-
             self::setChecked(true);
+
+            // throws an exception if server is unreachable or can't connect
+            $this->request('version');
         }
     }
 
