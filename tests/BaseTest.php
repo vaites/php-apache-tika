@@ -660,7 +660,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         return
         [
             [
-                'http://www.africau.edu/images/default/sample.pdf'
+                'https://github.com/vaites/php-apache-tika/raw/master/samples/sample6s.pdf'
             ]
         ];
     }
