@@ -566,7 +566,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         {
             $client->setDownloadRemote(false);
 
-            $this->assertContains('This is a small demonstration .pdf file', $client->getText($file));
+            $this->assertContains('Rationis enim perfectio est virtus', $client->getText($file));
         }
     }
 
