@@ -343,7 +343,7 @@ class WebClient extends Client
         list($response, $status) = $this->exec($options);
 
         // reduce memory usage closing cURL resource
-        if($file && is_resource($options[CURLOPT_INFILE]))
+        if(isset($options[CURLOPT_INFILE]) && is_resource($options[CURLOPT_INFILE]))
         {
             fclose($options[CURLOPT_INFILE]);
         }
