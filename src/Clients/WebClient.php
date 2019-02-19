@@ -376,7 +376,6 @@ class WebClient extends Client
             $this->error($status, $resource);
         }
 
-
         return $response;
     }
 
