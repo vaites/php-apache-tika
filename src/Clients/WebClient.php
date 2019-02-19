@@ -342,6 +342,10 @@ class WebClient extends Client
         // get the response and the HTTP status code
         list($response, $status) = $this->exec($options);
 
+        if ($file && is_resource($options[CURLOPT_INFILE])){
+            fclose($options[CURLOPT_INFILE]);
+        }
+
         // request completed successfully
         if($status == 200)
         {
@@ -371,6 +375,7 @@ class WebClient extends Client
         {
             $this->error($status, $resource);
         }
+
 
         return $response;
     }
