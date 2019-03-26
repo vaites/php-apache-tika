@@ -43,6 +43,13 @@ class DocumentMetadata extends Metadata
     public $language = null;
 
     /**
+     * Content encoding
+     *
+     * @var null
+     */
+    public $encoding = null;
+
+    /**
      * Author
      *
      * @var string
@@ -76,6 +83,7 @@ class DocumentMetadata extends Metadata
      * @param   string  $key
      * @param   mixed   $value
      * @return  bool
+     * @throws  \Exception
      */
     protected function setAttribute($key, $value)
     {
@@ -150,6 +158,10 @@ class DocumentMetadata extends Metadata
             case 'last-modified':
                 $value = preg_replace('/\.\d+/', 'Z', $value);
                 $this->updated = new DateTime($value, $timezone);
+                break;
+
+            case 'content-encoding':
+                $this->encoding = $value;
                 break;
 
             default:
