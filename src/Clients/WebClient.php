@@ -70,6 +70,8 @@ class WebClient extends Client
      */
     public function __construct($host = null, $port = null, $options = [])
     {
+        parent::__construct();
+
         if(is_string($host) && filter_var($host, FILTER_VALIDATE_URL))
         {
             $this->setUrl($host);

@@ -42,6 +42,8 @@ class CLIClient extends Client
      */
     public function __construct($path = null, $java = null)
     {
+        parent::__construct();
+
         if($path)
         {
             $this->setPath($path);
@@ -115,13 +117,17 @@ class CLIClient extends Client
         if(self::isChecked() === false)
         {
             // Java command must not return an error
-            exec(($this->java ?: 'java') . ' -version 2> /dev/null', $output, $return);
-            if($return != 0)
+            try
+            {
+                $this->exec(($this->java ?: 'java') . ' -version');
+            }
+            catch(Exception $exception)
             {
                 throw new Exception('Java command not found');
             }
+
             // JAR path must exists
-            elseif(file_exists($this->path) === false)
+            if(file_exists($this->path) === false)
             {
                 throw new Exception('Apache Tika app JAR not found');
             }
@@ -175,7 +181,7 @@ class CLIClient extends Client
             $response = str_replace(basename($file) . '"}{', '", ', $response);
 
             // on Windows, response comes in another charset
-            if(defined('PHP_WINDOWS_VERSION_MAJOR'))
+            if($this->platform == 'win')
             {
                 $response = utf8_encode($response);
             }

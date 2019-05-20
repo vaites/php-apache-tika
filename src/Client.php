@@ -50,6 +50,13 @@ abstract class Client
     protected $response = null;
 
     /**
+     * Platform (unix or win)
+     *
+     * @var string
+     */
+    protected $platform = 'unix';
+
+    /**
      * Cached responses to avoid multiple request for the same file.
      *
      * @var array
@@ -76,6 +83,17 @@ abstract class Client
      * @var bool
      */
     protected $downloadRemote = false;
+
+    /**
+     * Configure client
+     */
+    public function __construct()
+    {
+        if(defined('PHP_WINDOWS_VERSION_MAJOR'))
+        {
+            $this->platform = 'win';
+        }
+    }
 
     /**
      * Get a class instance throwing an exception if check fails
