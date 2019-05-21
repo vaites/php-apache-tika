@@ -115,4 +115,49 @@ class WebTest extends BaseTest
 
         $this->assertEquals(5, $client->getRetries());
     }
+
+    /**
+     * Recursive text metadata test
+     *
+     * @dataProvider    ocrProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testTextRecursiveMetadata($file)
+    {
+        $metadata = self::$client->getMetadata($file, 'text');
+
+        $this->assertContains('Ut enim ad minim veniam', $metadata->content);
+    }
+
+    /**
+     * Recursive HTML metadata test
+     *
+     * @dataProvider    ocrProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testHtmlRecursiveMetadata($file)
+    {
+        $metadata = self::$client->getMetadata($file, 'html');
+
+        $this->assertContains('Ut enim ad minim veniam', $metadata->content);
+    }
+
+    /**
+     * Recursive ignore metadata test
+     *
+     * @dataProvider    ocrProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testIgnoreRecursiveMetadata($file)
+    {
+        $metadata = self::$client->getMetadata($file, 'ignore');
+
+        $this->assertNull($metadata->content);
+    }
 }

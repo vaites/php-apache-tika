@@ -12,6 +12,13 @@ use Exception;
 abstract class Metadata
 {
     /**
+     * Content
+     *
+     * @var string
+     */
+    public $content = null;
+
+    /**
      * MIME type
      *
      * @var string
@@ -86,7 +93,10 @@ abstract class Metadata
         }
 
         // decode the JSON response
-        $meta = json_decode($response);
+        $json = json_decode($response);
+
+        // get the meta info
+        $meta = is_array($json) ? current($json) : $json;
 
         // exceptions if metadata is not valid
         if(json_last_error())

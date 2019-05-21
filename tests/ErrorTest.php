@@ -151,6 +151,24 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test wrong recursive metadata type
+     */
+    public function testRequestMetadataType()
+    {
+        try
+        {
+            $client = Client::prepare('localhost', 9998, [CURLOPT_PROXY => 'localhost']);
+            $client->getMetadata(dirname(__DIR__) . '/samples/sample3.png', 'bad');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Unknown recursive type', $exception->getMessage());
+        }
+    }
+
+    /**
      * Test unsupported media type
      */
     public function testUnsupportedMedia()

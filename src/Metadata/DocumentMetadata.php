@@ -164,6 +164,10 @@ class DocumentMetadata extends Metadata
                 $this->encoding = $value;
                 break;
 
+            case 'x-tika:content':
+                $this->content = $value;
+                break;
+
             default:
                 return false;
         }

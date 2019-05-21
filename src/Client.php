@@ -231,13 +231,26 @@ abstract class Client
     /**
      * Gets file metadata
      *
+     * @link    https://wiki.apache.org/tika/TikaJAXRS#Recursive_Metadata_and_Content
      * @param   string  $file
+     * @param   string  $recursive
      * @return  \Vaites\ApacheTika\Metadata\Metadata
      * @throws  \Exception
      */
-    public function getMetadata($file)
+    public function getMetadata($file, $recursive = null)
     {
-        return $this->request('meta', $file);
+        if(is_null($recursive))
+        {
+            return $this->request('meta', $file);
+        }
+        elseif(in_array($recursive, ['text', 'html', 'ignore']))
+        {
+            return $this->request("rmeta/$recursive", $file);
+        }
+        else
+        {
+            throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
+        }
     }
 
     /**

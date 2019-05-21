@@ -353,7 +353,7 @@ class WebClient extends Client
         // request completed successfully
         if($status == 200)
         {
-            if($type == 'meta')
+            if(preg_match('/^(meta|rmeta)/', $type))
             {
                 $response = Metadata::make($response, $file);
             }
@@ -497,7 +497,10 @@ class WebClient extends Client
                 break;
 
             case 'meta':
-                $resource = 'meta';
+            case 'rmeta/html':
+            case 'rmeta/ignore':
+            case 'rmeta/text':
+                $resource = $type;
                 $headers[] = 'Accept: application/json';
                 break;
 

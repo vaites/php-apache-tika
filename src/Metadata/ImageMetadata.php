@@ -60,6 +60,10 @@ class ImageMetadata extends Metadata
                 $this->width = (int) $value;
                 break;
 
+            case 'x-tika:content':
+                $this->content = $value;
+                break;
+
             default:
                 return false;
         }
