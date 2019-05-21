@@ -393,6 +393,56 @@ abstract class Client
     }
 
     /**
+     * Check if a response is cached
+     *
+     * @param   string  $type
+     * @param   string  $file
+     * @return  mixed
+     */
+    protected function isCached($type, $file)
+    {
+        return isset($this->cache[sha1($file)][$type]);
+    }
+
+    /**
+     * Get a cached response
+     *
+     * @param   string  $type
+     * @param   string  $file
+     * @return  mixed
+     */
+    protected function getCachedResponse($type, $file)
+    {
+        return isset($this->cache[sha1($file)][$type]) ? $this->cache[sha1($file)][$type] : null;
+    }
+
+    /**
+     * Check if a request type must be cached
+     *
+     * @param   string  $type
+     * @return  bool
+     */
+    protected function isCacheable($type)
+    {
+        return in_array($type, ['lang', 'meta']);
+    }
+
+    /**
+     * Caches a response
+     *
+     * @param   string  $type
+     * @param   mixed   $response
+     * @param   string  $file
+     * @return  bool
+     */
+    protected function cacheResponse($type, $response, $file)
+    {
+        $this->cache[sha1($file)][$type] = $response;
+
+        return true;
+    }
+
+    /**
      * Checks if a specific version is supported
      *
      * @param   string  $version

@@ -314,9 +314,9 @@ class WebClient extends Client
         $this->check();
 
         // check if is cached
-        if(isset($this->cache[sha1($file)][$type]))
+        if($this->isCached($type, $file))
         {
-            return $this->cache[sha1($file)][$type];
+            return $this->getCachedResponse($type, $file);
         }
         elseif(!isset($retries[sha1($file)]))
         {
@@ -361,7 +361,7 @@ class WebClient extends Client
             // cache certain responses
             if($this->isCacheable($type))
             {
-                $this->cache[sha1($file)][$type] = $response;
+                $this->cacheResponse($type, $response, $file);
             }
         }
         // request completed successfully but result is empty
@@ -577,16 +577,5 @@ class WebClient extends Client
         }
 
         return $options;
-    }
-
-    /**
-     * Check if a request type must be cached
-     *
-     * @param   string  $type
-     * @return  bool
-     */
-    protected function isCacheable($type)
-    {
-        return in_array($type, ['lang', 'meta']);
     }
 }

@@ -150,9 +150,9 @@ class CLIClient extends Client
         $this->check();
 
         // check if is cached
-        if(isset($this->cache[sha1($file)][$type]))
+        if($this->isCached($type, $file))
         {
-            return $this->cache[sha1($file)][$type];
+            return $this->getCachedResponse($type, $file);
         }
 
         // command arguments
@@ -190,9 +190,9 @@ class CLIClient extends Client
         }
 
         // cache certain responses
-        if(in_array($type, ['lang', 'meta']))
+        if($this->isCacheable($type))
         {
-            $this->cache[sha1($file)][$type] = $response;
+            $this->cacheResponse($type, $response, $file);
         }
 
         return $response;
