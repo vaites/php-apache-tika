@@ -359,7 +359,7 @@ class WebClient extends Client
             }
 
             // cache certain responses
-            if(in_array($type, ['lang', 'meta']))
+            if($this->isCacheable($type))
             {
                 $this->cache[sha1($file)][$type] = $response;
             }
@@ -577,5 +577,16 @@ class WebClient extends Client
         }
 
         return $options;
+    }
+
+    /**
+     * Check if a request type must be cached
+     *
+     * @param   string  $type
+     * @return  bool
+     */
+    protected function isCacheable($type)
+    {
+        return in_array($type, ['lang', 'meta']);
     }
 }
