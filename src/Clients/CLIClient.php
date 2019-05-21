@@ -141,7 +141,7 @@ class CLIClient extends Client
      *
      * @param   string  $type
      * @param   string  $file
-     * @return  string
+     * @return  string|\Vaites\ApacheTika\Metadata\Metadata
      * @throws  \Exception
      */
     public function request($type, $file = null)

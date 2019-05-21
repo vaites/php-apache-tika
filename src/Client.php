@@ -540,7 +540,7 @@ abstract class Client
      *
      * @param   string  $type
      * @param   string  $file
-     * @return  string
+     * @return  string|\Vaites\ApacheTika\Metadata\Metadata
      * @throws  \Exception
      */
     abstract public function request($type, $file);
