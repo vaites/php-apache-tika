@@ -134,7 +134,7 @@ class WebTest extends BaseTest
         {
             $metadata = self::$client->getMetadata($file, 'text');
 
-            $this->assertContains('enim ad minim veniam', $metadata->content);
+            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
         }
     }
 
@@ -156,7 +156,7 @@ class WebTest extends BaseTest
         {
             $metadata = self::$client->getMetadata($file, 'html');
 
-            $this->assertContains('enim ad minim veniam', $metadata->content);
+            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
         }
     }
 
