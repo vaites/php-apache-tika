@@ -58,6 +58,16 @@ class CommonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Set download remote
+     */
+    public function testDownloadRemote()
+    {
+        self::$client->setDownloadRemote(true);
+
+        $this->assertTrue(self::$client->getDownloadRemote());
+    }
+
+    /**
      * Set callback (closure) test
      */
     public function testSetClosureCallback()

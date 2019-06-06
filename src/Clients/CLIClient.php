@@ -180,13 +180,8 @@ class CLIClient extends Client
             // fix for invalid? json returned only with images
             $response = str_replace(basename($file) . '"}{', '", ', $response);
 
-            // on Windows, response comes in another charset
-            if($this->platform == 'win')
-            {
-                $response = utf8_encode($response);
-            }
-
-            $response = Metadata::make($response, $file);
+            // on Windows, response must be encoded to UTF8
+            $response = Metadata::make($this->platform == 'win' ? utf8_encode($response) : $response, $file);
         }
 
         // cache certain responses

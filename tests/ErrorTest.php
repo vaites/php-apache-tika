@@ -187,6 +187,42 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test unsupported command line recursive metadata
+     */
+    public function testUnsupportedCLIRecursiveMetadata()
+    {
+        try
+        {
+            $client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar');
+            $client->getMetadata(dirname(__DIR__) . '/samples/sample4.doc', 'html');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Recursive metadata is not supported', $exception->getMessage());
+        }
+    }
+
+    /**
+     * Test unknown recursive metadata type
+     */
+    public function testUnknownRecursiveMetadataType()
+    {
+        try
+        {
+            $client = Client::make('localhost', 9998);
+            $client->getMetadata(dirname(__DIR__) . '/samples/sample4.doc', 'error');
+
+            $this->fail();
+        }
+        catch(Exception $exception)
+        {
+            $this->assertContains('Unknown recursive type', $exception->getMessage());
+        }
+    }
+
+    /**
      * Test invalid callback
      */
     public function testInvalidCallback()

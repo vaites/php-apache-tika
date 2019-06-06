@@ -54,7 +54,7 @@ abstract class Client
      *
      * @var string
      */
-    protected $platform = 'unix';
+    protected $platform = null;
 
     /**
      * Cached responses to avoid multiple request for the same file.
@@ -89,10 +89,7 @@ abstract class Client
      */
     public function __construct()
     {
-        if(defined('PHP_WINDOWS_VERSION_MAJOR'))
-        {
-            $this->platform = 'win';
-        }
+        $this->platform = defined('PHP_WINDOWS_VERSION_MAJOR') ? 'win' : 'unix';
     }
 
     /**
