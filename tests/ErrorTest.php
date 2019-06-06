@@ -52,7 +52,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Unexpected exit value', $exception->getMessage());
+            $this->assertContains('Apache Tika app JAR not found', $exception->getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         {
             rename($path . '.bak', $path);
 
-            $this->assertContains('Unexpected exit value', $exception->getMessage());
+            $this->assertContains('Apache Tika app JAR not found', $exception->getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Unexpected exit value', $exception->getMessage());
+            $this->assertContains('Java command not found', $exception->getMessage());
         }
     }
 
