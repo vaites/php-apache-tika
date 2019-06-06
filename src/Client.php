@@ -7,13 +7,13 @@ use Exception;
 
 use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
+use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
  * Apache Tika client interface
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    http://wiki.apache.org/tika/TikaJAXRS
- * @link    https://tika.apache.org/1.10/formats.html
+ * @link    https://tika.apache.org/1.21/formats.html
  */
 abstract class Client
 {
@@ -103,6 +103,8 @@ abstract class Client
      */
     public static function make($param1 = null, $param2 = null, $options = [])
     {
+        self::$check = true;
+
         if (preg_match('/\.jar$/', func_get_arg(0)))
         {
             return new CLIClient($param1, $param2);
@@ -226,7 +228,7 @@ abstract class Client
     }
 
     /**
-     * Gets file metadata
+     * Gets file metadata using recursive if specified
      *
      * @link    https://wiki.apache.org/tika/TikaJAXRS#Recursive_Metadata_and_Content
      * @param   string  $file
@@ -238,16 +240,31 @@ abstract class Client
     {
         if(is_null($recursive))
         {
-            return $this->request('meta', $file);
+            $response = $this->request('meta', $file);
         }
         elseif(in_array($recursive, ['text', 'html', 'ignore']))
         {
-            return $this->request("rmeta/$recursive", $file);
+            $response = $this->request("rmeta/$recursive", $file);
         }
         else
         {
             throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
         }
+
+        return Metadata::make($response, $file);
+    }
+
+    /**
+     * Gets recursive file metadata (alias for getMetadata)
+     *
+     * @param   string  $file
+     * @param   string  $recursive
+     * @return  \Vaites\ApacheTika\Metadata\Metadata
+     * @throws  \Exception
+     */
+    public function getRecursiveMetadata($file, $recursive)
+    {
+        return $this->getMetadata($file, $recursive);
     }
 
     /**

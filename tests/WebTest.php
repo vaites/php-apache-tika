@@ -132,7 +132,7 @@ class WebTest extends BaseTest
         }
         else
         {
-            $metadata = self::$client->getMetadata($file, 'text');
+            $metadata = self::$client->getRecursiveMetadata($file, 'text');
 
             $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
         }

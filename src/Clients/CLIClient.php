@@ -5,14 +5,12 @@ namespace Vaites\ApacheTika\Clients;
 use Exception;
 
 use Vaites\ApacheTika\Client;
-use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
  * Apache Tika command line interface client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    http://wiki.apache.org/tika/TikaJAXRS
- * @link    https://tika.apache.org/1.12/formats.html
+ * @link    https://tika.apache.org/1.21/gettingstarted.html#Using_Tika_as_a_command_line_utility
  */
 class CLIClient extends Client
 {
@@ -141,7 +139,7 @@ class CLIClient extends Client
      *
      * @param   string  $type
      * @param   string  $file
-     * @return  string|\Vaites\ApacheTika\Metadata\Metadata
+     * @return  string
      * @throws  \Exception
      */
     public function request($type, $file = null)
@@ -181,7 +179,7 @@ class CLIClient extends Client
             $response = str_replace(basename($file) . '"}{', '", ', $response);
 
             // on Windows, response must be encoded to UTF8
-            $response = Metadata::make($this->platform == 'win' ? utf8_encode($response) : $response, $file);
+            $response = $this->platform == 'win' ? utf8_encode($response) : $response;
         }
 
         // cache certain responses

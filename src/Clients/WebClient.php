@@ -5,14 +5,12 @@ namespace Vaites\ApacheTika\Clients;
 use Exception;
 
 use Vaites\ApacheTika\Client;
-use Vaites\ApacheTika\Metadata\Metadata;
 
 /**
  * Apache Tika web client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  * @link    http://wiki.apache.org/tika/TikaJAXRS
- * @link    https://tika.apache.org/1.12/formats.html
  */
 class WebClient extends Client
 {
@@ -303,7 +301,7 @@ class WebClient extends Client
      *
      * @param   string  $type
      * @param   string  $file
-     * @return  string|\Vaites\ApacheTika\Metadata\Metadata
+     * @return  string
      * @throws  \Exception
      */
     public function request($type, $file = null)
@@ -353,11 +351,6 @@ class WebClient extends Client
         // request completed successfully
         if($status == 200)
         {
-            if(preg_match('/^(meta|rmeta)/', $type))
-            {
-                $response = Metadata::make($response, $file);
-            }
-
             // cache certain responses
             if($this->isCacheable($type))
             {

@@ -127,6 +127,7 @@ Tika file related methods:
 
 ```php
 $client->getMetadata($file);
+$client->getRecursiveMetadata($file, 'text');
 $client->getLanguage($file);
 $client->getMIME($file);
 $client->getHTML($file);
