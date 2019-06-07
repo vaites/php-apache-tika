@@ -96,7 +96,7 @@ abstract class Client
      */
     public static function make($param1 = null, $param2 = null, $options = [], $check = true)
     {
-        if (preg_match('/\.jar$/', func_get_arg(0)))
+        if(preg_match('/\.jar$/', func_get_arg(0)))
         {
             return new CLIClient($param1, $param2, $check);
         }
@@ -556,7 +556,7 @@ abstract class Client
      *
      * @param   string  $type
      * @param   string  $file
-     * @return  string|\Vaites\ApacheTika\Metadata\Metadata
+     * @return  string
      * @throws  \Exception
      */
     abstract public function request($type, $file);
