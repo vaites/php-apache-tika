@@ -181,4 +181,15 @@ class WebTest extends BaseTest
             $this->assertNull($metadata->content);
         }
     }
+
+    /**
+     * Test delayed check
+     */
+    public function testDelayedCheck()
+    {
+        $client = Client::prepare('localhost', 9997);
+        $client->setPort(9998);
+
+        $this->assertStringEndsWith(self::$version, $client->getVersion());
+    }
 }

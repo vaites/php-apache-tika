@@ -29,18 +29,11 @@ abstract class Client
     ];
 
     /**
-     * Verify JAR or server connection on constructor
-     *
-     * @var bool
-     */
-    protected static $check = true;
-
-    /**
      * Checked flag
      *
      * @var bool
      */
-    protected static $checked = false;
+    protected $checked = false;
 
     /**
      * Response using callbacks
@@ -101,17 +94,15 @@ abstract class Client
      * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws  \Exception
      */
-    public static function make($param1 = null, $param2 = null, $options = [])
+    public static function make($param1 = null, $param2 = null, $options = [], $check = true)
     {
-        self::$check = true;
-
         if (preg_match('/\.jar$/', func_get_arg(0)))
         {
-            return new CLIClient($param1, $param2);
+            return new CLIClient($param1, $param2, $check);
         }
         else
         {
-            return new WebClient($param1, $param2, $options);
+            return new WebClient($param1, $param2, $options, $check);
         }
     }
 
@@ -126,9 +117,7 @@ abstract class Client
      */
     public static function prepare($param1 = null, $param2 = null, $options = [])
     {
-        self::$check = false;
-
-        return self::make($param1, $param2, $options);
+        return self::make($param1, $param2, $options, false);
     }
 
     /**
@@ -402,11 +391,11 @@ abstract class Client
     /**
      * Sets the checked flag
      *
-     * @param $checked
+     * @param   bool    $checked
      */
-    public static function setChecked($checked)
+    public function setChecked($checked)
     {
-        self::$checked = (bool) $checked;
+        $this->checked = (bool) $checked;
     }
 
     /**
@@ -414,9 +403,9 @@ abstract class Client
      *
      * @return  bool
      */
-    public static function isChecked()
+    public function isChecked()
     {
-        return self::$checked;
+        return $this->checked;
     }
 
     /**

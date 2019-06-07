@@ -75,7 +75,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         {
             rename($path . '.bak', $path);
 
-            $this->assertContains('Apache Tika app JAR not found', $exception->getMessage());
+            $this->assertContains('Unexpected exit value', $exception->getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 
         try
         {
-            $client = Client::prepare($path, '/nonexistent/path/to/java');
+            $client = Client::make($path, '/nonexistent/path/to/java');
             $client->getVersion();
         }
         catch(Exception $exception)
@@ -104,7 +104,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            Client::setChecked(true);
             $client = Client::prepare('localhost', 9997);
             $client->getVersion();
 
@@ -123,8 +122,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            Client::setChecked(true);
-            $client = Client::prepare('localhost', 9998, [CURLOPT_PROXY => 'localhost']);
+            $client = Client::make('localhost', 9998);
             $client->request('bad');
 
             $this->fail();
@@ -157,7 +155,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $client = Client::prepare('localhost', 9998, [CURLOPT_PROXY => 'localhost']);
+            $client = Client::make('localhost', 9998);
             $client->getMetadata(dirname(__DIR__) . '/samples/sample3.png', 'bad');
 
             $this->fail();
@@ -191,10 +189,12 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testUnsupportedCLIRecursiveMetadata()
     {
+        $path = self::getPathForVersion(self::$version);
+
         try
         {
-            $client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar');
-            $client->getMetadata(dirname(__DIR__) . '/samples/sample4.doc', 'html');
+            $client = Client::make($path);
+            $client->getMetadata('example.doc', 'html');
 
             $this->fail();
         }
@@ -212,7 +212,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         try
         {
             $client = Client::make('localhost', 9998);
-            $client->getMetadata(dirname(__DIR__) . '/samples/sample4.doc', 'error');
+            $client->getMetadata('example.doc', 'error');
 
             $this->fail();
         }
@@ -227,9 +227,11 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidCallback()
     {
+        $path = self::getPathForVersion(self::$version);
+
         try
         {
-            $client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar');
+            $client = Client::make($path);
             $client->setCallback('unknown_function');
         }
         catch(Exception $exception)
@@ -243,9 +245,11 @@ class ErrorTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidChunkSize()
     {
+        $path = self::getPathForVersion(self::$version);
+
         try
         {
-            $client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar');
+            $client = Client::make($path);
             $client->setChunkSize('string');
         }
         catch(Exception $exception)

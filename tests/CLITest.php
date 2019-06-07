@@ -22,9 +22,11 @@ class CLITest extends BaseTest
      */
     public function testSetPath()
     {
-        $client = Client::make(self::getPathForVersion(self::$version));
+        $path = self::getPathForVersion('1.7');
 
-        $this->assertEquals(self::getPathForVersion(self::$version), $client->getPath());
+        $client = Client::make($path);
+
+        $this->assertEquals($path, $client->getPath());
     }
 
     /**
@@ -32,9 +34,24 @@ class CLITest extends BaseTest
      */
     public function testSetBinary()
     {
-        $client = Client::make(self::getPathForVersion(self::$version), '/usr/bin/java');
+        $path = self::getPathForVersion(self::$version);
+
+        $client = Client::make($path, '/usr/bin/java');
 
         $this->assertEquals('/usr/bin/java', $client->getJava());
+    }
+
+    /**
+     * Test delayed check
+     */
+    public function testDelayedCheck()
+    {
+        $path = self::getPathForVersion(self::$version);
+
+        $client = Client::prepare('/nonexistent/path/to/apache-tika.jar');
+        $client->setPath($path);
+
+        $this->assertStringEndsWith(self::$version, $client->getVersion());
     }
 
     /**

@@ -64,9 +64,10 @@ class WebClient extends Client
      * @param   string  $host
      * @param   int     $port
      * @param   array   $options
+     * @param   bool    $check
      * @throws  \Exception
      */
-    public function __construct($host = null, $port = null, $options = [])
+    public function __construct($host = null, $port = null, $options = [], $check = true)
     {
         parent::__construct();
 
@@ -91,7 +92,7 @@ class WebClient extends Client
 
         $this->setDownloadRemote(true);
 
-        if(self::$check === true)
+        if($check === true)
         {
             $this->check();
         }
@@ -287,9 +288,9 @@ class WebClient extends Client
      */
     public function check()
     {
-        if(self::isChecked() === false)
+        if($this->isChecked() === false)
         {
-            self::setChecked(true);
+            $this->setChecked(true);
 
             // throws an exception if server is unreachable or can't connect
             $this->request('version');

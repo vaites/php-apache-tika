@@ -35,10 +35,10 @@ class CLIClient extends Client
      *
      * @param   string  $path
      * @param   string  $java
-     *
-     * @throws Exception
+     * @param   bool    $check
+     * @throws  \Exception
      */
-    public function __construct($path = null, $java = null)
+    public function __construct($path = null, $java = null, $check = true)
     {
         parent::__construct();
 
@@ -52,7 +52,7 @@ class CLIClient extends Client
             $this->setJava($java);
         }
 
-        if(self::$check === true)
+        if($check === true)
         {
             $this->check();
         }
@@ -112,7 +112,7 @@ class CLIClient extends Client
      */
     public function check()
     {
-        if(self::isChecked() === false)
+        if($this->isChecked() === false)
         {
             // Java command must not return an error
             try
@@ -130,7 +130,7 @@ class CLIClient extends Client
                 throw new Exception('Apache Tika app JAR not found');
             }
 
-            self::setChecked(true);
+            $this->setChecked(true);
         }
     }
 
