@@ -389,25 +389,29 @@ class WebClient extends Client
         // cURL init and options
         $curl = curl_init();
 
-        // we avoid curl_setopt_array($curl, $options) because extrange Windows behaviour (issue #8)
-        foreach($options as $option => $value)
+        // add options only if cURL init doesn't fails
+        if(is_resource($curl))
         {
-            curl_setopt($curl, $option, $value);
-        }
+            // we avoid curl_setopt_array($curl, $options) because extrange Windows behaviour (issue #8)
+            foreach($options as $option => $value)
+            {
+                curl_setopt($curl, $option, $value);
+            }
 
-        // make the request
-        if(is_null($this->callback))
-        {
-            $this->response = curl_exec($curl);
-        }
-        else
-        {
-            $this->response = '';
-            curl_exec($curl);
+            // make the request
+            if(is_null($this->callback))
+            {
+                $this->response = curl_exec($curl);
+            }
+            else
+            {
+                $this->response = '';
+                curl_exec($curl);
+            }
         }
 
         // exception if cURL fails
-        if(curl_errno($curl))
+        if($curl === false || curl_errno($curl))
         {
             throw new Exception(curl_error($curl), curl_errno($curl));
         }
