@@ -413,7 +413,7 @@ class WebClient extends Client
         // exception if cURL fails
         if($curl === false || curl_errno($curl))
         {
-            throw new Exception(curl_error($curl), curl_errno($curl));
+            throw new Exception($curl ? 'Unexpected error' : curl_error($curl), $curl ? curl_errno($curl) : 0);
         }
 
         // return the response and the status code
@@ -567,7 +567,7 @@ class WebClient extends Client
             $options[CURLOPT_INFILESIZE] = filesize($file);
         }
         // other options for specific requests
-        elseif(in_array($type,  ['detectors', 'mime-types', 'parsers', 'version']))
+        elseif(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             $options[CURLOPT_PUT] = false;
         }
