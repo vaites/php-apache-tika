@@ -371,7 +371,7 @@ class WebClient extends Client
         // other status code is an error
         else
         {
-            $this->error($status, $resource);
+            $this->error($status, $resource, $file);
         }
 
         return $response;
@@ -432,9 +432,10 @@ class WebClient extends Client
      *
      * @param   int       $status
      * @param   string    $resource
+     * @param   string    $file
      * @throws  \Exception
      */
-    protected function error($status, $resource)
+    protected function error($status, $resource, $file = null)
     {
         switch($status)
         {
@@ -450,7 +451,15 @@ class WebClient extends Client
 
             //  unprocessable entity
             case 422:
-                throw new Exception('Unprocessable document', 422);
+                $message = 'Unprocessable document';
+
+                // using remote files require Tika server to be launched with specific options
+                if($this->downloadRemote == false && preg_match('/^http/', $file))
+                {
+                    $message .= ' (is server launched using "-enableUnsecureFeatures -enableFileUrl" arguments?)';
+                }
+
+                throw new Exception($message, 422);
                 break;
 
             // server error
