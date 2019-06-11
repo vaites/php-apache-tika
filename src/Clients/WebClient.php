@@ -392,17 +392,18 @@ class WebClient extends Client
         // add options only if cURL init doesn't fails
         if(is_resource($curl))
         {
-            // we avoid curl_setopt_array($curl, $options) because extrange Windows behaviour (issue #8)
+            // we avoid curl_setopt_array($curl, $options) because strange Windows behaviour (issue #8)
             foreach($options as $option => $value)
             {
                 curl_setopt($curl, $option, $value);
             }
 
-            // make the request
+            // make the request directly
             if(is_null($this->callback))
             {
                 $this->response = curl_exec($curl);
             }
+            // with a callback, the response is appended on each block inside the callback
             else
             {
                 $this->response = '';
@@ -411,9 +412,13 @@ class WebClient extends Client
         }
 
         // exception if cURL fails
-        if($curl === false || curl_errno($curl))
+        if($curl === false)
         {
-            throw new Exception($curl ? 'Unexpected error' : curl_error($curl), $curl ? curl_errno($curl) : 0);
+            throw new Exception('Unexpected error');
+        }
+        elseif(curl_errno($curl))
+        {
+            throw new Exception(curl_error($curl), curl_errno($curl));
         }
 
         // return the response and the status code
