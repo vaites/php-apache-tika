@@ -401,7 +401,7 @@ class WebClient extends Client
             // make the request directly
             if(is_null($this->callback))
             {
-                $this->response = curl_exec($curl);
+                $this->response = curl_exec($curl) ?: '';
             }
             // with a callback, the response is appended on each block inside the callback
             else

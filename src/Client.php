@@ -559,5 +559,5 @@ abstract class Client
      * @return  string
      * @throws  \Exception
      */
-    abstract public function request($type, $file);
+    abstract public function request($type, $file = null);
 }

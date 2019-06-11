@@ -106,15 +106,8 @@ class DocumentMetadata extends Metadata
 
             case 'keyword':
             case 'keywords':
-                if(preg_match('/,/', $value))
-                {
-                    $value = preg_split('/\s*,\s*/', $value);
-                }
-                else
-                {
-                    $value = preg_split('/\s+/', $value);
-                }
-                $this->keywords = array_unique($value);
+                $keywords = preg_split(preg_match('/,/', $value) ? '/\s*,\s*/' : '/\s+/', $value);
+                $this->keywords = array_unique($keywords ?: []);
                 break;
 
             case 'language':
@@ -127,8 +120,8 @@ class DocumentMetadata extends Metadata
                 break;
 
             case 'content-type':
-                $value = preg_split('/;\s+/', $value);
-                $this->mime = array_shift($value);
+                $mime = $value ? preg_split('/;\s+/', $value) : [];
+                $this->mime = array_shift($mime);
                 break;
 
             case 'application-name':
