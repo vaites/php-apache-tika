@@ -295,7 +295,7 @@ class CLIClient extends Client
                 break;
 
             default:
-                throw new Exception("Unknown type $type");
+                throw new Exception($file ? "Unknown type $type for $file" : "Unknown type $type");
         }
 
         return $arguments;

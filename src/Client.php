@@ -17,6 +17,8 @@ use Vaites\ApacheTika\Metadata\Metadata;
  */
 abstract class Client
 {
+    const MODE = null;
+
     /**
      * List of supported Apache Tika versions
      *
@@ -91,6 +93,7 @@ abstract class Client
      * @param   string  $param1     path or host
      * @param   int     $param2     Java binary path or port for web client
      * @param   array   $options    options for cURL request
+     * @param   bool    $check      check JAR file or server connection
      * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws  \Exception
      */
@@ -222,7 +225,7 @@ abstract class Client
      * @link    https://wiki.apache.org/tika/TikaJAXRS#Recursive_Metadata_and_Content
      * @param   string  $file
      * @param   string  $recursive
-     * @return  \Vaites\ApacheTika\Metadata\Metadata
+     * @return  \Vaites\ApacheTika\Metadata\Metadata|\Vaites\ApacheTika\Metadata\DocumentMetadata|\Vaites\ApacheTika\Metadata\ImageMetadata
      * @throws  \Exception
      */
     public function getMetadata($file, $recursive = null)

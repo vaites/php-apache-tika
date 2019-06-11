@@ -12,6 +12,13 @@ use Exception;
 abstract class Metadata
 {
     /**
+     * Title
+     *
+     * @var string
+     */
+    public $title = null;
+
+    /**
      * Content
      *
      * @var string

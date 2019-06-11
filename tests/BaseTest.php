@@ -483,7 +483,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         {
             BaseTest::$shared = 0;
 
-            self::$client->getMainText($file, function ($chunk) {
+            self::$client->getMainText($file, function()
+            {
                 BaseTest::$shared++;
             });
 
@@ -511,7 +512,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         {
             BaseTest::$shared = 0;
 
-            self::$client->getHtml($file, function($chunk)
+            self::$client->getHtml($file, function()
             {
                 BaseTest::$shared++;
             });
@@ -602,10 +603,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
     /**
      * Static method to test callback
-     *
-     * @param   string  $chunk
      */
-    public static function callableCallback($chunk)
+    public static function callableCallback()
     {
         BaseTest::$shared++;
     }

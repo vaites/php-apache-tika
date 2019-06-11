@@ -140,7 +140,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $client = Client::make('localhost', 9998, [CURLOPT_PUT => false]);
+            Client::make('localhost', 9998, [CURLOPT_PUT => false]);
         }
         catch(Exception $exception)
         {
@@ -281,7 +281,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $metadata = Metadata::make('InvalidJsonString', './samples/sample1.doc');
+            Metadata::make('InvalidJsonString', './samples/sample1.doc');
         }
         catch(Exception $exception)
         {
