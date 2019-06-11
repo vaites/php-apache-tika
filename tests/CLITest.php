@@ -22,7 +22,7 @@ class CLITest extends BaseTest
      */
     public function testSetPath()
     {
-        $path = self::getPathForVersion('1.7');
+        $path = self::getPathForVersion(self::$version);
 
         $client = Client::make($path);
 
