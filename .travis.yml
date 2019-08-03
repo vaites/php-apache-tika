@@ -11,7 +11,7 @@ sudo: false
 addons:
   apt:
     packages:
-    - oracle-java9-set-default
+    - default-jdk-headless
     - tesseract-ocr
 cache:
   directories:
