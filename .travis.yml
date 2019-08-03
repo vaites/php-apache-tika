@@ -1,3 +1,4 @@
+dist: trusty
 language: php
 php:
 - 5.4
@@ -11,7 +12,7 @@ sudo: false
 addons:
   apt:
     packages:
-    - default-jdk-headless
+    - oracle-java9-set-default
     - tesseract-ocr
 cache:
   directories:
