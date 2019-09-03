@@ -326,7 +326,7 @@ class WebClient extends Client
         list($resource, $headers) = $this->getParameters($type, $file);
 
         // check the request
-        $file = parent::checkRequest($type, $file);
+        $file = $this->checkRequest($type, $file);
 
         // cURL options
         $options = $this->getCurlOptions($type, $file);

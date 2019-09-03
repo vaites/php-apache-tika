@@ -157,7 +157,7 @@ class CLIClient extends Client
         $arguments = $this->getArguments($type, $file);
 
         // check the request
-        $file = parent::checkRequest($type, $file);
+        $file = $this->checkRequest($type, $file);
 
         // add last argument
         if($file)
