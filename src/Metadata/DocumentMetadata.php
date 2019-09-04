@@ -29,7 +29,7 @@ class DocumentMetadata extends Metadata
     /**
      * Keywords
      *
-     * @var string
+     * @var array
      */
     public $keywords = [];
 
