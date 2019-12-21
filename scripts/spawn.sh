@@ -2,7 +2,7 @@
 
 PORT=${APACHE_TIKA_PORT:-9998}
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
-VERSION=${APACHE_TIKA_VERSION:-"1.22"}
+VERSION=${APACHE_TIKA_VERSION:-"1.23"}
 
 if ! type "javac" 2> /dev/null; then
     JAVA='java --add-modules java.se.ee'
