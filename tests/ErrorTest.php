@@ -168,6 +168,10 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test unsupported media type
+     *
+     * NOTE: return value was changed in version 1.23
+     *
+     * @link    https://github.com/apache/tika/blob/master/CHANGES.txt
      */
     public function testUnsupportedMedia()
     {
@@ -180,7 +184,14 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertEquals(415, $exception->getCode());
+            if(version_compare(self::$version, '1.11') < 0)
+            {
+                $this->assertEquals(415, $exception->getCode());
+            }
+            else
+            {
+                $this->assertEquals(0, $exception->getCode());
+            }
         }
     }
 
