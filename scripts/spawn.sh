@@ -4,11 +4,12 @@ PORT=${APACHE_TIKA_PORT:-9998}
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
 VERSION=${APACHE_TIKA_VERSION:-"1.23"}
 
-if ! type "javac" 2> /dev/null; then
+{
+    java --add-modules java.se.ee -version &&
     JAVA='java --add-modules java.se.ee'
-else
+} || {
     JAVA='java'
-fi
+}
 
 if [ $(ps aux | grep -c tika-server-$VERSION) -lt 2 ]; then
     $JAVA -version
