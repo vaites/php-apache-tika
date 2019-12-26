@@ -126,7 +126,7 @@ class WebTest extends BaseTest
      */
     public function testTextRecursiveMetadata($file)
     {
-        if(version_compare(self::$version, '1.23') < 0)
+        if(version_compare(self::$version, '1.11') < 0)
         {
             $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
         }

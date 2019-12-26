@@ -184,7 +184,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
         }
         catch(Exception $exception)
         {
-            if(version_compare(self::$version, '1.11') < 0)
+            if(version_compare(self::$version, '1.23') < 0)
             {
                 $this->assertEquals(415, $exception->getCode());
             }
