@@ -126,16 +126,9 @@ class WebTest extends BaseTest
      */
     public function testTextRecursiveMetadata($file)
     {
-        if(version_compare(self::$version, '1.11') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
-        }
-        else
-        {
-            $metadata = self::$client->getRecursiveMetadata($file, 'text');
+        $metadata = self::$client->getRecursiveMetadata($file, 'text');
 
-            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
-        }
+        $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
     }
 
     /**
@@ -148,16 +141,9 @@ class WebTest extends BaseTest
      */
     public function testHtmlRecursiveMetadata($file)
     {
-        if(version_compare(self::$version, '1.11') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
-        }
-        else
-        {
-            $metadata = self::$client->getMetadata($file, 'html');
+        $metadata = self::$client->getMetadata($file, 'html');
 
-            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
-        }
+        $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
     }
 
     /**
@@ -170,16 +156,9 @@ class WebTest extends BaseTest
      */
     public function testIgnoreRecursiveMetadata($file)
     {
-        if(version_compare(self::$version, '1.11') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
-        }
-        else
-        {
-            $metadata = self::$client->getMetadata($file, 'ignore');
+        $metadata = self::$client->getMetadata($file, 'ignore');
 
-            $this->assertNull($metadata->content);
-        }
+        $this->assertNull($metadata->content);
     }
 
     /**

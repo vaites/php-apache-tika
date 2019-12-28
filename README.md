@@ -35,7 +35,7 @@ to work with the new versions of the tool.
 
 ## Requirements
 
-* PHP 5.4 or greater
+* PHP 7.1 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
 * Apache Tika 1.7 or greater
@@ -48,7 +48,7 @@ to work with the new versions of the tool.
 
 Install using Composer:
 
-```php
+```bash
 composer require vaites/php-apache-tika
 ```
 

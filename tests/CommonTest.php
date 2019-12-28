@@ -95,7 +95,7 @@ class CommonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSupportedVersions()
     {
-        $this->assertTrue(in_array('1.10', Client::getSupportedVersions()));
+        $this->assertTrue(in_array(self::$version, Client::getSupportedVersions()));
     }
 
     /**
@@ -103,6 +103,6 @@ class CommonTest extends PHPUnit_Framework_TestCase
      */
     public function testIsVersionSupported()
     {
-        $this->assertTrue(Client::isVersionSupported('1.10'));
+        $this->assertTrue(Client::isVersionSupported(self::$version));
     }
 }
