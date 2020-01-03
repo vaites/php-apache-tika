@@ -255,24 +255,6 @@ class ErrorTest extends TestCase
     /**
      * Test invalid chunk size
      */
-    public function testInvalidChunkSize()
-    {
-        $path = self::getPathForVersion(self::$version);
-
-        try
-        {
-            $client = Client::make($path);
-            $client->setChunkSize('string');
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('is not a valid chunk size', $exception->getMessage());
-        }
-    }
-
-    /**
-     * Test invalid chunk size
-     */
     public function testUnsupportedChunkSize()
     {
         try

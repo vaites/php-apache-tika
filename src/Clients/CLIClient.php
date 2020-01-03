@@ -38,7 +38,7 @@ class CLIClient extends Client
      * @param   bool    $check
      * @throws  \Exception
      */
-    public function __construct($path = null, $java = null, $check = true)
+    public function __construct(string $path = null, string $java = null, bool $check = true)
     {
         parent::__construct();
 
@@ -105,12 +105,77 @@ class CLIClient extends Client
     }
 
     /**
+     * Returns the supported MIME types
+     *
+     * @return  array
+     * @throws  \Exception
+     */
+    public function getSupportedMIMETypes(): array
+    {
+        $mimeTypes = [];
+
+        $response = preg_split("/\n/", $this->request('mime-types'));
+
+        foreach($response as $line)
+        {
+            if(preg_match('/^\w+/', $line))
+            {
+                $mime = $line;
+                $mimeTypes[$mime] = ['alias' => []];
+            }
+            else
+            {
+                list($key, $value) = preg_split('/:\s+/', trim($line));
+
+                if($key == 'alias')
+                {
+                    $mimeTypes[$mime]['alias'][] = $value;
+                }
+                else
+                {
+                    $mimeTypes[$mime][$key] = $value;
+                }
+            }
+        }
+
+
+        return $mimeTypes;
+    }
+
+    /**
+     * Returns the available detectors
+     *
+     * @return  array
+     * @throws  \Exception
+     */
+    public function getAvailableDetectors(): array
+    {
+        $response = $this->request('detectors');
+
+        return preg_split("/\n/", $response);
+    }
+
+    /**
+     * Returns the available parsers
+     *
+     * @return  array
+     * @throws  \Exception
+     */
+    public function getAvailableParsers(): array
+    {
+        $response = $this->request('parsers');
+
+        return preg_split("/\n/", $response);
+    }
+
+
+    /**
      * Check Java binary, JAR path or server connection
      *
      * @return  void
      * @throws  \Exception
      */
-    public function check()
+    public function check(): void
     {
         if($this->isChecked() === false)
         {
@@ -142,13 +207,13 @@ class CLIClient extends Client
      * @return  string
      * @throws  \Exception
      */
-    public function request($type, $file = null)
+    public function request(string $type, string $file = null): string
     {
         // check if not checked
         $this->check();
 
         // check if is cached
-        if($this->isCached($type, $file))
+        if($file !== null && $this->isCached($type, $file))
         {
             return $this->getCachedResponse($type, $file);
         }
@@ -198,7 +263,7 @@ class CLIClient extends Client
      * @return  null|string
      * @throws  \Exception
      */
-    public function exec($command)
+    public function exec(string $command): ?string
     {
         // run command
         $exit = -1;
@@ -242,7 +307,7 @@ class CLIClient extends Client
      * @return  array
      * @throws  Exception
      */
-    protected function getArguments($type, $file = null)
+    protected function getArguments(string $type, string $file = null): array
     {
         // parameters for command
         $arguments = [];

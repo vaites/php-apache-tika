@@ -67,7 +67,7 @@ class WebClient extends Client
      * @param   bool    $check
      * @throws  \Exception
      */
-    public function __construct($host = null, $port = null, $options = [], $check = true)
+    public function __construct(string $host = null, int $port = null, array $options = [], bool $check = true)
     {
         parent::__construct();
 
@@ -103,7 +103,7 @@ class WebClient extends Client
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return sprintf('http://%s:%d', $this->host, $this->port ?: 9998);
     }
@@ -114,7 +114,7 @@ class WebClient extends Client
      * @param   string  $url
      * @return $this
      */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $url = parse_url($url);
 
@@ -133,7 +133,7 @@ class WebClient extends Client
      *
      * @return  null|string
      */
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
@@ -144,7 +144,7 @@ class WebClient extends Client
      * @param   string  $host
      * @return  $this
      */
-    public function setHost($host)
+    public function setHost(string $host): self
     {
         $this->host = $host;
 
@@ -156,7 +156,7 @@ class WebClient extends Client
      *
      * @return  null|int
      */
-    public function getPort()
+    public function getPort(): ?int
     {
         return $this->port;
     }
@@ -167,7 +167,7 @@ class WebClient extends Client
      * @param   int     $port
      * @return  $this
      */
-    public function setPort($port)
+    public function setPort(int $port): self
     {
         $this->port = $port;
 
@@ -179,7 +179,7 @@ class WebClient extends Client
      *
      * @return  int
      */
-    public function getRetries()
+    public function getRetries(): int
     {
         return $this->retries;
     }
@@ -190,7 +190,7 @@ class WebClient extends Client
      * @param   int     $retries
      * @return  $this
      */
-    public function setRetries($retries)
+    public function setRetries(int $retries): self
     {
         $this->retries = $retries;
 
@@ -200,9 +200,9 @@ class WebClient extends Client
     /**
      * Get all the options
      *
-     * @return  null|array
+     * @return  array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -213,9 +213,9 @@ class WebClient extends Client
      * @param   string  $key
      * @return  mixed
      */
-    public function getOption($key)
+    public function getOption(string $key)
     {
-        return isset($this->options[$key]) ? $this->options[$key] : null;
+        return $this->options[$key] ?? null;
     }
 
     /**
@@ -228,7 +228,7 @@ class WebClient extends Client
      * @return  $this
      * @throws  \Exception
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, $value): self
     {
         if(in_array($key, [CURLINFO_HEADER_OUT, CURLOPT_PUT, CURLOPT_RETURNTRANSFER]))
         {
@@ -247,7 +247,7 @@ class WebClient extends Client
      * @return  $this
      * @throws  \Exception
      */
-    public function setOptions($options)
+    public function setOptions(array $options): self
     {
         foreach($options as $key => $value)
         {
@@ -262,7 +262,7 @@ class WebClient extends Client
      *
      * @return  int
      */
-    public function getTimeout()
+    public function getTimeout(): int
     {
         return $this->getOption(CURLOPT_TIMEOUT);
     }
@@ -274,7 +274,7 @@ class WebClient extends Client
      * @return  $this
      * @throws  \Exception
      */
-    public function setTimeout($value)
+    public function setTimeout(int $value): self
     {
         $this->setOption(CURLOPT_TIMEOUT, (int) $value);
 
@@ -282,11 +282,48 @@ class WebClient extends Client
     }
 
     /**
+     * Returns the supported MIME types
+     *
+     * @return  array
+     * @throws  \Exception
+     */
+    public function getSupportedMIMETypes(): array
+    {
+        $mimeTypes = json_decode($this->request('mime-types'), true);
+
+        ksort($mimeTypes);
+
+        return $mimeTypes;
+    }
+
+    /**
+     * Returns the available detectors
+     *
+     * @return  array
+     * @throws  \Exception
+     */
+    public function getAvailableDetectors(): array
+    {
+        return json_decode($this->request('detectors'), true);
+    }
+
+    /**
+     * Returns the available parsers
+     *
+     * @return  array
+     * @throws  \Exception
+     */
+    public function getAvailableParsers(): array
+    {
+        return json_decode($this->request('parsers'), true);
+    }
+
+    /**
      * Check if server is running
      *
      * @throws \Exception
      */
-    public function check()
+    public function check(): void
     {
         if($this->isChecked() === false)
         {
@@ -305,7 +342,7 @@ class WebClient extends Client
      * @return  string
      * @throws  \Exception
      */
-    public function request($type, $file = null)
+    public function request(string $type, string $file = null): string
     {
         static $retries = [];
 
@@ -313,7 +350,7 @@ class WebClient extends Client
         $this->check();
 
         // check if is cached
-        if($this->isCached($type, $file))
+        if($file !== null && $this->isCached($type, $file))
         {
             return $this->getCachedResponse($type, $file);
         }
@@ -384,7 +421,7 @@ class WebClient extends Client
      * @return  array
      * @throws  \Exception
      */
-    protected function exec(array $options = [])
+    protected function exec(array $options = []): array
     {
         // cURL init and options
         $curl = curl_init();
@@ -435,7 +472,7 @@ class WebClient extends Client
      * @param   string    $file
      * @throws  \Exception
      */
-    protected function error($status, $resource, $file = null)
+    protected function error(int $status, string $resource, string $file = null): void
     {
         switch($status)
         {
@@ -482,9 +519,10 @@ class WebClient extends Client
      * @return  array
      * @throws  \Exception
      */
-    protected function getParameters($type, $file = null)
+    protected function getParameters(string $type, string $file = null): array
     {
         $headers = [];
+        $callback = null;
 
         if(!empty($file) && preg_match('/^http/', $file))
         {
@@ -508,12 +546,16 @@ class WebClient extends Client
                 $headers[] = "Content-Disposition: attachment, filename=$name";
                 break;
 
+            case 'detectors':
+            case 'parsers':
             case 'meta':
+            case 'mime-types':
             case 'rmeta/html':
             case 'rmeta/ignore':
             case 'rmeta/text':
                 $resource = $type;
                 $headers[] = 'Accept: application/json';
+                $callback = function($response) { return json_decode($response, true); };
                 break;
 
             case 'text':
@@ -526,9 +568,6 @@ class WebClient extends Client
                 $headers[] = 'Accept: text/plain';
                 break;
 
-            case 'detectors':
-            case 'parsers':
-            case 'mime-types':
             case 'version':
                 $resource = $type;
                 break;
@@ -537,7 +576,7 @@ class WebClient extends Client
                 throw new Exception("Unknown type $type");
         }
 
-        return [$resource, $headers];
+        return [$resource, $headers, $callback];
     }
 
     /**
@@ -548,7 +587,7 @@ class WebClient extends Client
      * @return  array
      * @throws  \Exception
      */
-    protected function getCurlOptions($type, $file = null)
+    protected function getCurlOptions(string $type, string $file = null): array
     {
         // base options
         $options = $this->options;
