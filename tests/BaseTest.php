@@ -2,12 +2,14 @@
 
 namespace Vaites\ApacheTika\Tests;
 
-use PHPUnit_Framework_TestCase;
+use Exception;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Common test functionality
  */
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * Current tika version
@@ -43,11 +45,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param null      $name
      * @param array     $data
      * @param string    $dataName
+     * @throws \Exception
      */
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
+
+        if(empty(self::$version))
+        {
+            throw new Exception('APACHE_TIKA_VERSION environment variable not defined');
+        }
 
         parent::__construct($name, $data, $dataName);
     }
@@ -344,7 +352,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testRemoteDocumentText($file)
     {
-        $this->assertContains('Rationis enim perfectio est virtus', $client->getText($file));
+        $this->assertContains('Rationis enim perfectio est virtus', self::$client->getText($file));
     }
 
     /**
@@ -391,7 +399,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     public function testSupportedMIMETypes()
     {
-        $this->assertContains('application/x-pdf', self::$client->getSupportedMIMETypes());
+        $this->assertArrayHasKey('application/pdf', self::$client->getSupportedMIMETypes());
     }
 
     /**

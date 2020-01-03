@@ -1,7 +1,8 @@
 <?php namespace Vaites\ApacheTika\Tests;
 
 use Exception;
-use PHPUnit_Framework_TestCase;
+
+use PHPUnit\Framework\TestCase;
 
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Metadata\Metadata;
@@ -9,7 +10,7 @@ use Vaites\ApacheTika\Metadata\Metadata;
 /**
  * Error tests
  */
-class ErrorTest extends PHPUnit_Framework_TestCase
+class ErrorTest extends TestCase
 {
     /**
      * Current tika version

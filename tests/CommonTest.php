@@ -1,13 +1,13 @@
 <?php namespace Vaites\ApacheTika\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 use Vaites\ApacheTika\Client;
 
 /**
  * Common test functionality
  */
-class CommonTest extends PHPUnit_Framework_TestCase
+class CommonTest extends TestCase
 {
     /**
      * Current tika version
