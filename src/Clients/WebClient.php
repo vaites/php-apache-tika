@@ -323,7 +323,7 @@ class WebClient extends Client
         }
 
         // parameters for cURL request
-        list($resource, $headers) = $this->getParameters($type, $file);
+        [$resource, $headers] = $this->getParameters($type, $file);
 
         // check the request
         $file = $this->checkRequest($type, $file);
@@ -341,7 +341,7 @@ class WebClient extends Client
         $options[CURLOPT_URL] = $this->getUrl() . "/$resource";
 
         // get the response and the HTTP status code
-        list($response, $status) = $this->exec($options);
+        [$response, $status] = $this->exec($options);
 
         // reduce memory usage closing cURL resource
         if(isset($options[CURLOPT_INFILE]) && is_resource($options[CURLOPT_INFILE]))
@@ -560,7 +560,10 @@ class WebClient extends Client
 
             $options[CURLOPT_WRITEFUNCTION] = function($handler, $data) use($callback)
             {
-                $this->response .= $data;
+                if($this->callbackAppend === true)
+                {
+                    $this->response .= $data;
+                }
 
                 $callback($data);
 
