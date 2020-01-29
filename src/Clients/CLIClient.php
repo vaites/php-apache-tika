@@ -284,7 +284,10 @@ class CLIClient extends Client
                     $callback($chunk);
                 }
 
-                $this->response .= $chunk;
+                if($this->callbackAppend === true)
+                {
+                    $this->response .= $chunk;
+                }
             }
             fclose($pipes[1]);
             $exit = proc_close($process);

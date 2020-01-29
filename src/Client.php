@@ -72,6 +72,13 @@ abstract class Client
     protected $callback = null;
 
     /**
+     * Enable or disable appending when using callback
+     *
+     * @var bool
+     */
+    protected $callbackAppend = true;
+
+    /**
      * Size of chunks for callback
      *
      * @var int
@@ -178,14 +185,16 @@ abstract class Client
      * @return  $this
      * @throws  \Exception
      */
-    public function setCallback($callback): self
+    public function setCallback($callback, $append = true): self
     {
         if($callback instanceof Closure)
         {
+            $this->callbackAppend = (bool) $append;
             $this->callback = $callback;
         }
         elseif(is_callable($callback))
         {
+            $this->callbackAppend = (bool) $append;
             $this->callback = function($chunk) use($callback)
             {
                 return call_user_func_array($callback, [$chunk]);
@@ -322,14 +331,15 @@ abstract class Client
      *
      * @param   string  $file
      * @param   mixed   $callback
+     * @param   bool    $append
      * @return  string
      * @throws  \Exception
      */
-    public function getHTML(string $file, callable $callback = null): string
+    public function getHTML(string $file, callable $callback = null, $append = true): string
     {
         if(!is_null($callback))
         {
-            $this->setCallback($callback);
+            $this->setCallback($callback, $append);
         }
 
         return $this->request('html', $file);
@@ -340,14 +350,15 @@ abstract class Client
      *
      * @param   string  $file
      * @param   mixed   $callback
+     * @param   bool    $append
      * @return  string
      * @throws  \Exception
      */
-    public function getText(string $file, callable $callback = null): string
+    public function getText(string $file, callable $callback = null, $append = true): string
     {
         if(!is_null($callback))
         {
-            $this->setCallback($callback);
+            $this->setCallback($callback, $append);
         }
 
         return $this->request('text', $file);
@@ -356,16 +367,17 @@ abstract class Client
     /**
      * Extracts main text
      *
-     * @param   string      $file
-     * @param   callable    $callback
+     * @param   string  $file
+     * @param   mixed   $callback
+     * @param   bool    $append
      * @return  string
      * @throws  \Exception
      */
-    public function getMainText(string $file, callable $callback = null): string
+    public function getMainText(string $file, callable $callback = null, $append = true): string
     {
         if(!is_null($callback))
         {
-            $this->setCallback($callback);
+            $this->setCallback($callback, $append);
         }
 
         return $this->request('text-main', $file);
