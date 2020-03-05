@@ -247,8 +247,8 @@ class CLIClient extends Client
      */
     protected function getArguments($type, $file = null)
     {
-        // parameters for command
-        $arguments = [];
+        $arguments = $this->encoding ? ["--encoding={$this->encoding}"] : [];
+
         switch($type)
         {
             case 'html':
