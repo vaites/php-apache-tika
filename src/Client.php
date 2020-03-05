@@ -58,6 +58,13 @@ abstract class Client
     protected $cache = [];
 
     /**
+     * Text encoding
+     *
+     * @var \Closure
+     */
+    protected $encoding = null;
+
+    /**
      * Callback called on secuential read
      *
      * @var \Closure
@@ -123,6 +130,30 @@ abstract class Client
     }
 
     /**
+     * Get the encoding
+     *
+     * @return  \Closure|null
+     */
+    public function getEncoding()
+    {
+        return $this->encoding;
+    }
+
+    /**
+     * Set the encoding
+     *
+     * @param   string   $encoding
+     * @return  $this
+     * @throws  \Exception
+     */
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
+
+        return $this;
+    }
+
+    /**
      * Get the callback
      *
      * @return  \Closure|null
@@ -136,6 +167,7 @@ abstract class Client
      * Set the callback (callable or closure) for call on secuential read
      *
      * @param   mixed   $callback
+     * @param   bool    $append
      * @return  $this
      * @throws  \Exception
      */

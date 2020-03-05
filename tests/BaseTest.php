@@ -373,6 +373,35 @@ abstract class BaseTest extends TestCase
     }
 
     /**
+     * Encoding tests
+     *
+     * @dataProvider    encodingProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testEncodingDocumentText($file)
+    {
+        $client =& self::$client;
+
+        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        {
+            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
+        }
+        else
+        {
+            //$client->setEncoding('UTF-8');
+
+            $this->assertThat($client->getText($file), $this->logicalAnd
+            (
+                $this->stringContains('L’espéranto'),
+                $this->stringContains('世界語'),
+                $this->stringContains('Эспера́нто')
+            ));
+        }
+    }
+
+    /**
      * Test available detectors
      *
      * @throws  \Exception
@@ -463,6 +492,16 @@ abstract class BaseTest extends TestCase
                 'https://raw.githubusercontent.com/vaites/php-apache-tika/master/samples/sample6.pdf'
             ]
         ];
+    }
+
+    /**
+     * File provider for encoding testing
+     *
+     * @return array
+     */
+    public function encodingProvider()
+    {
+        return $this->samples('sample7');
     }
 
     /**

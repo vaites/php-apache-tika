@@ -13,7 +13,7 @@ from documents, images and other formats.
 
 The following modes are supported:
 * **App mode**: run app JAR via command line interface
-* **Server mode**: make HTTP requests to [JSR 311 network server](http://wiki.apache.org/tika/TikaJAXRS)
+* **Server mode**: make HTTP requests to [JSR 311 network server](https://cwiki.apache.org/confluence/display/TIKA/TikaServer)
 
 Server mode is recommended because is 5 times faster, but some shared hosts don't allow run processes in background.
 
@@ -144,6 +144,12 @@ $client->getAvailableDetectors();
 $client->getAvailableParsers();
 $client->getVersion();
 ```
+
+Encoding methods:
+```php
+$client->getEncoding();
+$client->setEncoding('UTF-8');
+```
     
 Supported versions related methods:
 
@@ -219,6 +225,26 @@ $client->setTimeout($seconds);
 $client->getTimeout();
 ```
 
+## Troubleshooting
+
+### Empty responses or unexpected results
+
+This library is only a _proxy_ so if you get an empy responses or unexpected results the most common cause is Tika 
+itself. A simple test is using the GUI to check the response:
+
+1. Run the Tika app without arguments: `java -jar tika-app-x.xx.jar` 
+2. Drop your file or select it using _File -> Open_
+3. Wait until the metadata appears
+4. Get the text or HTML using _View_ menu
+
+If the results are the same, you must take a look into [Tika's Jira](https://issues.apache.org/jira/projects/TIKA/issues)
+and open an issue if necessary.
+
+### Encoding
+
+By default the returned text is encoded with UTF-8 but there are some issues with the encoding when using the app mode.
+The `Client::setEncoding()` method allows to set the expected encoding (this will be fixed in the upcoming 1.0 release). 
+
 ## Tests
 
 Tests are designed to **cover all features for all supported versions** of Apache Tika in app mode and server mode. 
@@ -229,8 +255,10 @@ There are a few samples to test against:
 * **sample3**: text recognition
 * **sample4**: unsupported media
 * **sample5**: huge text for callbacks 
+* **sample6**: remote calls 
+* **sample7**: text encoding
 
-## Issues
+## Known issues
 
 There are some issues found during tests, not related with this library:
 
