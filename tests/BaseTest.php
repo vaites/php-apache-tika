@@ -314,18 +314,11 @@ abstract class BaseTest extends TestCase
     {
         $client =& self::$client;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            BaseTest::$shared = 0;
+        BaseTest::$shared = 0;
 
-            $response = self::$client->getText($file, [$this, 'callableCallback'], false);
+        $response = self::$client->getText($file, [$this, 'callableCallback'], false);
 
-            $this->assertEmpty($response);
-        }
+        $this->assertEmpty($response);
     }
 
     /**
@@ -410,21 +403,14 @@ abstract class BaseTest extends TestCase
     {
         $client =& self::$client;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            //$client->setEncoding('UTF-8');
+        $client->setEncoding('UTF-8');
 
-            $this->assertThat($client->getText($file), $this->logicalAnd
-            (
-                $this->stringContains('L’espéranto'),
-                $this->stringContains('世界語'),
-                $this->stringContains('Эспера́нто')
-            ));
-        }
+        $this->assertThat($client->getText($file), $this->logicalAnd
+        (
+            $this->stringContains('L’espéranto'),
+            $this->stringContains('世界語'),
+            $this->stringContains('Эспера́нто')
+        ));
     }
 
     /**
