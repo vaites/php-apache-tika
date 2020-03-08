@@ -43,6 +43,8 @@ to work with the new versions of the tool.
     * Java 8 for Tika 1.19 or greater
     * Java 7 for Tika from 1.15 to 1.18
 * [Tesseract](https://github.com/tesseract-ocr/tesseract) (optional for OCR recognition)
+
+**NOTE**: the supported PHP version will remain synced with [the latest supported by PHP team](https://www.php.net/supported-versions.php) 
     
 ## Installation
 
