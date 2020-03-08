@@ -615,7 +615,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         }
         else
         {
-            //$client->setEncoding('UTF-8');
+            $client->setEncoding('UTF-8');
 
             $this->assertThat($client->getText($file), $this->logicalAnd
             (
