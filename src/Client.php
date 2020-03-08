@@ -132,9 +132,9 @@ abstract class Client
     /**
      * Get the encoding
      *
-     * @return  \Closure|null
+     * @return  string|null
      */
-    public function getEncoding()
+    public function getEncoding(): string
     {
         return $this->encoding;
     }
@@ -146,9 +146,16 @@ abstract class Client
      * @return  $this
      * @throws  \Exception
      */
-    public function setEncoding($encoding)
+    public function setEncoding(string $encoding): self
     {
-        $this->encoding = $encoding;
+        if(!empty($encoding))
+        {
+            $this->encoding = $encoding;
+        }
+        else
+        {
+            throw new Exception('Invalid encoding');
+        }
 
         return $this;
     }

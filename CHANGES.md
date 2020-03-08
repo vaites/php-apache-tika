@@ -4,6 +4,20 @@
 * Drop support for Apache Tika 1.14 and lower
 * Added type declarations and return types
 
+# v0.9.0
+
+* Added Client::setEncoding() to avoid encoding problems using app mode
+* Added _Troubleshooting_ section to the README.md
+
+# v0.8.0
+
+* Added option to disable append on Client::setCallback() to save memory
+
+# v0.7.2
+
+ * Tested up to Apache Tika 1.23
+ * Spawn scripts 'autodetects' if module java.se.ee is required
+
 # v0.7.1
 
 * Tested up to version 1.21

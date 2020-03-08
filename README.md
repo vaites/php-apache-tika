@@ -30,18 +30,18 @@ to work with the new versions of the tool.
 * Standarized metadata for documents
 * Support for local and remote resources
 * No heavyweight library dependencies
-* Compatible with Apache Tika 1.7 or greater
+* Compatible with Apache Tika 1.15 or greater
     * Tested up to 1.23
 
 ## Requirements
 
-* PHP 7.1 or greater
+* PHP 7.2 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
-* Apache Tika 1.7 or greater
+* Apache Tika 1.15 or greater
 * Oracle Java or OpenJDK 
-    * Java 6 for Tika up to 1.9
-    * Java 7 for Tika 1.10 or greater
+    * Java 8 for Tika 1.19 or greater
+    * Java 7 for Tika from 1.15 to 1.18
 * [Tesseract](https://github.com/tesseract-ocr/tesseract) (optional for OCR recognition)
     
 ## Installation
