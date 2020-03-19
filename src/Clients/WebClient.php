@@ -10,7 +10,7 @@ use Vaites\ApacheTika\Client;
  * Apache Tika web client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    http://wiki.apache.org/tika/TikaJAXRS
+ * @link    https://cwiki.apache.org/confluence/display/TIKA/TikaServer
  */
 class WebClient extends Client
 {

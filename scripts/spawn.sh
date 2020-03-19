@@ -2,7 +2,7 @@
 
 PORT=${APACHE_TIKA_PORT:-9998}
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
-VERSION=${APACHE_TIKA_VERSION:-"1.23"}
+VERSION=${APACHE_TIKA_VERSION:-"1.24"}
 
 {
     java --add-modules java.se.ee -version &&

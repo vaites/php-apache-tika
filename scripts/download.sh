@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
-VERSION=${APACHE_TIKA_VERSION:-"1.23"}
+VERSION=${APACHE_TIKA_VERSION:-"1.24"}
 MIRROR="https://archive.apache.org"
 
 mkdir --parents $BINARIES

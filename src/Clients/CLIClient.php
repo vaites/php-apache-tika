@@ -10,7 +10,7 @@ use Vaites\ApacheTika\Client;
  * Apache Tika command line interface client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    https://tika.apache.org/1.23/gettingstarted.html#Using_Tika_as_a_command_line_utility
+ * @link    https://tika.apache.org/1.24/gettingstarted.html#Using_Tika_as_a_command_line_utility
  */
 class CLIClient extends Client
 {
