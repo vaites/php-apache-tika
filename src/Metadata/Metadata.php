@@ -9,7 +9,7 @@ use Exception;
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
-abstract class Metadata
+abstract class Metadata implements MetadataInterface
 {
     /**
      * Title
@@ -88,10 +88,10 @@ abstract class Metadata
      *
      * @param   string  $response
      * @param   string  $file
-     * @return  \Vaites\ApacheTika\Metadata\Metadata
+     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
-    public static function make($response, $file)
+    public static function make(string $response, string $file): MetadataInterface
     {
         // an empty response throws an error
         if(empty($response) || trim($response) == '')

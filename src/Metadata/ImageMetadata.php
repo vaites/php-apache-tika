@@ -2,6 +2,8 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
+use InvalidArgumentException;
+
 /**
  * Metadata class for images
  *
@@ -35,10 +37,9 @@ class ImageMetadata extends Metadata
      *
      * @param string $key
      * @param mixed  $value
-     *
-     * @return bool
+     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      */
-    protected function setAttribute($key, $value)
+    protected function setAttribute(string $key, string $value): MetadataInterface
     {
         switch(mb_strtolower($key))
         {
@@ -65,9 +66,9 @@ class ImageMetadata extends Metadata
                 break;
 
             default:
-                return false;
+                throw new InvalidArgumentException("Invalid attribute $key");
         }
 
-        return true;
+        return $this;
     }
 }

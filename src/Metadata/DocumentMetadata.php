@@ -4,6 +4,7 @@ namespace Vaites\ApacheTika\Metadata;
 
 use DateTime;
 use DateTimeZone;
+use InvalidArgumentException;
 
 /**
  * Metadata class for documents
@@ -45,7 +46,7 @@ class DocumentMetadata extends Metadata
     /**
      * Content encoding
      *
-     * @var null
+     * @var string
      */
     public $encoding = null;
 
@@ -81,11 +82,11 @@ class DocumentMetadata extends Metadata
      * Sets an attribute
      *
      * @param   string  $key
-     * @param   mixed   $value
-     * @return  bool
+     * @param   string   $value
+     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
-    protected function setAttribute($key, $value)
+    protected function setAttribute(string $key, string $value): MetadataInterface
     {
         $timezone = new DateTimeZone('UTC');
 
@@ -162,9 +163,9 @@ class DocumentMetadata extends Metadata
                 break;
 
             default:
-                return false;
+                throw new InvalidArgumentException("Invalid attribute $key");
         }
 
-        return true;
+        return $this;
     }
 }
