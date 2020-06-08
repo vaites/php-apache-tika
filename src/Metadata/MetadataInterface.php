@@ -11,5 +11,5 @@ interface MetadataInterface
      * @param   string  $value
      * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      */
-    function setAttribute(string $key, string $value): MetadataInterface;
+    public function setAttribute(string $key, string $value): MetadataInterface;
 }

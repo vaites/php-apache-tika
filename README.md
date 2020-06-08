@@ -31,7 +31,7 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
-    * Tested up to 1.23
+    * Tested up to 1.24.1
 
 ## Requirements
 
@@ -264,8 +264,6 @@ There are a few samples to test against:
 
 There are some issues found during tests, not related with this library:
 
-* 1.9 version running Java 7 on server mode throws random error 500 (*Unexpected RuntimeException*)
-* 1.14 version on server mode throws random errors (*Expected ';', got ','*) when parsing image metadata
 * Tesseract slows down document parsing as described in [TIKA-2359](https://issues.apache.org/jira/browse/TIKA-2359)
     
 ## Integrations

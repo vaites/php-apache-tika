@@ -4,7 +4,6 @@ namespace Vaites\ApacheTika\Metadata;
 
 use DateTime;
 use DateTimeZone;
-use InvalidArgumentException;
 
 /**
  * Metadata class for documents
@@ -81,12 +80,12 @@ class DocumentMetadata extends Metadata
     /**
      * Sets an attribute
      *
-     * @param   string  $key
-     * @param   string   $value
+     * @param string $key
+     * @param mixed  $value
      * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
-    protected function setAttribute(string $key, string $value): MetadataInterface
+    protected function setSpecificAttribute(string $key, $value): MetadataInterface
     {
         $timezone = new DateTimeZone('UTC');
 
@@ -118,11 +117,6 @@ class DocumentMetadata extends Metadata
             case 'author':
             case 'initial-creator':
                 $this->author = $value;
-                break;
-
-            case 'content-type':
-                $mime = $value ? preg_split('/;\s+/', $value) : [];
-                $this->mime = array_shift($mime);
                 break;
 
             case 'application-name':
@@ -161,9 +155,6 @@ class DocumentMetadata extends Metadata
             case 'x-tika:content':
                 $this->content = $value;
                 break;
-
-            default:
-                throw new InvalidArgumentException("Invalid attribute $key");
         }
 
         return $this;

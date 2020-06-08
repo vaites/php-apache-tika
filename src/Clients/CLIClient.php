@@ -63,7 +63,7 @@ class CLIClient extends Client
      *
      * @return  null|string
      */
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
@@ -74,7 +74,7 @@ class CLIClient extends Client
      * @param   string  $path
      * @return  $this
      */
-    public function setPath($path)
+    public function setPath($path): self
     {
         $this->path = $path;
 
@@ -86,7 +86,7 @@ class CLIClient extends Client
      *
      * @return  null|int
      */
-    public function getJava()
+    public function getJava(): ?string
     {
         return $this->java;
     }
@@ -97,7 +97,7 @@ class CLIClient extends Client
      * @param   string    $java
      * @return  $this
      */
-    public function setJava($java)
+    public function setJava($java): self
     {
         $this->java = $java;
 

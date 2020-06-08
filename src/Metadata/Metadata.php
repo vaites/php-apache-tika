@@ -3,6 +3,7 @@
 namespace Vaites\ApacheTika\Metadata;
 
 use Exception;
+use stdClass;
 
 /**
  * Standarized metadata class with common attributes for all document types
@@ -49,18 +50,18 @@ abstract class Metadata implements MetadataInterface
     /**
      * RAW attributes returned by Apache Tika
      *
-     * @var array
+     * @var \stdClass
      */
     public $meta = [];
 
     /**
      * Parse Apache Tika response filling all properties
      *
-     * @param   string  $meta
-     * @param   string  $file
+     * @param \stdClass $meta
+     * @param string    $file
      * @throws \Exception
      */
-    public function __construct($meta, $file)
+    public function __construct(stdClass $meta, string $file)
     {
         $this->meta = $meta;
 
@@ -86,8 +87,8 @@ abstract class Metadata implements MetadataInterface
     /**
      * Return an instance of Metadata based on content type
      *
-     * @param   string  $response
-     * @param   string  $file
+     * @param string $response
+     * @param string $file
      * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
@@ -133,9 +134,33 @@ abstract class Metadata implements MetadataInterface
     /**
      * Sets an attribute
      *
-     * @param   string  $key
-     * @param   mixed   $value
-     * @return  bool
+     * @param string $key
+     * @param mixed  $value
+     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      */
-    abstract protected function setAttribute($key, $value);
+    public final function setAttribute(string $key, $value): MetadataInterface
+    {
+        switch(mb_strtolower($key))
+        {
+            case 'content-type':
+                $mime = $value ? preg_split('/;\s+/', $value) : [];
+                $this->mime = array_shift($mime);
+                break;
+
+            default:
+                $this->setSpecificAttribute($key, $value);
+
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets an speficic attribute for the file type
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
+     */
+    abstract protected function setSpecificAttribute(string $key, $value): MetadataInterface;
 }
