@@ -52,7 +52,7 @@ abstract class Metadata implements MetadataInterface
      *
      * @var \stdClass
      */
-    public $meta = [];
+    public $meta = null;
 
     /**
      * Parse Apache Tika response filling all properties
@@ -66,13 +66,13 @@ abstract class Metadata implements MetadataInterface
         $this->meta = $meta;
 
         // process each meta
-        foreach($this->meta as $key => $value)
+        foreach((array) $this->meta as $key => $value)
         {
             $this->setAttribute($key, $value);
         }
 
         // file name without extension if title is not detected
-        if(empty($this->title) && !is_null($file))
+        if(empty($this->title))
         {
             $this->title = preg_replace('/\..+$/', '', basename($file));
         }

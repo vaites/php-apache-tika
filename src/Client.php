@@ -8,6 +8,7 @@ use Exception;
 use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
 use Vaites\ApacheTika\Metadata\Metadata;
+use Vaites\ApacheTika\Metadata\MetadataInterface;
 
 /**
  * Apache Tika client interface
@@ -60,14 +61,14 @@ abstract class Client
     /**
      * Text encoding
      *
-     * @var \Closure
+     * @var string|null
      */
     protected $encoding = null;
 
     /**
      * Callback called on secuential read
      *
-     * @var \Closure
+     * @var callable|null
      */
     protected $callback = null;
 
@@ -103,20 +104,19 @@ abstract class Client
     /**
      * Get a class instance throwing an exception if check fails
      *
-     * @param   string  $param1     path or host
-     * @param   int     $param2     Java binary path or port for web client
-     * @param   array   $options    options for cURL request
-     * @param   bool    $check      check JAR file or server connection
+     * @param string     $param1 path or host
+     * @param string|int $param2 Java binary path or port for web client
+     * @param array      $options options for cURL request
+     * @param bool       $check check JAR file or server connection
      * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws  \Exception
      */
-    public static function make($param1 = null, $param2 = null, $options = [], $check = true): Client
+    public static function make(string $param1 = null, $param2 = null, array $options = [], bool $check = true): Client
     {
         if(preg_match('/\.jar$/', func_get_arg(0)))
         {
             return new CLIClient($param1, $param2, $check);
-        }
-        else
+        } else
         {
             return new WebClient($param1, $param2, $options, $check);
         }
@@ -125,9 +125,9 @@ abstract class Client
     /**
      * Get a class instance delaying the check
      *
-     * @param   string  $param1     path or host
-     * @param   int     $param2     Java binary path or port for web client
-     * @param   array   $options    options for cURL request
+     * @param string $param1 path or host
+     * @param int    $param2 Java binary path or port for web client
+     * @param array  $options options for cURL request
      * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws  \Exception
      */
@@ -141,7 +141,7 @@ abstract class Client
      *
      * @return  string|null
      */
-    public function getEncoding(): string
+    public function getEncoding(): ?string
     {
         return $this->encoding;
     }
@@ -149,7 +149,7 @@ abstract class Client
     /**
      * Set the encoding
      *
-     * @param   string   $encoding
+     * @param string $encoding
      * @return  $this
      * @throws  \Exception
      */
@@ -158,8 +158,7 @@ abstract class Client
         if(!empty($encoding))
         {
             $this->encoding = $encoding;
-        }
-        else
+        } else
         {
             throw new Exception('Invalid encoding');
         }
@@ -180,22 +179,22 @@ abstract class Client
     /**
      * Set the callback (callable or closure) for call on secuential read
      *
-     * @param   mixed   $callback
-     * @param   bool    $append
+     * @param callable $callback
+     * @param bool     $append
      * @return  $this
      * @throws  \Exception
      */
-    public function setCallback($callback, $append = true): self
+    public function setCallback(callable $callback, $append = true): self
     {
         if($callback instanceof Closure)
         {
             $this->callbackAppend = (bool) $append;
             $this->callback = $callback;
         }
-        elseif(is_callable($callback))
+        elseif(is_string($callback))
         {
             $this->callbackAppend = (bool) $append;
-            $this->callback = function($chunk) use($callback)
+            $this->callback = function($chunk) use ($callback)
             {
                 return call_user_func_array($callback, [$chunk]);
             };
@@ -221,7 +220,7 @@ abstract class Client
     /**
      * Set the chunk size for secuential read
      *
-     * @param   int     $size
+     * @param int $size
      * @return  $this
      * @throws  \Exception
      */
@@ -252,7 +251,7 @@ abstract class Client
     /**
      * Set the remote download flag
      *
-     * @param   bool    $download
+     * @param bool $download
      * @return  $this
      */
     public function setDownloadRemote(bool $download): self
@@ -266,12 +265,12 @@ abstract class Client
      * Gets file metadata using recursive if specified
      *
      * @link    https://wiki.apache.org/tika/TikaJAXRS#Recursive_Metadata_and_Content
-     * @param   string  $file
-     * @param   string  $recursive
-     * @return  \Vaites\ApacheTika\Metadata\Metadata|\Vaites\ApacheTika\Metadata\DocumentMetadata|\Vaites\ApacheTika\Metadata\ImageMetadata
+     * @param string $file
+     * @param string $recursive
+     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
-    public function getMetadata(string $file, string $recursive = null): ?Metadata
+    public function getMetadata(string $file, string $recursive = null): MetadataInterface
     {
         if(is_null($recursive))
         {
@@ -292,12 +291,12 @@ abstract class Client
     /**
      * Gets recursive file metadata (alias for getMetadata)
      *
-     * @param   string  $file
-     * @param   string  $recursive
-     * @return  \Vaites\ApacheTika\Metadata\Metadata
+     * @param string $file
+     * @param string $recursive
+     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
-    public function getRecursiveMetadata(string $file, string $recursive)
+    public function getRecursiveMetadata(string $file, string $recursive): MetadataInterface
     {
         return $this->getMetadata($file, $recursive);
     }
@@ -305,7 +304,7 @@ abstract class Client
     /**
      * Detect language
      *
-     * @param   string  $file
+     * @param string $file
      * @return  string
      * @throws  \Exception
      */
@@ -317,7 +316,7 @@ abstract class Client
     /**
      * Detect MIME type
      *
-     * @param   string  $file
+     * @param string $file
      * @return  string
      * @throws \Exception
      */
@@ -329,9 +328,9 @@ abstract class Client
     /**
      * Extracts HTML
      *
-     * @param   string  $file
-     * @param   mixed   $callback
-     * @param   bool    $append
+     * @param string $file
+     * @param callable $callback
+     * @param bool   $append
      * @return  string
      * @throws  \Exception
      */
@@ -348,9 +347,9 @@ abstract class Client
     /**
      * Extracts text
      *
-     * @param   string  $file
-     * @param   mixed   $callback
-     * @param   bool    $append
+     * @param string $file
+     * @param callable $callback
+     * @param bool   $append
      * @return  string
      * @throws  \Exception
      */
@@ -367,9 +366,9 @@ abstract class Client
     /**
      * Extracts main text
      *
-     * @param   string  $file
-     * @param   mixed   $callback
-     * @param   bool    $append
+     * @param string $file
+     * @param callable $callback
+     * @param bool   $append
      * @return  string
      * @throws  \Exception
      */
@@ -407,7 +406,7 @@ abstract class Client
     /**
      * Sets the checked flag
      *
-     * @param   bool    $checked
+     * @param bool $checked
      * @return  $this
      */
     public function setChecked(bool $checked): self
@@ -430,8 +429,8 @@ abstract class Client
     /**
      * Check if a response is cached
      *
-     * @param   string  $type
-     * @param   string  $file
+     * @param string $type
+     * @param string $file
      * @return  bool
      */
     protected function isCached(string $type, string $file): bool
@@ -442,8 +441,8 @@ abstract class Client
     /**
      * Get a cached response
      *
-     * @param   string  $type
-     * @param   string  $file
+     * @param string $type
+     * @param string $file
      * @return  mixed
      */
     protected function getCachedResponse(string $type, string $file)
@@ -454,7 +453,7 @@ abstract class Client
     /**
      * Check if a request type must be cached
      *
-     * @param   string  $type
+     * @param string $type
      * @return  bool
      */
     protected function isCacheable(string $type): bool
@@ -465,9 +464,9 @@ abstract class Client
     /**
      * Caches a response
      *
-     * @param   string  $type
-     * @param   mixed   $response
-     * @param   string  $file
+     * @param string $type
+     * @param mixed  $response
+     * @param string $file
      * @return  bool
      */
     protected function cacheResponse(string $type, $response, string $file): bool
@@ -480,7 +479,7 @@ abstract class Client
     /**
      * Checks if a specific version is supported
      *
-     * @param   string  $version
+     * @param string $version
      * @return  bool
      */
     public static function isVersionSupported(string $version): bool
@@ -491,8 +490,8 @@ abstract class Client
     /**
      * Check the request before executing
      *
-     * @param   string  $type
-     * @param   string  $file
+     * @param string $type
+     * @param string $file
      * @return  string
      * @throws  \Exception
      */
@@ -502,19 +501,16 @@ abstract class Client
         if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             //
-        }
-        // invalid local file
-        elseif(!preg_match('/^http/', $file) && !file_exists($file))
+        } // invalid local file
+        else if(!preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
-        }
-        // invalid remote file
-        elseif(preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
+        } // invalid remote file
+        else if(preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
         {
             throw new Exception("File $file can't be opened", 2);
-        }
-        // download remote file if required only for integrated downloader
-        elseif(preg_match('/^http/', $file) && $this->downloadRemote)
+        } // download remote file if required only for integrated downloader
+        else if(preg_match('/^http/', $file) && $this->downloadRemote)
         {
             $file = $this->downloadFile($file);
         }
@@ -526,7 +522,7 @@ abstract class Client
      * Download file to a temporary folder
      *
      * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
-     * @param   string  $file
+     * @param string $file
      * @return  string
      * @throws  \Exception
      */
@@ -597,8 +593,8 @@ abstract class Client
     /**
      * Configure and make a request and return its results.
      *
-     * @param   string  $type
-     * @param   string  $file
+     * @param string $type
+     * @param string $file
      * @return  string
      * @throws  \Exception
      */

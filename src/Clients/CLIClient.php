@@ -14,7 +14,7 @@ use Vaites\ApacheTika\Client;
  */
 class CLIClient extends Client
 {
-    const MODE = 'cli';
+    protected const MODE = 'cli';
 
     /**
      * Apache Tika app path
@@ -84,7 +84,7 @@ class CLIClient extends Client
     /**
      * Get the Java path
      *
-     * @return  null|int
+     * @return  string|null
      */
     public function getJava(): ?string
     {
@@ -107,11 +107,14 @@ class CLIClient extends Client
     /**
      * Returns the supported MIME types
      *
+     * NOTE: the data provided by the CLI must be parsed: mime type has no spaces, aliases go next prefixed with spaces
+     *
      * @return  array
      * @throws  \Exception
      */
     public function getSupportedMIMETypes(): array
     {
+        $mime = null;
         $mimeTypes = [];
 
         $response = preg_split("/\n/", $this->request('mime-types'));
@@ -332,12 +335,6 @@ class CLIClient extends Client
                 $arguments[] = '--metadata --json';
                 break;
 
-            case 'rmeta/ignore':
-            case 'rmeta/html':
-            case 'rmeta/text':
-                throw new Exception('Recursive metadata is not supported in command line mode');
-                break;
-
             case 'text':
                 $arguments[] = '--text';
                 break;
@@ -361,6 +358,11 @@ class CLIClient extends Client
             case 'version':
                 $arguments[] = '--version';
                 break;
+
+            case 'rmeta/ignore':
+            case 'rmeta/html':
+            case 'rmeta/text':
+                throw new Exception('Recursive metadata is not supported in command line mode');
 
             default:
                 throw new Exception($file ? "Unknown type $type for $file" : "Unknown type $type");

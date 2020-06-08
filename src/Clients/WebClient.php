@@ -14,7 +14,7 @@ use Vaites\ApacheTika\Client;
  */
 class WebClient extends Client
 {
-    const MODE = 'web';
+    protected const MODE = 'web';
 
     /**
      * Cached responses to avoid multiple request for the same file
@@ -51,20 +51,20 @@ class WebClient extends Client
      */
     protected $options =
     [
-        CURLINFO_HEADER_OUT    => true,
-        CURLOPT_HTTPHEADER     => [],
-        CURLOPT_PUT            => true,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 5
+        CURLINFO_HEADER_OUT     => true,
+        CURLOPT_HTTPHEADER      => [],
+        CURLOPT_PUT             => true,
+        CURLOPT_RETURNTRANSFER  => true,
+        CURLOPT_TIMEOUT         => 5
     ];
 
     /**
      * Configure class and test if server is running
      *
-     * @param   string  $host
-     * @param   int     $port
-     * @param   array   $options
-     * @param   bool    $check
+     * @param string $host
+     * @param int    $port
+     * @param array  $options
+     * @param bool   $check
      * @throws  \Exception
      */
     public function __construct(string $host = null, int $port = null, array $options = [], bool $check = true)
@@ -74,8 +74,7 @@ class WebClient extends Client
         if(is_string($host) && filter_var($host, FILTER_VALIDATE_URL))
         {
             $this->setUrl($host);
-        }
-        elseif($host)
+        } else if($host)
         {
             $this->setHost($host);
         }
@@ -111,7 +110,7 @@ class WebClient extends Client
     /**
      * Set the host and port using an URL
      *
-     * @param   string  $url
+     * @param string $url
      * @return $this
      */
     public function setUrl(string $url): self
@@ -141,7 +140,7 @@ class WebClient extends Client
     /**
      * Set the host
      *
-     * @param   string  $host
+     * @param string $host
      * @return  $this
      */
     public function setHost(string $host): self
@@ -164,7 +163,7 @@ class WebClient extends Client
     /**
      * Set the port
      *
-     * @param   int     $port
+     * @param int $port
      * @return  $this
      */
     public function setPort(int $port): self
@@ -187,7 +186,7 @@ class WebClient extends Client
     /**
      * Set the number of retries
      *
-     * @param   int     $retries
+     * @param int $retries
      * @return  $this
      */
     public function setRetries(int $retries): self
@@ -210,10 +209,10 @@ class WebClient extends Client
     /**
      * Get an specified option
      *
-     * @param   string  $key
+     * @param int $key
      * @return  mixed
      */
-    public function getOption(string $key)
+    public function getOption(int $key)
     {
         return $this->options[$key] ?? null;
     }
@@ -223,12 +222,12 @@ class WebClient extends Client
      *
      * @link    http://php.net/manual/en/curl.constants.php
      * @link    http://php.net/manual/en/function.curl-setopt.php
-     * @param   string  $key
-     * @param   mixed   $value
+     * @param int   $key
+     * @param mixed $value
      * @return  $this
      * @throws  \Exception
      */
-    public function setOption(string $key, $value): self
+    public function setOption(int $key, $value): self
     {
         if(in_array($key, [CURLINFO_HEADER_OUT, CURLOPT_PUT, CURLOPT_RETURNTRANSFER]))
         {
@@ -243,7 +242,7 @@ class WebClient extends Client
     /**
      * Set the cURL options
      *
-     * @param   array   $options
+     * @param array $options
      * @return  $this
      * @throws  \Exception
      */
@@ -270,7 +269,7 @@ class WebClient extends Client
     /**
      * Set the timeout value for cURL
      *
-     * @param   int     $value
+     * @param int $value
      * @return  $this
      * @throws  \Exception
      */
@@ -337,8 +336,8 @@ class WebClient extends Client
     /**
      * Configure, make a request and return its results
      *
-     * @param   string  $type
-     * @param   string  $file
+     * @param string $type
+     * @param string $file
      * @return  string
      * @throws  \Exception
      */
@@ -353,8 +352,7 @@ class WebClient extends Client
         if($file !== null && $this->isCached($type, $file))
         {
             return $this->getCachedResponse($type, $file);
-        }
-        elseif(!isset($retries[sha1($file)]))
+        } else if(!isset($retries[sha1($file)]))
         {
             $retries[sha1($file)] = $this->retries;
         }
@@ -394,18 +392,15 @@ class WebClient extends Client
             {
                 $this->cacheResponse($type, $response, $file);
             }
-        }
-        // request completed successfully but result is empty
-        elseif($status == 204)
+        } // request completed successfully but result is empty
+        else if($status == 204)
         {
             $response = null;
-        }
-        // retry on request failed with error 500
-        elseif($status == 500 && $retries[sha1($file)]--)
+        } // retry on request failed with error 500
+        else if($status == 500 && $retries[sha1($file)]--)
         {
             $response = $this->request($type, $file);
-        }
-        // other status code is an error
+        } // other status code is an error
         else
         {
             $this->error($status, $resource, $file);
@@ -417,7 +412,7 @@ class WebClient extends Client
     /**
      * Make a request to Apache Tika Server
      *
-     * @param   array   $options
+     * @param array $options
      * @return  array
      * @throws  \Exception
      */
@@ -439,8 +434,7 @@ class WebClient extends Client
             if(is_null($this->callback))
             {
                 $this->response = curl_exec($curl) ?: '';
-            }
-            // with a callback, the response is appended on each block inside the callback
+            } // with a callback, the response is appended on each block inside the callback
             else
             {
                 $this->response = '';
@@ -467,9 +461,9 @@ class WebClient extends Client
      *
      * @codeCoverageIgnore
      *
-     * @param   int       $status
-     * @param   string    $resource
-     * @param   string    $file
+     * @param int    $status
+     * @param string $resource
+     * @param string $file
      * @throws  \Exception
      */
     protected function error(int $status, string $resource, string $file = null): void
@@ -478,12 +472,12 @@ class WebClient extends Client
         {
             //  method not allowed
             case 405:
-                throw new Exception('Method not allowed', 405);
+                $message = 'Method not allowed';
                 break;
 
             //  unsupported media type
             case 415:
-                throw new Exception('Unsupported media type', 415);
+                $message = 'Unsupported media type';
                 break;
 
             //  unprocessable entity
@@ -496,26 +490,28 @@ class WebClient extends Client
                     $message .= ' (is server launched using "-enableUnsecureFeatures -enableFileUrl" arguments?)';
                 }
 
-                throw new Exception($message, 422);
                 break;
 
             // server error
             case 500:
-                throw new Exception('Error while processing document', 500);
+                $message = 'Error while processing document';
                 break;
 
             // unexpected
             default:
-                throw new Exception("Unexpected response for /$resource ($status)", 501);
+                $message = "Unexpected response for /$resource ($status)";
+                $status = 501;
         }
+
+        throw new Exception($message, $status);
     }
 
     /**
      * Get the parameters to make the request
      *
      * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
-     * @param   string  $type
-     * @param   string  $file
+     * @param string $type
+     * @param string $file
      * @return  array
      * @throws  \Exception
      */
@@ -555,7 +551,10 @@ class WebClient extends Client
             case 'rmeta/text':
                 $resource = $type;
                 $headers[] = 'Accept: application/json';
-                $callback = function($response) { return json_decode($response, true); };
+                $callback = function($response)
+                {
+                    return json_decode($response, true);
+                };
                 break;
 
             case 'text':
@@ -582,8 +581,8 @@ class WebClient extends Client
     /**
      * Get the cURL options
      *
-     * @param   string  $type
-     * @param   string  $file
+     * @param string $type
+     * @param string $file
      * @return  array
      * @throws  \Exception
      */
@@ -597,7 +596,7 @@ class WebClient extends Client
         {
             $callback = $this->callback;
 
-            $options[CURLOPT_WRITEFUNCTION] = function($handler, $data) use($callback)
+            $options[CURLOPT_WRITEFUNCTION] = function($handler, $data) use ($callback)
             {
                 if($this->callbackAppend === true)
                 {
@@ -615,19 +614,16 @@ class WebClient extends Client
         if($file && preg_match('/^http/', $file))
         {
             //
-        }
-        // local file options
-        elseif($file && file_exists($file) && is_readable($file))
+        } // local file options
+        else if($file && file_exists($file) && is_readable($file))
         {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
             $options[CURLOPT_INFILESIZE] = filesize($file);
-        }
-        // other options for specific requests
-        elseif(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
+        } // other options for specific requests
+        else if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             $options[CURLOPT_PUT] = false;
-        }
-        // file not accesible
+        } // file not accesible
         else
         {
             throw new Exception("File $file can't be opened");
