@@ -44,8 +44,8 @@ to work with the new versions of the tool.
     * Java 7 for Tika from 1.15 to 1.18
 * [Tesseract](https://github.com/tesseract-ocr/tesseract) (optional for OCR recognition)
 
-**NOTE**: the supported PHP version will remain synced with [the latest supported by PHP team](https://www.php.net/supported-versions.php) 
-    
+**NOTE**: the supported PHP version will remain synced with [the latest supported by PHP team](https://www.php.net/supported-versions.php)
+
 ## Installation
 
 Install using Composer:
@@ -226,6 +226,15 @@ Set/get cURL client common options:
 $client->setTimeout($seconds);
 $client->getTimeout();
 ```
+
+### Breaking changes
+
+Since 1.0 version there are some breaking changes:
+
+* Apache Tika versions prior to 1.15 are not supported (use 0.x version for 1.14 and older)
+* PHP minimum requirement is 7.2 or greater (use 0.x version for 7.1 and older)
+* `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
+* `$client->getRecursiveMetadata()` returns an array as expected
 
 ## Troubleshooting
 

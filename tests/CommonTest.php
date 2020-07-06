@@ -95,7 +95,7 @@ class CommonTest extends TestCase
      */
     public function testGetSupportedVersions()
     {
-        $this->assertTrue(in_array(self::$version, Client::getSupportedVersions()));
+        $this->assertTrue(in_array(self::$version, self::$client->getSupportedVersions()));
     }
 
     /**
@@ -103,6 +103,6 @@ class CommonTest extends TestCase
      */
     public function testIsVersionSupported()
     {
-        $this->assertTrue(Client::isVersionSupported(self::$version));
+        $this->assertTrue(self::$client->isVersionSupported(self::$version));
     }
 }

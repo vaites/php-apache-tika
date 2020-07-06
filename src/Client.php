@@ -10,6 +10,8 @@ use Vaites\ApacheTika\Clients\WebClient;
 use Vaites\ApacheTika\Metadata\Metadata;
 use Vaites\ApacheTika\Metadata\MetadataInterface;
 
+use Composer\Factory;
+
 /**
  * Apache Tika client interface
  *
@@ -19,16 +21,6 @@ use Vaites\ApacheTika\Metadata\MetadataInterface;
 abstract class Client
 {
     protected const MODE = null;
-
-    /**
-     * List of supported Apache Tika versions
-     *
-     * @var array
-     */
-    protected static $supportedVersions =
-    [
-        '1.15', '1.16', '1.17', '1.18', '1.19', '1.19.1', '1.20', '1.21', '1.22', '1.23', '1.24', '1.24.1'
-    ];
 
     /**
      * Checked flag
@@ -397,10 +389,24 @@ abstract class Client
      * Return the list of Apache Tika supported versions
      *
      * @return array
+     * @throws \Exception
      */
-    public static function getSupportedVersions(): array
+    public function getSupportedVersions(): array
     {
-        return self::$supportedVersions;
+        static $versions = null;
+
+        if(is_null($versions))
+        {
+            $composer = json_decode(file_get_contents(dirname(__DIR__) . '/composer.json'), true);
+            $versions = $composer['extra']['supported-versions'] ?? null;
+
+            if(empty($versions))
+            {
+                throw new Exception("An error ocurred trying to read package's composer.json file");
+            }
+        }
+
+        return $versions;
     }
 
     /**
@@ -482,9 +488,9 @@ abstract class Client
      * @param string $version
      * @return  bool
      */
-    public static function isVersionSupported(string $version): bool
+    public function isVersionSupported(string $version): bool
     {
-        return in_array($version, self::getSupportedVersions());
+        return in_array($version, $this->getSupportedVersions());
     }
 
     /**
