@@ -278,7 +278,7 @@ abstract class Client
         foreach($response as $item)
         {
             $name = basename($file);
-            if($item->{'X-TIKA:embedded_depth'} > 0)
+            if(isset($item->{'X-TIKA:embedded_resource_path'}))
             {
                 $name .= $item->{'X-TIKA:embedded_resource_path'};
             }

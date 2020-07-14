@@ -117,42 +117,6 @@ class WebTest extends BaseTest
     }
 
     /**
-     * Recursive text metadata test
-     *
-     * @dataProvider ocrProvider
-     */
-    public function testTextRecursiveMetadata(string $file): void
-    {
-        $metadata = self::$client->getRecursiveMetadata($file, 'text');
-
-        $this->assertContains('Sed do eiusmod tempor incididunt', array_shift($metadata)->content);
-    }
-
-    /**
-     * Recursive HTML metadata test
-     *
-     * @dataProvider ocrProvider
-     */
-    public function testHtmlRecursiveMetadata(string $file): void
-    {
-        $metadata = self::$client->getRecursiveMetadata($file, 'html');
-
-        $this->assertContains('Sed do eiusmod tempor incididunt', array_shift($metadata)->content);
-    }
-
-    /**
-     * Recursive ignore metadata test
-     *
-     * @dataProvider ocrProvider
-     */
-    public function testIgnoreRecursiveMetadata(string $file): void
-    {
-        $metadata = self::$client->getRecursiveMetadata($file, 'ignore');
-
-        $this->assertNull(array_shift($metadata)->content);
-    }
-
-    /**
      * Test delayed check
      */
     public function testDelayedCheck(): void

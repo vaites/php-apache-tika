@@ -156,16 +156,6 @@ class CLIClient extends Client
     }
 
     /**
-     * Throw an exception because recursive metadata is not supported on CLI mode
-     *
-     * @throws \Exception
-     */
-    public function getRecursiveMetadata(string $file, ?string $format = 'ignore'): array
-    {
-        throw new Exception('Recursive metadata is not supported in CLI mode');
-    }
-
-    /**
      * Check Java binary, JAR path or server connection
      *
      * @throws \Exception
@@ -230,7 +220,7 @@ class CLIClient extends Client
         $response = $this->exec($command);
 
         // metadata response
-        if($type == 'meta')
+        if(in_array(preg_replace('/\/.+/', '', $type), ['meta', 'rmeta']))
         {
             // fix for invalid? json returned only with images
             $response = str_replace(basename($file) . '"}{', '", ', $response);
@@ -344,9 +334,16 @@ class CLIClient extends Client
                 break;
 
             case 'rmeta/ignore':
+                $arguments[] = '--metadata --jsonRecursive';
+                break;
+
             case 'rmeta/html':
+                $arguments[] = '--html --metadata --jsonRecursive';
+                break;
+
             case 'rmeta/text':
-                throw new Exception('Recursive metadata is not supported in command line mode');
+                $arguments[] = '--text --metadata --jsonRecursive';
+                break;
 
             default:
                 throw new Exception($file ? "Unknown type $type for $file" : "Unknown type $type");
