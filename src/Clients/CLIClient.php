@@ -155,6 +155,15 @@ class CLIClient extends Client
         return preg_split("/\n/", $response);
     }
 
+    /**
+     * Throw an exception because recursive metadata is not supported on CLI mode
+     *
+     * @throws \Exception
+     */
+    public function getRecursiveMetadata(string $file, ?string $format = 'ignore'): array
+    {
+        throw new Exception('Recursive metadata is not supported in CLI mode');
+    }
 
     /**
      * Check Java binary, JAR path or server connection

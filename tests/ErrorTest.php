@@ -108,7 +108,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertEquals(7, $exception->getCode());
+            $this->assertEquals(28, $exception->getCode());
         }
     }
 
@@ -153,7 +153,7 @@ class ErrorTest extends TestCase
         try
         {
             $client = Client::make('localhost', 9998);
-            $client->getMetadata(dirname(__DIR__) . '/samples/sample3.png', 'bad');
+            $client->getRecursiveMetadata(dirname(__DIR__) . '/samples/sample3.png', 'bad');
 
             $this->fail();
         }
@@ -202,7 +202,7 @@ class ErrorTest extends TestCase
         try
         {
             $client = Client::make($path);
-            $client->getMetadata('example.doc', 'html');
+            $client->getRecursiveMetadata('example.doc', 'html');
 
             $this->fail();
         }
@@ -220,31 +220,13 @@ class ErrorTest extends TestCase
         try
         {
             $client = Client::make('localhost', 9998);
-            $client->getMetadata('example.doc', 'error');
+            $client->getRecursiveMetadata('example.doc', 'error');
 
             $this->fail();
         }
         catch(Exception $exception)
         {
             $this->assertContains('Unknown recursive type', $exception->getMessage());
-        }
-    }
-
-    /**
-     * Test invalid callback
-     */
-    public function testInvalidCallback(): void
-    {
-        $path = self::getPathForVersion(self::$version);
-
-        try
-        {
-            $client = Client::make($path);
-            $client->setCallback('unknown_function');
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Invalid callback', $exception->getMessage());
         }
     }
 
@@ -261,36 +243,6 @@ class ErrorTest extends TestCase
         catch(Exception $exception)
         {
             $this->assertContains('Chunk size is not supported', $exception->getMessage());
-        }
-    }
-
-    /**
-     * Test invalid metadata
-     */
-    public function testInvalidMetadata(): void
-    {
-        try
-        {
-            Metadata::make('InvalidJsonString', './samples/sample1.doc');
-        }
-        catch(Exception $exception)
-        {
-            $this->assertEquals(JSON_ERROR_SYNTAX, $exception->getCode());
-        }
-    }
-
-    /**
-     * Test empty metadata
-     */
-    public function testEmptyMetadata(): void
-    {
-        try
-        {
-            Metadata::make('', './samples/sample1.doc');
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Empty response', $exception->getMessage());
         }
     }
 
