@@ -311,7 +311,8 @@ class WebClient extends Client
         if($file !== null && $this->isCached($type, $file))
         {
             return $this->getCachedResponse($type, $file);
-        } else if(!isset($retries[sha1($file)]))
+        }
+        elseif(!isset($retries[sha1($file)]))
         {
             $retries[sha1($file)] = $this->retries;
         }
@@ -352,11 +353,11 @@ class WebClient extends Client
                 $this->cacheResponse($type, $response, $file);
             }
         } // request completed successfully but result is empty
-        else if($status == 204)
+        elseif($status == 204)
         {
             $response = null;
         } // retry on request failed with error 500
-        else if($status == 500 && $retries[sha1($file)]--)
+        elseif($status == 500 && $retries[sha1($file)]--)
         {
             $response = $this->request($type, $file);
         } // other status code is an error
@@ -561,12 +562,12 @@ class WebClient extends Client
         {
             //
         } // local file options
-        else if($file && file_exists($file) && is_readable($file))
+        elseif($file && file_exists($file) && is_readable($file))
         {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
             $options[CURLOPT_INFILESIZE] = filesize($file);
         } // other options for specific requests
-        else if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
+        elseif(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             $options[CURLOPT_PUT] = false;
         } // file not accesible

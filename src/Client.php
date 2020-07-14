@@ -109,7 +109,8 @@ abstract class Client
         if(preg_match('/\.jar$/', func_get_arg(0)))
         {
             return new CLIClient($param1, $param2, $check);
-        } else
+        }
+        else
         {
             return new WebClient($param1, $param2, $options, $check);
         }
@@ -460,15 +461,15 @@ abstract class Client
         {
             //
         } // invalid local file
-        else if(!preg_match('/^http/', $file) && !file_exists($file))
+        elseif(!preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
         } // invalid remote file
-        else if(preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
+        elseif(preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
         {
             throw new Exception("File $file can't be opened", 2);
         } // download remote file if required only for integrated downloader
-        else if(preg_match('/^http/', $file) && $this->downloadRemote)
+        elseif(preg_match('/^http/', $file) && $this->downloadRemote)
         {
             $file = $this->downloadFile($file);
         }

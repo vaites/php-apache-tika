@@ -41,13 +41,10 @@ abstract class BaseTest extends TestCase
 
     /**
      * Get env variables
-     *
-     * @param null      $name
-     * @param array     $data
-     * @param string    $dataName
+     * 
      * @throws \Exception
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct(string $name = null, array $data = array(), $dataName = '')
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
@@ -63,7 +60,7 @@ abstract class BaseTest extends TestCase
     /**
      * Version test
      */
-    public function testVersion()
+    public function testVersion(): void
     {
         $this->assertEquals('Apache Tika ' . self::$version, self::$client->getVersion());
     }
@@ -71,13 +68,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @param   string $class
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testMetadata($file, $class = 'Metadata')
+    public function testMetadata(string $file, string $class = 'Metadata'): void
     {
         $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
     }
@@ -85,13 +78,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @param   string $class
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadata($file, $class = 'DocumentMetadata')
+    public function testDocumentMetadata(string $file, string $class = 'DocumentMetadata'): void
     {
         $this->testMetadata($file, $class);
     }
@@ -99,12 +88,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata title test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataTitle($file)
+    public function testDocumentMetadataTitle(string $file): void
     {
         $this->assertEquals('Lorem ipsum dolor sit amet', self::$client->getMetadata($file)->title);
     }
@@ -112,12 +98,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata author test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataAuthor($file)
+    public function testDocumentMetadataAuthor(string $file): void
     {
         $this->assertEquals('David Martínez', self::$client->getMetadata($file)->author);
     }
@@ -125,12 +108,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata dates test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataCreated($file)
+    public function testDocumentMetadataCreated(string $file): void
     {
         $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->created);
     }
@@ -138,12 +118,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata dates test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataUpdated($file)
+    public function testDocumentMetadataUpdated(string $file): void
     {
         $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->updated);
     }
@@ -151,12 +128,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata keywords test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataKeywords($file)
+    public function testDocumentMetadataKeywords(string $file): void
     {
         $this->assertContains('ipsum', self::$client->getMetadata($file)->keywords);
     }
@@ -164,12 +138,9 @@ abstract class BaseTest extends TestCase
     /**
      * Language test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentLanguage($file)
+    public function testDocumentLanguage(string $file): void
     {
         $this->assertRegExp('/^[a-z]{2}$/', self::$client->getLanguage($file));
     }
@@ -177,12 +148,9 @@ abstract class BaseTest extends TestCase
     /**
      * MIME test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMIME($file)
+    public function testDocumentMIME(string $file): void
     {
         $this->assertNotEmpty(self::$client->getMIME($file));
     }
@@ -190,12 +158,9 @@ abstract class BaseTest extends TestCase
     /**
      * HTML test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentHTML($file)
+    public function testDocumentHTML(string $file): void
     {
         $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
     }
@@ -203,12 +168,9 @@ abstract class BaseTest extends TestCase
     /**
      * Text test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentText($file)
+    public function testDocumentText(string $file): void
     {
         $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
     }
@@ -216,12 +178,9 @@ abstract class BaseTest extends TestCase
     /**
      * Main text test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMainText($file)
+    public function testDocumentMainText(string $file): void
     {
         $this->assertContains('Lorem ipsum dolor sit amet', self::$client->getMainText($file));
     }
@@ -229,13 +188,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata test
      *
-     * @dataProvider    imageProvider
-     *
-     * @param   string $file
-     * @param   string $class
-     * @throws  \Exception
+     * @dataProvider imageProvider
      */
-    public function testImageMetadata($file, $class = 'ImageMetadata')
+    public function testImageMetadata(string $file, string $class = 'ImageMetadata'): void
     {
         $this->testMetadata($file, $class);
     }
@@ -243,12 +198,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata width test
      *
-     * @dataProvider    imageProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider imageProvider
      */
-    public function testImageMetadataWidth($file)
+    public function testImageMetadataWidth(string $file): void
     {
         $meta = self::$client->getMetadata($file);
 
@@ -258,12 +210,9 @@ abstract class BaseTest extends TestCase
     /**
      * Metadata height test
      *
-     * @dataProvider    imageProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider imageProvider
      */
-    public function testImageMetadataHeight($file)
+    public function testImageMetadataHeight(string $file): void
     {
         $meta = self::$client->getMetadata($file);
 
@@ -273,12 +222,9 @@ abstract class BaseTest extends TestCase
     /**
      * OCR test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider ocrProvider
      */
-    public function testImageOCR($file)
+    public function testImageOCR(string $file): void
     {
         $text = self::$client->getText($file);
 
@@ -288,12 +234,9 @@ abstract class BaseTest extends TestCase
     /**
      * Text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testTextCallback($file)
+    public function testTextCallback(string $file): void
     {
         BaseTest::$shared = 0;
 
@@ -305,15 +248,10 @@ abstract class BaseTest extends TestCase
     /**
      * Text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testTextCallbackWithoutAppend($file)
+    public function testTextCallbackWithoutAppend(string $file): void
     {
-        $client =& self::$client;
-
         BaseTest::$shared = 0;
 
         $response = self::$client->getText($file, [$this, 'callableCallback'], false);
@@ -324,12 +262,9 @@ abstract class BaseTest extends TestCase
     /**
      * Main text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testMainTextCallback($file)
+    public function testMainTextCallback(string $file): void
     {
         BaseTest::$shared = 0;
 
@@ -344,12 +279,9 @@ abstract class BaseTest extends TestCase
     /**
      * Main text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testHtmlCallback($file)
+    public function testHtmlCallback(string $file): void
     {
         BaseTest::$shared = 0;
 
@@ -364,12 +296,9 @@ abstract class BaseTest extends TestCase
     /**
      * Remote file test with integrated download
      *
-     * @dataProvider    remoteProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider remoteProvider
      */
-    public function testRemoteDocumentText($file)
+    public function testRemoteDocumentText(string $file): void
     {
         $this->assertContains('Rationis enim perfectio est virtus', self::$client->getText($file));
     }
@@ -377,12 +306,9 @@ abstract class BaseTest extends TestCase
     /**
      * Remote file test with internal downloader
      *
-     * @dataProvider    remoteProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider remoteProvider
      */
-    public function testDirectRemoteDocumentText($file)
+    public function testDirectRemoteDocumentText(string $file): void
     {
         $client =& self::$client;
 
@@ -394,12 +320,9 @@ abstract class BaseTest extends TestCase
     /**
      * Encoding tests
      *
-     * @dataProvider    encodingProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider encodingProvider
      */
-    public function testEncodingDocumentText($file)
+    public function testEncodingDocumentText(string $file): void
     {
         $client =& self::$client;
 
@@ -415,30 +338,24 @@ abstract class BaseTest extends TestCase
 
     /**
      * Test available detectors
-     *
-     * @throws  \Exception
      */
-    public function testAvailableDetectors()
+    public function testAvailableDetectors(): void
     {
         $this->assertContains('org.apache.tika.mime.MimeTypes', self::$client->getAvailableDetectors());
     }
 
     /**
      * Test available parsers
-     *
-     * @throws  \Exception
      */
-    public function testAvailableParsers()
+    public function testAvailableParsers(): void
     {
         $this->assertContains('org.apache.tika.parser.DefaultParser', self::$client->getAvailableParsers());
     }
 
     /**
      * Test supported MIME types
-     *
-     * @throws  \Exception
      */
-    public function testSupportedMIMETypes()
+    public function testSupportedMIMETypes(): void
     {
         $this->assertArrayHasKey('application/pdf', self::$client->getSupportedMIMETypes());
     }
@@ -446,57 +363,47 @@ abstract class BaseTest extends TestCase
     /**
      * Static method to test callback
      */
-    public static function callableCallback()
+    public static function callableCallback(): void
     {
         BaseTest::$shared++;
     }
 
     /**
      * Document file provider
-     *
-     * @return  array
      */
-    public function documentProvider()
+    public function documentProvider(): array
     {
         return $this->samples('sample1');
     }
 
     /**
      * Image file provider
-     *
-     * @return array
      */
-    public function imageProvider()
+    public function imageProvider(): array
     {
         return $this->samples('sample2');
     }
 
     /**
      * File provider for OCR testing
-     *
-     * @return array
      */
-    public function ocrProvider()
+    public function ocrProvider(): array
     {
         return $this->samples('sample3');
     }
 
     /**
      * File provider for callback testing
-     *
-     * @return array
      */
-    public function callbackProvider()
+    public function callbackProvider(): array
     {
         return $this->samples('sample5');
     }
 
     /**
      * File provider for remote testing
-     *
-     * @return array
      */
-    public function remoteProvider()
+    public function remoteProvider(): array
     {
         return
         [
@@ -508,21 +415,16 @@ abstract class BaseTest extends TestCase
 
     /**
      * File provider for encoding testing
-     *
-     * @return array
      */
-    public function encodingProvider()
+    public function encodingProvider(): array
     {
         return $this->samples('sample7');
     }
 
     /**
      * File provider using "samples" folder
-     *
-     * @param   string $sample
-     * @return  array
      */
-    protected function samples($sample)
+    protected function samples(string $sample): array
     {
         $samples = [];
 

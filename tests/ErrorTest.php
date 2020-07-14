@@ -28,12 +28,8 @@ class ErrorTest extends TestCase
 
     /**
      * Get env variables
-     *
-     * @param null      $name
-     * @param array     $data
-     * @param string    $dataName
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct(string $name = null, array $data = array(), string $dataName = '')
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
@@ -44,7 +40,7 @@ class ErrorTest extends TestCase
     /**
      * Test wrong command line mode path
      */
-    public function testAppPath()
+    public function testAppPath(): void
     {
         try
         {
@@ -60,7 +56,7 @@ class ErrorTest extends TestCase
     /**
      * Test unexpected exit value for command line mode
      */
-    public function testAppExitValue()
+    public function testAppExitValue(): void
     {
         $path = self::getPathForVersion(self::$version);
 
@@ -83,7 +79,7 @@ class ErrorTest extends TestCase
     /**
      * Test invalid Java binary path for command line mode
      */
-    public function testJavaBinary()
+    public function testJavaBinary(): void
     {
         $path = self::getPathForVersion(self::$version);
 
@@ -101,7 +97,7 @@ class ErrorTest extends TestCase
     /**
      * Test wrong server
      */
-    public function testServerConnection()
+    public function testServerConnection(): void
     {
         try
         {
@@ -119,7 +115,7 @@ class ErrorTest extends TestCase
     /**
      * Test wrong request options
      */
-    public function testRequestOptions()
+    public function testRequestOptions(): void
     {
         try
         {
@@ -137,7 +133,7 @@ class ErrorTest extends TestCase
     /**
      * Test invalidrequest options
      */
-    public function testRequestRestrictedOptions()
+    public function testRequestRestrictedOptions(): void
     {
         try
         {
@@ -152,7 +148,7 @@ class ErrorTest extends TestCase
     /**
      * Test wrong recursive metadata type
      */
-    public function testRequestMetadataType()
+    public function testRequestMetadataType(): void
     {
         try
         {
@@ -174,7 +170,7 @@ class ErrorTest extends TestCase
      *
      * @link    https://github.com/apache/tika/blob/master/CHANGES.txt
      */
-    public function testUnsupportedMedia()
+    public function testUnsupportedMedia(): void
     {
         try
         {
@@ -199,7 +195,7 @@ class ErrorTest extends TestCase
     /**
      * Test unsupported command line recursive metadata
      */
-    public function testUnsupportedCLIRecursiveMetadata()
+    public function testUnsupportedCLIRecursiveMetadata(): void
     {
         $path = self::getPathForVersion(self::$version);
 
@@ -219,7 +215,7 @@ class ErrorTest extends TestCase
     /**
      * Test unknown recursive metadata type
      */
-    public function testUnknownRecursiveMetadataType()
+    public function testUnknownRecursiveMetadataType(): void
     {
         try
         {
@@ -237,7 +233,7 @@ class ErrorTest extends TestCase
     /**
      * Test invalid callback
      */
-    public function testInvalidCallback()
+    public function testInvalidCallback(): void
     {
         $path = self::getPathForVersion(self::$version);
 
@@ -255,7 +251,7 @@ class ErrorTest extends TestCase
     /**
      * Test invalid chunk size
      */
-    public function testUnsupportedChunkSize()
+    public function testUnsupportedChunkSize(): void
     {
         try
         {
@@ -271,7 +267,7 @@ class ErrorTest extends TestCase
     /**
      * Test invalid metadata
      */
-    public function testInvalidMetadata()
+    public function testInvalidMetadata(): void
     {
         try
         {
@@ -286,7 +282,7 @@ class ErrorTest extends TestCase
     /**
      * Test empty metadata
      */
-    public function testEmptyMetadata()
+    public function testEmptyMetadata(): void
     {
         try
         {
@@ -302,10 +298,8 @@ class ErrorTest extends TestCase
      * Test wrong request type for all clients
      *
      * @dataProvider    parameterProvider
-     *
-     * @param   array   $parameters
      */
-    public function testRequestType($parameters)
+    public function testRequestType(array $parameters): void
     {
         try
         {
@@ -324,10 +318,8 @@ class ErrorTest extends TestCase
      * Test nonexistent local file for all clients
      *
      * @dataProvider    parameterProvider
-     * 
-     * @param   array   $parameters
      */
-    public function testLocalFile($parameters)
+    public function testLocalFile(array $parameters): void
     {
         try
         {
@@ -346,10 +338,8 @@ class ErrorTest extends TestCase
      * Test nonexistent remote file for all clients
      *
      * @dataProvider    parameterProvider
-     *
-     * @param   array   $parameters
      */
-    public function testRemoteFile($parameters)
+    public function testRemoteFile(array $parameters): void
     {
         try
         {
@@ -366,10 +356,8 @@ class ErrorTest extends TestCase
 
     /**
      * Client parameters provider
-     *
-     * @return array
      */
-    public function parameterProvider()
+    public function parameterProvider(): array
     {
         return
         [
@@ -380,11 +368,8 @@ class ErrorTest extends TestCase
 
     /**
      * Get the full path of Tika app for a specified version
-     *
-     * @param   string  $version
-     * @return  string
      */
-    private static function getPathForVersion($version)
+    private static function getPathForVersion(string $version): string
     {
         return self::$binaries . "/tika-app-{$version}.jar";
     }

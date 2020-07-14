@@ -114,7 +114,7 @@ class CLIClient extends Client
             }
             else
             {
-                list($key, $value) = preg_split('/:\s+/', trim($line));
+                [$key, $value] = preg_split('/:\s+/', trim($line));
 
                 if($key == 'alias')
                 {
@@ -133,7 +133,7 @@ class CLIClient extends Client
 
     /**
      * Returns the available detectors
-     * 
+     *
      * @throws \Exception
      */
     public function getAvailableDetectors(): array

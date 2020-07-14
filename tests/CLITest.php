@@ -12,7 +12,7 @@ class CLITest extends BaseTest
     /**
      * Create shared instances of clients
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$client = Client::make(self::getPathForVersion(self::$version));
     }
@@ -20,7 +20,7 @@ class CLITest extends BaseTest
     /**
      * Set path test
      */
-    public function testSetPath()
+    public function testSetPath(): void
     {
         $path = self::getPathForVersion(self::$version);
 
@@ -32,7 +32,7 @@ class CLITest extends BaseTest
     /**
      * Set Java test
      */
-    public function testSetBinary()
+    public function testSetBinary(): void
     {
         $path = self::getPathForVersion(self::$version);
 
@@ -44,7 +44,7 @@ class CLITest extends BaseTest
     /**
      * Test delayed check
      */
-    public function testDelayedCheck()
+    public function testDelayedCheck(): void
     {
         $path = self::getPathForVersion(self::$version);
 
@@ -56,11 +56,8 @@ class CLITest extends BaseTest
 
     /**
      * Get the full path of Tika app for a specified version
-     *
-     * @param   string  $version
-     * @return  string
      */
-    private static function getPathForVersion($version)
+    private static function getPathForVersion(string $version): string
     {
         return self::$binaries . "/tika-app-{$version}.jar";
     }

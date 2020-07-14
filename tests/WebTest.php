@@ -14,7 +14,7 @@ class WebTest extends BaseTest
     /**
      * Start Tika server and create shared instance of clients
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 30]);
     }
@@ -22,7 +22,7 @@ class WebTest extends BaseTest
     /**
      * cURL multiple options test
      */
-    public function testCurlOptions()
+    public function testCurlOptions(): void
     {
         $client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 3]);
         $options = $client->getOptions();
@@ -33,7 +33,7 @@ class WebTest extends BaseTest
     /**
      * cURL single option test
      */
-    public function testCurlSingleOption()
+    public function testCurlSingleOption(): void
     {
         $client = Client::make('localhost', 9998)->setOption(CURLOPT_TIMEOUT, 3);
 
@@ -43,7 +43,7 @@ class WebTest extends BaseTest
     /**
      * cURL timeout option test
      */
-    public function testCurlTimeoutOption()
+    public function testCurlTimeoutOption(): void
     {
         $client = Client::make('localhost', 9998)->setTimeout(3);
 
@@ -53,7 +53,7 @@ class WebTest extends BaseTest
     /**
      * cURL headers test
      */
-    public function testCurlHeaders()
+    public function testCurlHeaders(): void
     {
         $header = 'Content-Type: image/jpeg';
 
@@ -66,7 +66,7 @@ class WebTest extends BaseTest
     /**
      * Set host test
      */
-    public function testSetHost()
+    public function testSetHost(): void
     {
         $client = Client::make('localhost', 9998);
         $client->setHost('127.0.0.1');
@@ -77,7 +77,7 @@ class WebTest extends BaseTest
     /**
      * Set port test
      */
-    public function testSetPort()
+    public function testSetPort(): void
     {
         $client = Client::make('localhost', 9998);
         $client->setPort(9997);
@@ -88,7 +88,7 @@ class WebTest extends BaseTest
     /**
      * Set url host test
      */
-    public function testSetUrlHost()
+    public function testSetUrlHost(): void
     {
         $client = Client::make('http://localhost:9998');
 
@@ -98,7 +98,7 @@ class WebTest extends BaseTest
     /**
      * Set url port test
      */
-    public function testSetUrlPort()
+    public function testSetUrlPort(): void
     {
         $client = Client::make('http://localhost:9998');
 
@@ -108,7 +108,7 @@ class WebTest extends BaseTest
     /**
      * Set retries test
      */
-    public function testSetRetries()
+    public function testSetRetries(): void
     {
         $client = Client::make('localhost', 9998);
         $client->setRetries(5);
@@ -119,52 +119,43 @@ class WebTest extends BaseTest
     /**
      * Recursive text metadata test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider ocrProvider
      */
-    public function testTextRecursiveMetadata($file)
+    public function testTextRecursiveMetadata(string $file): void
     {
         $metadata = self::$client->getRecursiveMetadata($file, 'text');
 
-        $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
+        $this->assertContains('Sed do eiusmod tempor incididunt', array_shift($metadata)->content);
     }
 
     /**
      * Recursive HTML metadata test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider ocrProvider
      */
-    public function testHtmlRecursiveMetadata($file)
+    public function testHtmlRecursiveMetadata(string $file): void
     {
-        $metadata = self::$client->getMetadata($file, 'html');
+        $metadata = self::$client->getRecursiveMetadata($file, 'html');
 
-        $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
+        $this->assertContains('Sed do eiusmod tempor incididunt', array_shift($metadata)->content);
     }
 
     /**
      * Recursive ignore metadata test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider ocrProvider
      */
-    public function testIgnoreRecursiveMetadata($file)
+    public function testIgnoreRecursiveMetadata(string $file): void
     {
-        $metadata = self::$client->getMetadata($file, 'ignore');
+        $metadata = self::$client->getRecursiveMetadata($file, 'ignore');
 
-        $this->assertNull($metadata->content);
+        $this->assertNull(array_shift($metadata)->content);
     }
 
     /**
      * Test delayed check
      */
-    public function testDelayedCheck()
+    public function testDelayedCheck(): void
     {
         $client = Client::prepare('localhost', 9997);
         $client->setPort(9998);
