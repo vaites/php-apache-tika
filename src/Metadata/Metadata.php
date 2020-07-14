@@ -2,6 +2,8 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
+use DateTime;
+use DateTimeZone;
 use Exception;
 use stdClass;
 
@@ -87,33 +89,13 @@ abstract class Metadata implements MetadataInterface
     /**
      * Return an instance of Metadata based on content type
      *
-     * @param string $response
+     * @param \stdClass $meta
      * @param string $file
-     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
-     * @throws  \Exception
+     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
+     * @throws \Exception
      */
-    public static function make(string $response, string $file): MetadataInterface
+    public static function make(stdClass $meta, string $file): MetadataInterface
     {
-        // an empty response throws an error
-        if(empty($response) || trim($response) == '')
-        {
-            throw new Exception('Empty response');
-        }
-
-        // decode the JSON response
-        $json = json_decode($response);
-
-        // get the meta info
-        $meta = is_array($json) ? current($json) : $json;
-
-        // exceptions if metadata is not valid
-        if(json_last_error())
-        {
-            $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Error parsing JSON response';
-
-            throw new Exception($message, json_last_error());
-        }
-
         // get content type
         $mime = is_array($meta->{'Content-Type'}) ? current($meta->{'Content-Type'}) : $meta->{'Content-Type'};
 
@@ -140,11 +122,26 @@ abstract class Metadata implements MetadataInterface
      */
     public final function setAttribute(string $key, $value): MetadataInterface
     {
+        $timezone = new DateTimeZone('UTC');
+
         switch(mb_strtolower($key))
         {
             case 'content-type':
                 $mime = $value ? preg_split('/;\s+/', $value) : [];
                 $this->mime = array_shift($mime);
+                break;
+
+            case 'creation-date':
+            case 'date':
+            case 'meta:creation-date':
+                $value = preg_replace('/\.\d+/', 'Z', $value);
+                $this->created = new DateTime(is_array($value) ? array_shift($value) : $value, $timezone);
+                break;
+
+            case 'last-modified':
+            case 'modified':
+                $value = preg_replace('/\.\d+/', 'Z', $value);
+                $this->updated = new DateTime(is_array($value) ? array_shift($value) : $value, $timezone);
                 break;
 
             default:

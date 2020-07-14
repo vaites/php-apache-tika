@@ -2,9 +2,6 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
-use DateTime;
-use DateTimeZone;
-
 /**
  * Metadata class for documents
  *
@@ -87,8 +84,6 @@ class DocumentMetadata extends Metadata
      */
     protected function setSpecificAttribute(string $key, $value): MetadataInterface
     {
-        $timezone = new DateTimeZone('UTC');
-
         if(is_array($value))
         {
             $value = array_shift($value);
@@ -135,17 +130,6 @@ class DocumentMetadata extends Metadata
             case 'nbword':
             case 'word-count':
                 $this->words = (int) $value;
-                break;
-
-            case 'creation-date':
-            case 'date':
-                $value = preg_replace('/\.\d+/', 'Z', $value);
-                $this->created = new DateTime($value, $timezone);
-                break;
-
-            case 'last-modified':
-                $value = preg_replace('/\.\d+/', 'Z', $value);
-                $this->updated = new DateTime($value, $timezone);
                 break;
 
             case 'content-encoding':

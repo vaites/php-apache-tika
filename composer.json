@@ -38,7 +38,8 @@
     "require-dev": {
         "phpunit/phpunit": "^7.5",
         "nunomaduro/phpinsights": "^1.14",
-        "phpstan/phpstan": "^0.12.26"
+        "phpstan/phpstan": "^0.12.26",
+        "filp/whoops": "^2.7"
     },
     "extra": {
         "supported-versions": [

@@ -268,6 +268,7 @@ There are a few samples to test against:
 * **sample5**: huge text for callbacks 
 * **sample6**: remote calls 
 * **sample7**: text encoding
+* **sample8**: recursive metadatate
 
 ## Known issues
 

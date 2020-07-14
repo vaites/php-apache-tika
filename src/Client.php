@@ -4,6 +4,7 @@ namespace Vaites\ApacheTika;
 
 use Closure;
 use Exception;
+use stdClass;
 
 use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
@@ -254,43 +255,61 @@ abstract class Client
     }
 
     /**
-     * Gets file metadata using recursive if specified
+     * Gets file metadata
      *
-     * @link    https://wiki.apache.org/tika/TikaJAXRS#Recursive_Metadata_and_Content
      * @param string $file
-     * @param string $recursive
      * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
-    public function getMetadata(string $file, string $recursive = null): MetadataInterface
+    public function getMetadata(string $file): MetadataInterface
     {
-        if(is_null($recursive))
+        $response = $this->parseJsonResponse($this->request('meta', $file));
+
+        if($response instanceof stdClass == false)
         {
-            $response = $this->request('meta', $file);
-        }
-        elseif(in_array($recursive, ['text', 'html', 'ignore']))
-        {
-            $response = $this->request("rmeta/$recursive", $file);
-        }
-        else
-        {
-            throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
+            throw new Exception("Unexpected metadata response for $file");
         }
 
         return Metadata::make($response, $file);
     }
 
     /**
-     * Gets recursive file metadata (alias for getMetadata)
+     * Gets recursive file metadata
      *
+     * @link    https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-RecursiveMetadataandContent
      * @param string $file
-     * @param string $recursive
-     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
+     * @param string|null $format
+     * @return  array|\Vaites\ApacheTika\Metadata\MetadataInterface[]
      * @throws  \Exception
      */
-    public function getRecursiveMetadata(string $file, string $recursive): MetadataInterface
+    public function getRecursiveMetadata(string $file, ?string $format = 'ignore'): array
     {
-        return $this->getMetadata($file, $recursive);
+        if(in_array($format, ['text', 'html', 'ignore']) == false)
+        {
+            throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
+        }
+
+        $response = $this->parseJsonResponse($this->request("rmeta/$format", $file));
+
+        if(is_array($response) == false)
+        {
+            throw new Exception("Unexpected metadata response for $file");
+        }
+
+        $metadata = [];
+
+        foreach($response as $item)
+        {
+            $name = basename($file);
+            if($item->{'X-TIKA:embedded_depth'} > 0)
+            {
+                $name .= $item->{'X-TIKA:embedded_resource_path'};
+            }
+
+            $metadata[$name] = Metadata::make($item, $file);
+        }
+
+        return $metadata;
     }
 
     /**
@@ -522,6 +541,35 @@ abstract class Client
         }
 
         return $file;
+    }
+
+    /**
+     * Parse the response returned by Apache Tika
+     *
+     * @param string $response
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function parseJsonResponse(string $response)
+    {
+        // an empty response throws an error
+        if(empty($response) || trim($response) == '')
+        {
+            throw new Exception('Empty response');
+        }
+
+        // decode the JSON response
+        $json = json_decode($response);
+
+        // exceptions if metadata is not valid
+        if(json_last_error())
+        {
+            $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Error parsing JSON response';
+
+            throw new Exception($message, json_last_error());
+        }
+
+        return $json;
     }
 
     /**
