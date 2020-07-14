@@ -32,6 +32,7 @@ to work with the new versions of the tool.
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
     * Tested up to 1.24.1
+* Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
 
@@ -58,7 +59,8 @@ If you want to use OCR you must install [Tesseract](https://github.com/tesseract
 
 * **Fedora/CentOS**: `sudo yum install tesseract` (use dnf instead of yum on Fedora 22 or greater)
 * **Debian/Ubuntu**: `sudo apt-get install tesseract-ocr`
-* **Mac OS X**: `brew install tesseract` (using [Homebrew](http://brew.sh))
+* **macOS**: `brew install tesseract` (using [Homebrew](http://brew.sh))
+* **Windows**: `scoop install tesseract` (using [Scoop](http://scoop.sh))
 
 The library assumes `tesseract` binary is in path, so you can compile it yourself or install using any other method. 
 
