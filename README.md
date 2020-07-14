@@ -233,10 +233,12 @@ $client->getTimeout();
 
 Since 1.0 version there are some breaking changes:
 
-* Apache Tika versions prior to 1.15 are not supported (use 0.x version for 1.14 and older)
-* PHP minimum requirement is 7.2 or greater (use 0.x version for 7.1 and older)
-* `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
+* Apache Tika versions prior to 1.15 are not supported (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older)
+* PHP minimum requirement is 7.2 or greater (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older)
 * `$client->getRecursiveMetadata()` returns an array as expected
+* `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
+
+See [CHANGELOG.md](CHANGELOG.md) for more details.
 
 ## Troubleshooting
 
