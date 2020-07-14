@@ -33,10 +33,7 @@ class CLIClient extends Client
     /**
      * Configure client
      *
-     * @param   string  $path
-     * @param   string  $java
-     * @param   bool    $check
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function __construct(string $path = null, string $java = null, bool $check = true)
     {
@@ -60,8 +57,6 @@ class CLIClient extends Client
 
     /**
      * Get the path
-     *
-     * @return  null|string
      */
     public function getPath(): ?string
     {
@@ -70,9 +65,6 @@ class CLIClient extends Client
 
     /**
      * Set the path
-     *
-     * @param   string  $path
-     * @return  $this
      */
     public function setPath($path): self
     {
@@ -83,8 +75,6 @@ class CLIClient extends Client
 
     /**
      * Get the Java path
-     *
-     * @return  string|null
      */
     public function getJava(): ?string
     {
@@ -93,9 +83,6 @@ class CLIClient extends Client
 
     /**
      * Set the Java path
-     *
-     * @param   string    $java
-     * @return  $this
      */
     public function setJava($java): self
     {
@@ -109,8 +96,7 @@ class CLIClient extends Client
      *
      * NOTE: the data provided by the CLI must be parsed: mime type has no spaces, aliases go next prefixed with spaces
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getSupportedMIMETypes(): array
     {
@@ -147,9 +133,8 @@ class CLIClient extends Client
 
     /**
      * Returns the available detectors
-     *
-     * @return  array
-     * @throws  \Exception
+     * 
+     * @throws \Exception
      */
     public function getAvailableDetectors(): array
     {
@@ -161,8 +146,7 @@ class CLIClient extends Client
     /**
      * Returns the available parsers
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getAvailableParsers(): array
     {
@@ -175,8 +159,7 @@ class CLIClient extends Client
     /**
      * Check Java binary, JAR path or server connection
      *
-     * @return  void
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function check(): void
     {
@@ -205,10 +188,7 @@ class CLIClient extends Client
     /**
      * Configure and make a request and return its results
      *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function request(string $type, string $file = null): string
     {
@@ -262,9 +242,7 @@ class CLIClient extends Client
     /**
      * Run the command and return its results
      *
-     * @param   string  $command
-     * @return  null|string
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function exec(string $command): ?string
     {
@@ -308,9 +286,6 @@ class CLIClient extends Client
     /**
      * Get the arguments to run the command
      *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  array
      * @throws  Exception
      */
     protected function getArguments(string $type, string $file = null): array

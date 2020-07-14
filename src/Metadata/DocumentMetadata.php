@@ -77,9 +77,6 @@ class DocumentMetadata extends Metadata
     /**
      * Sets an attribute
      *
-     * @param string $key
-     * @param mixed  $value
-     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws  \Exception
      */
     protected function setSpecificAttribute(string $key, $value): MetadataInterface

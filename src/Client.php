@@ -101,8 +101,8 @@ abstract class Client
      * @param string|int $param2 Java binary path or port for web client
      * @param array      $options options for cURL request
      * @param bool       $check check JAR file or server connection
-     * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
-     * @throws  \Exception
+     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @throws \Exception
      */
     public static function make(string $param1 = null, $param2 = null, array $options = [], bool $check = true): Client
     {
@@ -121,8 +121,8 @@ abstract class Client
      * @param string $param1 path or host
      * @param int    $param2 Java binary path or port for web client
      * @param array  $options options for cURL request
-     * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
-     * @throws  \Exception
+     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @throws \Exception
      */
     public static function prepare($param1 = null, $param2 = null, $options = []): Client
     {
@@ -131,8 +131,6 @@ abstract class Client
 
     /**
      * Get the encoding
-     *
-     * @return  string|null
      */
     public function getEncoding(): ?string
     {
@@ -142,16 +140,15 @@ abstract class Client
     /**
      * Set the encoding
      *
-     * @param string $encoding
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function setEncoding(string $encoding): self
     {
         if(!empty($encoding))
         {
             $this->encoding = $encoding;
-        } else
+        }
+        else
         {
             throw new Exception('Invalid encoding');
         }
@@ -161,8 +158,6 @@ abstract class Client
 
     /**
      * Get the callback
-     *
-     * @return  \Closure|null
      */
     public function getCallback(): ?Closure
     {
@@ -172,10 +167,7 @@ abstract class Client
     /**
      * Set the callback (callable or closure) for call on secuential read
      *
-     * @param callable $callback
-     * @param bool     $append
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function setCallback(callable $callback, $append = true): self
     {
@@ -202,8 +194,6 @@ abstract class Client
 
     /**
      * Get the chunk size
-     *
-     * @return  int
      */
     public function getChunkSize(): int
     {
@@ -213,9 +203,7 @@ abstract class Client
     /**
      * Set the chunk size for secuential read
      *
-     * @param int $size
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function setChunkSize(int $size): self
     {
@@ -233,8 +221,6 @@ abstract class Client
 
     /**
      * Get the remote download flag
-     *
-     * @return  bool
      */
     public function getDownloadRemote(): bool
     {
@@ -243,9 +229,6 @@ abstract class Client
 
     /**
      * Set the remote download flag
-     *
-     * @param bool $download
-     * @return  $this
      */
     public function setDownloadRemote(bool $download): self
     {
@@ -257,9 +240,7 @@ abstract class Client
     /**
      * Gets file metadata
      *
-     * @param string $file
-     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getMetadata(string $file): MetadataInterface
     {
@@ -276,11 +257,8 @@ abstract class Client
     /**
      * Gets recursive file metadata
      *
-     * @link    https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-RecursiveMetadataandContent
-     * @param string $file
-     * @param string|null $format
-     * @return  array|\Vaites\ApacheTika\Metadata\MetadataInterface[]
-     * @throws  \Exception
+     * @link https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-RecursiveMetadataandContent
+     * @throws \Exception
      */
     public function getRecursiveMetadata(string $file, ?string $format = 'ignore'): array
     {
@@ -315,9 +293,7 @@ abstract class Client
     /**
      * Detect language
      *
-     * @param string $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getLanguage(string $file): string
     {
@@ -327,8 +303,6 @@ abstract class Client
     /**
      * Detect MIME type
      *
-     * @param string $file
-     * @return  string
      * @throws \Exception
      */
     public function getMIME(string $file): string
@@ -339,13 +313,9 @@ abstract class Client
     /**
      * Extracts HTML
      *
-     * @param string $file
-     * @param callable $callback
-     * @param bool   $append
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getHTML(string $file, callable $callback = null, $append = true): string
+    public function getHTML(string $file, callable $callback = null, bool $append = true): string
     {
         if(!is_null($callback))
         {
@@ -358,13 +328,9 @@ abstract class Client
     /**
      * Extracts text
      *
-     * @param string $file
-     * @param callable $callback
-     * @param bool   $append
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getText(string $file, callable $callback = null, $append = true): string
+    public function getText(string $file, callable $callback = null, bool $append = true): string
     {
         if(!is_null($callback))
         {
@@ -377,13 +343,9 @@ abstract class Client
     /**
      * Extracts main text
      *
-     * @param string $file
-     * @param callable $callback
-     * @param bool   $append
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getMainText(string $file, callable $callback = null, $append = true): string
+    public function getMainText(string $file, callable $callback = null, bool $append = true): string
     {
         if(!is_null($callback))
         {
@@ -396,8 +358,7 @@ abstract class Client
     /**
      * Returns current Tika version
      *
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getVersion(): string
     {
@@ -407,7 +368,6 @@ abstract class Client
     /**
      * Return the list of Apache Tika supported versions
      *
-     * @return array
      * @throws \Exception
      */
     public function getSupportedVersions(): array
@@ -430,9 +390,6 @@ abstract class Client
 
     /**
      * Sets the checked flag
-     *
-     * @param bool $checked
-     * @return  $this
      */
     public function setChecked(bool $checked): self
     {
@@ -443,8 +400,6 @@ abstract class Client
 
     /**
      * Checks if instance is checked
-     *
-     * @return  bool
      */
     public function isChecked(): bool
     {
@@ -453,10 +408,6 @@ abstract class Client
 
     /**
      * Check if a response is cached
-     *
-     * @param string $type
-     * @param string $file
-     * @return  bool
      */
     protected function isCached(string $type, string $file): bool
     {
@@ -465,10 +416,6 @@ abstract class Client
 
     /**
      * Get a cached response
-     *
-     * @param string $type
-     * @param string $file
-     * @return  mixed
      */
     protected function getCachedResponse(string $type, string $file)
     {
@@ -477,9 +424,6 @@ abstract class Client
 
     /**
      * Check if a request type must be cached
-     *
-     * @param string $type
-     * @return  bool
      */
     protected function isCacheable(string $type): bool
     {
@@ -488,11 +432,6 @@ abstract class Client
 
     /**
      * Caches a response
-     *
-     * @param string $type
-     * @param mixed  $response
-     * @param string $file
-     * @return  bool
      */
     protected function cacheResponse(string $type, $response, string $file): bool
     {
@@ -503,9 +442,6 @@ abstract class Client
 
     /**
      * Checks if a specific version is supported
-     *
-     * @param string $version
-     * @return  bool
      */
     public function isVersionSupported(string $version): bool
     {
@@ -515,10 +451,7 @@ abstract class Client
     /**
      * Check the request before executing
      *
-     * @param string $type
-     * @param string $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function checkRequest(string $type, string $file = null): ?string
     {
@@ -546,7 +479,6 @@ abstract class Client
     /**
      * Parse the response returned by Apache Tika
      *
-     * @param string $response
      * @return mixed
      * @throws \Exception
      */
@@ -575,10 +507,8 @@ abstract class Client
     /**
      * Download file to a temporary folder
      *
-     * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
-     * @param string $file
-     * @return  string
-     * @throws  \Exception
+     * @link https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
+     * @throws \Exception
      */
     protected function downloadFile(string $file): string
     {
@@ -616,41 +546,33 @@ abstract class Client
     /**
      * Must return the supported MIME types
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     abstract public function getSupportedMIMETypes(): array;
 
     /**
      * Must return the available detectors
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     abstract public function getAvailableDetectors(): array;
 
     /**
      * Must return the available parsers
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     abstract public function getAvailableParsers(): array;
 
     /**
      * Check Java binary, JAR path or server connection
-     *
-     * @return  void
      */
     abstract public function check(): void;
 
     /**
      * Configure and make a request and return its results.
      *
-     * @param string $type
-     * @param string $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
     abstract public function request(string $type, string $file = null): string;
 }

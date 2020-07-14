@@ -59,8 +59,6 @@ abstract class Metadata implements MetadataInterface
     /**
      * Parse Apache Tika response filling all properties
      *
-     * @param \stdClass $meta
-     * @param string    $file
      * @throws \Exception
      */
     public function __construct(stdClass $meta, string $file)
@@ -89,9 +87,6 @@ abstract class Metadata implements MetadataInterface
     /**
      * Return an instance of Metadata based on content type
      *
-     * @param \stdClass $meta
-     * @param string $file
-     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws \Exception
      */
     public static function make(stdClass $meta, string $file): MetadataInterface
@@ -116,8 +111,6 @@ abstract class Metadata implements MetadataInterface
     /**
      * Sets an attribute
      *
-     * @param string $key
-     * @param mixed  $value
      * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      */
     public final function setAttribute(string $key, $value): MetadataInterface
@@ -155,8 +148,6 @@ abstract class Metadata implements MetadataInterface
     /**
      * Sets an speficic attribute for the file type
      *
-     * @param string $key
-     * @param mixed  $value
      * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      */
     abstract protected function setSpecificAttribute(string $key, $value): MetadataInterface;

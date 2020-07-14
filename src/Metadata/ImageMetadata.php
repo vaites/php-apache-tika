@@ -33,8 +33,6 @@ class ImageMetadata extends Metadata
     /**
      * Sets an attribute
      *
-     * @param string $key
-     * @param mixed  $value
      * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      */
     protected function setSpecificAttribute(string $key, $value): MetadataInterface

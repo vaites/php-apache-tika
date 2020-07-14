@@ -61,11 +61,7 @@ class WebClient extends Client
     /**
      * Configure class and test if server is running
      *
-     * @param string $host
-     * @param int    $port
-     * @param array  $options
-     * @param bool   $check
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function __construct(string $host = null, int $port = null, array $options = [], bool $check = true)
     {
@@ -74,7 +70,8 @@ class WebClient extends Client
         if(is_string($host) && filter_var($host, FILTER_VALIDATE_URL))
         {
             $this->setUrl($host);
-        } else if($host)
+        }
+        elseif($host)
         {
             $this->setHost($host);
         }
@@ -99,8 +96,6 @@ class WebClient extends Client
 
     /**
      * Get the base URL
-     *
-     * @return string
      */
     public function getUrl(): string
     {
@@ -109,9 +104,6 @@ class WebClient extends Client
 
     /**
      * Set the host and port using an URL
-     *
-     * @param string $url
-     * @return $this
      */
     public function setUrl(string $url): self
     {
@@ -129,8 +121,6 @@ class WebClient extends Client
 
     /**
      * Get the host
-     *
-     * @return  null|string
      */
     public function getHost(): ?string
     {
@@ -139,9 +129,6 @@ class WebClient extends Client
 
     /**
      * Set the host
-     *
-     * @param string $host
-     * @return  $this
      */
     public function setHost(string $host): self
     {
@@ -152,8 +139,6 @@ class WebClient extends Client
 
     /**
      * Get the port
-     *
-     * @return  null|int
      */
     public function getPort(): ?int
     {
@@ -162,9 +147,6 @@ class WebClient extends Client
 
     /**
      * Set the port
-     *
-     * @param int $port
-     * @return  $this
      */
     public function setPort(int $port): self
     {
@@ -175,8 +157,6 @@ class WebClient extends Client
 
     /**
      * Get the number of retries
-     *
-     * @return  int
      */
     public function getRetries(): int
     {
@@ -185,9 +165,6 @@ class WebClient extends Client
 
     /**
      * Set the number of retries
-     *
-     * @param int $retries
-     * @return  $this
      */
     public function setRetries(int $retries): self
     {
@@ -198,8 +175,6 @@ class WebClient extends Client
 
     /**
      * Get all the options
-     *
-     * @return  array
      */
     public function getOptions(): array
     {
@@ -209,7 +184,6 @@ class WebClient extends Client
     /**
      * Get an specified option
      *
-     * @param int $key
      * @return  mixed
      */
     public function getOption(int $key)
@@ -220,12 +194,9 @@ class WebClient extends Client
     /**
      * Set a cURL option to be set with curl_setopt()
      *
-     * @link    http://php.net/manual/en/curl.constants.php
-     * @link    http://php.net/manual/en/function.curl-setopt.php
-     * @param int   $key
-     * @param mixed $value
-     * @return  $this
-     * @throws  \Exception
+     * @link http://php.net/manual/en/curl.constants.php
+     * @link http://php.net/manual/en/function.curl-setopt.php
+     * @throws \Exception
      */
     public function setOption(int $key, $value): self
     {
@@ -242,9 +213,7 @@ class WebClient extends Client
     /**
      * Set the cURL options
      *
-     * @param array $options
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function setOptions(array $options): self
     {
@@ -258,8 +227,6 @@ class WebClient extends Client
 
     /**
      * Get the timeout value for cURL
-     *
-     * @return  int
      */
     public function getTimeout(): int
     {
@@ -269,9 +236,7 @@ class WebClient extends Client
     /**
      * Set the timeout value for cURL
      *
-     * @param int $value
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function setTimeout(int $value): self
     {
@@ -283,8 +248,7 @@ class WebClient extends Client
     /**
      * Returns the supported MIME types
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getSupportedMIMETypes(): array
     {
@@ -298,8 +262,7 @@ class WebClient extends Client
     /**
      * Returns the available detectors
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getAvailableDetectors(): array
     {
@@ -309,8 +272,7 @@ class WebClient extends Client
     /**
      * Returns the available parsers
      *
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function getAvailableParsers(): array
     {
@@ -336,10 +298,7 @@ class WebClient extends Client
     /**
      * Configure, make a request and return its results
      *
-     * @param string $type
-     * @param string $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function request(string $type, string $file = null): string
     {
@@ -412,9 +371,7 @@ class WebClient extends Client
     /**
      * Make a request to Apache Tika Server
      *
-     * @param array $options
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     protected function exec(array $options = []): array
     {
@@ -459,12 +416,7 @@ class WebClient extends Client
     /**
      * Throws an exception for an error status code
      *
-     * @codeCoverageIgnore
-     *
-     * @param int    $status
-     * @param string $resource
-     * @param string $file
-     * @throws  \Exception
+     * @throws \Exception
      */
     protected function error(int $status, string $resource, string $file = null): void
     {
@@ -509,11 +461,8 @@ class WebClient extends Client
     /**
      * Get the parameters to make the request
      *
-     * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
-     * @param string $type
-     * @param string $file
-     * @return  array
-     * @throws  \Exception
+     * @link https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
+     * @throws \Exception
      */
     protected function getParameters(string $type, string $file = null): array
     {
@@ -581,10 +530,7 @@ class WebClient extends Client
     /**
      * Get the cURL options
      *
-     * @param string $type
-     * @param string $file
-     * @return  array
-     * @throws  \Exception
+     * @throws \Exception
      */
     protected function getCurlOptions(string $type, string $file = null): array
     {
