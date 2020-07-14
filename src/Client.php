@@ -11,8 +11,6 @@ use Vaites\ApacheTika\Clients\WebClient;
 use Vaites\ApacheTika\Metadata\Metadata;
 use Vaites\ApacheTika\Metadata\MetadataInterface;
 
-use Composer\Factory;
-
 /**
  * Apache Tika client interface
  *
@@ -172,7 +170,7 @@ abstract class Client
      */
     public function setCallback(callable $callback, $append = true): self
     {
-        if($callback instanceof Closure)
+        if($callback instanceof Closure || is_array($callback))
         {
             $this->callbackAppend = (bool) $append;
             $this->callback = $callback;
