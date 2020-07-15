@@ -108,7 +108,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertEquals(28, $exception->getCode());
+            $this->assertEquals(7, $exception->getCode());
         }
     }
 
@@ -189,26 +189,6 @@ class ErrorTest extends TestCase
             {
                 $this->assertEquals(0, $exception->getCode());
             }
-        }
-    }
-
-    /**
-     * Test unsupported command line recursive metadata
-     */
-    public function testUnsupportedCLIRecursiveMetadata(): void
-    {
-        $path = self::getPathForVersion(self::$version);
-
-        try
-        {
-            $client = Client::make($path);
-            $client->getRecursiveMetadata('example.doc', 'html');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Recursive metadata is not supported', $exception->getMessage());
         }
     }
 
