@@ -217,6 +217,72 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Recursive text metadata test
+     *
+     * @dataProvider    ocrProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testTextRecursiveMetadata($file)
+    {
+        if(version_compare(self::$version, '1.11') < 0)
+        {
+            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
+        }
+        else
+        {
+            $metadata = self::$client->getRecursiveMetadata($file, 'text');
+
+            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
+        }
+    }
+
+    /**
+     * Recursive HTML metadata test
+     *
+     * @dataProvider    ocrProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testHtmlRecursiveMetadata($file)
+    {
+        if(version_compare(self::$version, '1.11') < 0)
+        {
+            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
+        }
+        else
+        {
+            $metadata = self::$client->getMetadata($file, 'html');
+
+            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
+        }
+    }
+
+    /**
+     * Recursive ignore metadata test
+     *
+     * @dataProvider    ocrProvider
+     *
+     * @param   string $file
+     * @throws  \Exception
+     */
+    public function testIgnoreRecursiveMetadata($file)
+    {
+        if(version_compare(self::$version, '1.11') < 0)
+        {
+            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
+        }
+        else
+        {
+            $metadata = self::$client->getMetadata($file, 'ignore');
+
+            $this->assertNull($metadata->content);
+        }
+    }
+
+    /**
      * Language test
      *
      * @dataProvider    documentProvider

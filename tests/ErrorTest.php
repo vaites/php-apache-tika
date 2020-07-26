@@ -196,26 +196,6 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test unsupported command line recursive metadata
-     */
-    public function testUnsupportedCLIRecursiveMetadata()
-    {
-        $path = self::getPathForVersion(self::$version);
-
-        try
-        {
-            $client = Client::make($path);
-            $client->getMetadata('example.doc', 'html');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertContains('Recursive metadata is not supported', $exception->getMessage());
-        }
-    }
-
-    /**
      * Test unknown recursive metadata type
      */
     public function testUnknownRecursiveMetadataType()
