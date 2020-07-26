@@ -36,9 +36,9 @@ class CLITest extends BaseTest
     {
         $path = self::getPathForVersion(self::$version);
 
-        $client = Client::make($path, '/usr/bin/java');
+        $client = Client::make($path, 'java');
 
-        $this->assertEquals('/usr/bin/java', $client->getJava());
+        $this->assertEquals('java', $client->getJava());
     }
 
     /**

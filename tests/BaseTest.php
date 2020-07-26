@@ -144,6 +144,8 @@ abstract class BaseTest extends TestCase
     {
         $metadata = self::$client->getRecursiveMetadata($file, 'text');
 
+        die(var_dump(array_shift($metadata)));
+
         $this->assertContains('Sed do eiusmod tempor incididunt', array_shift($metadata)->content);
     }
 
