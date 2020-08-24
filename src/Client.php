@@ -448,6 +448,18 @@ abstract class Client
     }
 
     /**
+     * Check if a mime type is supported
+     *
+     * @param string $mime
+     * @return bool
+     * @throws \Exception
+     */
+    public function isMIMETypeSupported(string $mime): bool
+    {
+        return array_key_exists($mime, $this->getSupportedMIMETypes());
+    }
+
+    /**
      * Check the request before executing
      *
      * @throws \Exception
