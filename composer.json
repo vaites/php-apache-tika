@@ -39,6 +39,7 @@
         "phpunit/phpunit": "^7.5",
         "nunomaduro/phpinsights": "^1.14",
         "phpstan/phpstan": "^0.12.26",
+        "symfony/var-dumper": "^5.1",
         "filp/whoops": "^2.7"
     },
     "extra": {
