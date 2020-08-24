@@ -1,7 +1,6 @@
 dist: trusty
 language: php
 php:
-- 7.1
 - 7.2
 - 7.3
 - 7.4
@@ -15,14 +14,6 @@ cache:
   directories:
   - "$HOME/tika"
 env:
-  - APACHE_TIKA_VERSION=1.7
-  - APACHE_TIKA_VERSION=1.8
-  - APACHE_TIKA_VERSION=1.9
-  - APACHE_TIKA_VERSION=1.10
-  - APACHE_TIKA_VERSION=1.11
-  - APACHE_TIKA_VERSION=1.12
-  - APACHE_TIKA_VERSION=1.13
-  - APACHE_TIKA_VERSION=1.14
   - APACHE_TIKA_VERSION=1.15
   - APACHE_TIKA_VERSION=1.16
   - APACHE_TIKA_VERSION=1.17
@@ -33,6 +24,8 @@ env:
   - APACHE_TIKA_VERSION=1.21
   - APACHE_TIKA_VERSION=1.22
   - APACHE_TIKA_VERSION=1.23
+  - APACHE_TIKA_VERSION=1.24
+  - APACHE_TIKA_VERSION=1.24.1
 before_install:
 - pip install --user codecov
 install:

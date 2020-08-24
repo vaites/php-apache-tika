@@ -144,6 +144,7 @@ Other Tika related methods:
 
 ```php
 $client->getSupportedMIMETypes();
+$client->getIsMIMETypeSupported('application/pdf');
 $client->getAvailableDetectors();
 $client->getAvailableParsers();
 $client->getVersion();
@@ -237,6 +238,7 @@ Since 1.0 version there are some breaking changes:
 * PHP minimum requirement is 7.2 or greater (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older)
 * `$client->getRecursiveMetadata()` returns an array as expected
 * `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
+* Values returned by `Client::getAvailableDetectors()` and `Client::getAvailableParsers()` are identical and have a new definition 
 
 See [CHANGELOG.md](CHANGELOG.md) for more details.
 
