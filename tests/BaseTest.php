@@ -379,7 +379,12 @@ abstract class BaseTest extends TestCase
      */
     public function testAvailableDetectors(): void
     {
-        $this->assertContains('org.apache.tika.mime.MimeTypes', self::$client->getAvailableDetectors());
+        $detectors = self::$client->getAvailableDetectors();
+
+        $this->assertEquals
+        (
+            $detectors[0]['children'][0]['name'], 'org.apache.tika.detect.OverrideDetector'
+        );
     }
 
     /**
@@ -387,7 +392,12 @@ abstract class BaseTest extends TestCase
      */
     public function testAvailableParsers(): void
     {
-        $this->assertContains('org.apache.tika.parser.DefaultParser', self::$client->getAvailableParsers());
+        $parsers = self::$client->getAvailableParsers();
+
+        $this->assertEquals
+        (
+            $parsers[0]['children'][0]['name'], 'org.apache.tika.parser.apple.AppleSingleFileParser'
+        );
     }
 
     /**
@@ -396,6 +406,15 @@ abstract class BaseTest extends TestCase
     public function testSupportedMIMETypes(): void
     {
         $this->assertArrayHasKey('application/pdf', self::$client->getSupportedMIMETypes());
+    }
+
+
+    /**
+     * Test supported MIME types
+     */
+    public function testIsMIMETypeSupported(): void
+    {
+        $this->assertTrue(self::$client->isMIMETypeSupported('application/pdf'));
     }
 
     /**
