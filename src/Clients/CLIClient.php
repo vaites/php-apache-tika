@@ -109,7 +109,7 @@ class CLIClient extends Client
         {
             if(preg_match('/^\w+/', $line))
             {
-                $mime = $line;
+                $mime = trim($line);
                 $mimeTypes[$mime] = ['alias' => []];
             }
             else
@@ -138,9 +138,29 @@ class CLIClient extends Client
      */
     public function getAvailableDetectors(): array
     {
-        $response = $this->request('detectors');
+        $detectors = [];
 
-        return preg_split("/\n/", $response);
+        $index = -1;
+        $split = preg_split("/\n/", $this->request('detectors'));
+
+        foreach($split as $line)
+        {
+            if(preg_match('/^\w+/', $line))
+            {
+                $detectors[++$index] =
+                [
+                    'children' => [],
+                    'composite' => true,
+                    'name' => trim(preg_replace('/\(.+\):/', '', $line))
+                ];
+            }
+            else
+            {
+                $detectors[$index]['children'][] = ['composite' => false, 'name' => trim($line)];
+            }
+        }
+
+        return $detectors;
     }
 
     /**

@@ -266,7 +266,7 @@ class WebClient extends Client
      */
     public function getAvailableDetectors(): array
     {
-        return json_decode($this->request('detectors'), true);
+        return [json_decode($this->request('detectors'), true)];
     }
 
     /**
