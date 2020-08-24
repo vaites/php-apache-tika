@@ -276,7 +276,7 @@ class WebClient extends Client
      */
     public function getAvailableParsers(): array
     {
-        return json_decode($this->request('parsers'), true);
+        return [json_decode($this->request('parsers'), true)];
     }
 
     /**

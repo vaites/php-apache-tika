@@ -145,7 +145,7 @@ class CLIClient extends Client
 
         foreach($split as $line)
         {
-            if(preg_match('/^\w+/', $line))
+            if(preg_match('/composite/i', $line))
             {
                 $detectors[++$index] =
                 [
@@ -170,9 +170,31 @@ class CLIClient extends Client
      */
     public function getAvailableParsers(): array
     {
-        $response = $this->request('parsers');
+        $parsers = [];
 
-        return preg_split("/\n/", $response);
+        $index = -1;
+        $split = preg_split("/\n/", $this->request('parsers'));
+        array_shift($split);
+
+        foreach($split as $line)
+        {
+            if(preg_match('/composite/i', $line))
+            {
+                $parsers[++$index] =
+                [
+                    'children' => [],
+                    'composite' => true,
+                    'name' => trim(preg_replace('/\(.+\):/', '', $line)),
+                    'decorated' => false
+                ];
+            }
+            else
+            {
+                $parsers[$index]['children'][] = ['composite' => false, 'name' => trim($line), 'decorated' => false];
+            }
+        }
+
+        return $parsers;
     }
 
     /**
