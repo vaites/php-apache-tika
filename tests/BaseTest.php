@@ -138,25 +138,29 @@ abstract class BaseTest extends TestCase
     /**
      * Recursive text metadata test
      *
-     * @dataProvider ocrProvider
+     * @dataProvider recursiveProvider
      */
     public function testTextRecursiveMetadata(string $file): void
     {
+        $nested = 'sample8.zip/sample1.doc';
+
         $metadata = self::$client->getRecursiveMetadata($file, 'text');
 
-        $this->assertContains('Sed do eiusmod tempor incididunt', array_shift($metadata)->content);
+        $this->assertContains('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
     }
 
     /**
      * Recursive HTML metadata test
      *
-     * @dataProvider ocrProvider
+     * @dataProvider recursiveProvider
      */
     public function testHtmlRecursiveMetadata(string $file): void
     {
+        $nested = 'sample8.zip/sample1.doc';
+
         $metadata = self::$client->getRecursiveMetadata($file, 'html');
 
-        $this->assertContains('Sed do eiusmod tempor incididunt', array_shift($metadata)->content);
+        $this->assertContains('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
     }
 
     /**
@@ -468,6 +472,14 @@ abstract class BaseTest extends TestCase
     public function encodingProvider(): array
     {
         return $this->samples('sample7');
+    }
+
+    /**
+     * File provider for recursive testing
+     */
+    public function recursiveProvider(): array
+    {
+        return $this->samples('sample8');
     }
 
     /**

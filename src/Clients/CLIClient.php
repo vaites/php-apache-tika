@@ -375,11 +375,11 @@ class CLIClient extends Client
                 break;
 
             case 'rmeta/html':
-                $arguments[] = '--html --metadata --jsonRecursive';
+                $arguments[] = '--html --jsonRecursive';
                 break;
 
             case 'rmeta/text':
-                $arguments[] = '--text --metadata --jsonRecursive';
+                $arguments[] = '--text --jsonRecursive';
                 break;
 
             default:

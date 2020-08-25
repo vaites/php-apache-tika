@@ -254,7 +254,14 @@ abstract class Client
     }
 
     /**
-     * Gets recursive file metadata
+     * Gets recursive file metadata where the returned array indexes are the file name.
+     *
+     * Example: for a sample.zip with an example.doc file, the return array looks like if be defined as:
+     *
+     *  [
+     *      'sample.zip' => new Metadata()
+     *      'sample.zip/example.doc' => new DocumentMetadata()
+     *  ]
      *
      * @link https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-RecursiveMetadataandContent
      * @throws \Exception
