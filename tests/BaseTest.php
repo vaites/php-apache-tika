@@ -379,10 +379,7 @@ abstract class BaseTest extends TestCase
     {
         $detectors = self::$client->getAvailableDetectors();
 
-        $this->assertEquals
-        (
-            $detectors[0]['children'][0]['name'], 'org.apache.tika.detect.OverrideDetector'
-        );
+        $this->assertArrayHasKey('org.apache.tika.detect.DefaultDetector', $detectors);
     }
 
     /**
@@ -392,10 +389,7 @@ abstract class BaseTest extends TestCase
     {
         $parsers = self::$client->getAvailableParsers();
 
-        $this->assertEquals
-        (
-            $parsers[0]['children'][0]['name'], 'org.apache.tika.parser.apple.AppleSingleFileParser'
-        );
+        $this->assertArrayHasKey('org.apache.tika.parser.DefaultParser', $parsers);
     }
 
     /**

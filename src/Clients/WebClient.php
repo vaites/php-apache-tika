@@ -266,7 +266,26 @@ class WebClient extends Client
      */
     public function getAvailableDetectors(): array
     {
-        return [json_decode($this->request('detectors'), true)];
+        $detectors = [json_decode($this->request('detectors'), true)];
+
+        foreach($detectors as $index => $parent)
+        {
+            $detectors[$parent['name']] = $parent;
+
+            if(isset($parent['children']))
+            {
+                foreach($parent['children'] as $subindex => $child)
+                {
+                    $detectors[$parent['name']]['children'][$child['name']] = $child;
+
+                    unset($detectors[$parent['name']]['children'][$subindex]);
+                }
+            }
+
+            unset($detectors[$index]);
+        }
+
+        return $detectors;
     }
 
     /**
@@ -276,7 +295,26 @@ class WebClient extends Client
      */
     public function getAvailableParsers(): array
     {
-        return [json_decode($this->request('parsers'), true)];
+        $parsers = [json_decode($this->request('parsers'), true)];
+
+        foreach($parsers as $index => $parent)
+        {
+            $parsers[$parent['name']] = $parent;
+
+            if(isset($parent['children']))
+            {
+                foreach($parent['children'] as $subindex => $child)
+                {
+                    $parsers[$parent['name']]['children'][$child['name']] = $child;
+
+                    unset($parsers[$parent['name']]['children'][$subindex]);
+                }
+            }
+
+            unset($parsers[$index]);
+        }
+
+        return $parsers;
     }
 
     /**

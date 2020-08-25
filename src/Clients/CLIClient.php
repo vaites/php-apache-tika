@@ -140,23 +140,21 @@ class CLIClient extends Client
     {
         $detectors = [];
 
-        $index = -1;
+
         $split = preg_split("/\n/", $this->request('detectors'));
 
+        $parent = null;
         foreach($split as $line)
         {
             if(preg_match('/composite/i', $line))
             {
-                $detectors[++$index] =
-                [
-                    'children' => [],
-                    'composite' => true,
-                    'name' => trim(preg_replace('/\(.+\):/', '', $line))
-                ];
+                $parent = trim(preg_replace('/\(.+\):/', '', $line));
+                $detectors[$parent] = ['children' => [], 'composite' => true, 'name' => $parent];
             }
             else
             {
-                $detectors[$index]['children'][] = ['composite' => false, 'name' => trim($line)];
+                $child = trim($line);
+                $detectors[$parent]['children'][$child] = ['composite' => false, 'name' => $child];
             }
         }
 
@@ -172,7 +170,6 @@ class CLIClient extends Client
     {
         $parsers = [];
 
-        $index = -1;
         $split = preg_split("/\n/", $this->request('parsers'));
         array_shift($split);
 
@@ -180,17 +177,15 @@ class CLIClient extends Client
         {
             if(preg_match('/composite/i', $line))
             {
-                $parsers[++$index] =
-                [
-                    'children' => [],
-                    'composite' => true,
-                    'name' => trim(preg_replace('/\(.+\):/', '', $line)),
-                    'decorated' => false
-                ];
+                $parent = trim(preg_replace('/\(.+\):/', '', $line));
+
+                $parsers[$parent] = ['children' => [], 'composite' => true, 'name' => $parent, 'decorated' => false];
             }
             else
             {
-                $parsers[$index]['children'][] = ['composite' => false, 'name' => trim($line), 'decorated' => false];
+                $child = trim($line);
+
+                $parsers[$parent]['children'][$child] = ['composite' => false, 'name' => $child, 'decorated' => false];
             }
         }
 
