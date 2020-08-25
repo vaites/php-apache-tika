@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+SOURCE=$(dirname $0)
+COMPOSER="$SOURCE/../composer.json"
+LATEST=$(php -r "echo array_pop(json_decode(file_get_contents('$COMPOSER'), true)['extra']['supported-versions']);")
+
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
-VERSION=${APACHE_TIKA_VERSION:-"1.24"}
+VERSION=${APACHE_TIKA_VERSION:-$LATEST}
 MIRROR="https://archive.apache.org"
 
 mkdir --parents $BINARIES

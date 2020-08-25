@@ -25,7 +25,7 @@ if [ $(ps aux | grep -c tika-server-$VERSION) -lt 2 ]; then
         $COMMAND
     else
         echo "Starting Tika Server $VERSION in background"
-        $COMMAND  2> /tmp/tika-server-$VERSION.log &
+        $COMMAND 2> /tmp/tika-server-$VERSION.log &
         sleep 5
     fi
 else
