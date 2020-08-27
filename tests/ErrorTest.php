@@ -29,7 +29,7 @@ class ErrorTest extends TestCase
     /**
      * Get env variables
      */
-    public function __construct(string $name = null, array $data = array(), string $dataName = '')
+    public function __construct(string $name = null, array $data = array(), $dataName = '')
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
@@ -49,7 +49,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Apache Tika app JAR not found', $exception->getMessage());
+            $this->assertStringContainsString('Apache Tika app JAR not found', $exception->getMessage());
         }
     }
 
@@ -72,7 +72,7 @@ class ErrorTest extends TestCase
         {
             rename($path . '.bak', $path);
 
-            $this->assertContains('Unexpected exit value', $exception->getMessage());
+            $this->assertStringContainsString('Unexpected exit value', $exception->getMessage());
         }
     }
 
@@ -90,7 +90,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Java command not found', $exception->getMessage());
+            $this->assertStringContainsString('Java command not found', $exception->getMessage());
         }
     }
 
@@ -126,7 +126,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Unknown type bad', $exception->getMessage());
+            $this->assertStringContainsString('Unknown type bad', $exception->getMessage());
         }
     }
 
@@ -159,7 +159,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Unknown recursive type', $exception->getMessage());
+            $this->assertStringContainsString('Unknown recursive type', $exception->getMessage());
         }
     }
 
@@ -206,7 +206,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Unknown recursive type', $exception->getMessage());
+            $this->assertStringContainsString('Unknown recursive type', $exception->getMessage());
         }
     }
 
@@ -222,7 +222,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Chunk size is not supported', $exception->getMessage());
+            $this->assertStringContainsString('Chunk size is not supported', $exception->getMessage());
         }
     }
 
@@ -242,7 +242,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertContains('Unknown type bad', $exception->getMessage());
+            $this->assertStringContainsString('Unknown type bad', $exception->getMessage());
         }
     }
 

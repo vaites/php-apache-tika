@@ -146,7 +146,7 @@ abstract class BaseTest extends TestCase
 
         $metadata = self::$client->getRecursiveMetadata($file, 'text');
 
-        $this->assertContains('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
     }
 
     /**
@@ -160,7 +160,7 @@ abstract class BaseTest extends TestCase
 
         $metadata = self::$client->getRecursiveMetadata($file, 'html');
 
-        $this->assertContains('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
     }
 
     /**
@@ -182,7 +182,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDocumentLanguage(string $file): void
     {
-        $this->assertRegExp('/^[a-z]{2}$/', self::$client->getLanguage($file));
+        $this->assertMatchesRegularExpression('/^[a-z]{2}$/', self::$client->getLanguage($file));
     }
 
     /**
@@ -202,7 +202,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDocumentHTML(string $file): void
     {
-        $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
     }
 
     /**
@@ -212,7 +212,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDocumentText(string $file): void
     {
-        $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
     }
 
     /**
@@ -222,7 +222,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDocumentMainText(string $file): void
     {
-        $this->assertContains('Lorem ipsum dolor sit amet', self::$client->getMainText($file));
+        $this->assertStringContainsString('Lorem ipsum dolor sit amet', self::$client->getMainText($file));
     }
 
     /**
@@ -268,7 +268,7 @@ abstract class BaseTest extends TestCase
     {
         $text = self::$client->getText($file);
 
-        $this->assertRegExp('/voluptate/i', $text);
+        $this->assertMatchesRegularExpression('/voluptate/i', $text);
     }
 
     /**
@@ -340,7 +340,7 @@ abstract class BaseTest extends TestCase
      */
     public function testRemoteDocumentText(string $file): void
     {
-        $this->assertContains('Rationis enim perfectio est virtus', self::$client->getText($file));
+        $this->assertStringContainsString('Rationis enim perfectio est virtus', self::$client->getText($file));
     }
 
     /**
@@ -354,7 +354,7 @@ abstract class BaseTest extends TestCase
 
         $client->setDownloadRemote(false);
 
-        $this->assertContains('Rationis enim perfectio est virtus', $client->getText($file));
+        $this->assertStringContainsString('Rationis enim perfectio est virtus', $client->getText($file));
     }
 
     /**
