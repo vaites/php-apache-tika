@@ -4,7 +4,11 @@ ROOT=$(dirname $0)
 
 cd "$ROOT/.."
 
-VERSIONS=$(cat .travis.yml | grep VERSION | awk -F '=' '{print $2}')
+if [ -z "$1" ]; then
+  VERSIONS=$(cat .travis.yml | grep VERSION | awk -F '=' '{print $2}')
+else
+  VERSIONS=$1
+fi
 
 for VERSION in $VERSIONS
 do
