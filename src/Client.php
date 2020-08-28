@@ -168,7 +168,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function setCallback(callable $callback, $append = true): self
+    public function setCallback(callable $callback, bool $append = true): self
     {
         if($callback instanceof Closure || is_array($callback))
         {

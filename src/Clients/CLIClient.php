@@ -140,7 +140,6 @@ class CLIClient extends Client
     {
         $detectors = [];
 
-
         $split = preg_split("/\n/", $this->request('detectors'));
 
         $parent = null;
@@ -173,6 +172,7 @@ class CLIClient extends Client
         $split = preg_split("/\n/", $this->request('parsers'));
         array_shift($split);
 
+        $parent = null;
         foreach($split as $line)
         {
             if(preg_match('/composite/i', $line))

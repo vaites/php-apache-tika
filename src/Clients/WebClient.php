@@ -414,12 +414,11 @@ class WebClient extends Client
      */
     protected function exec(array $options = []): array
     {
-        // cURL init and options
-        $curl = curl_init();
-
-        // add options only if cURL init doesn't fails
-        if(is_resource($curl))
+        try
         {
+            // cURL init and options
+            $curl = curl_init();
+
             // we avoid curl_setopt_array($curl, $options) because strange Windows behaviour (issue #8)
             foreach($options as $option => $value)
             {
@@ -436,16 +435,16 @@ class WebClient extends Client
                 $this->response = '';
                 curl_exec($curl);
             }
-        }
 
-        // exception if cURL fails
-        if($curl === false)
-        {
-            throw new Exception('Unexpected error');
+            // exception if cURL fails
+            if(curl_errno($curl))
+            {
+                throw new Exception(curl_error($curl), curl_errno($curl));
+            }
         }
-        elseif(curl_errno($curl))
+        catch(Exception $exception)
         {
-            throw new Exception(curl_error($curl), curl_errno($curl));
+            throw new Exception('Unexpected error', 0, $exception);
         }
 
         // return the response and the status code
