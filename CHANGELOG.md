@@ -12,6 +12,7 @@
 ### Changed
 * `$client->getRecursiveMetadata()` returns an array as expected
 * `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
+* `Client::getAvailableDetectors()` and `Client::getAvailableParsers()` returns an array with new format
 
 ## v0.9.3
 
