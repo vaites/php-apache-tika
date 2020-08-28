@@ -108,7 +108,7 @@ class ErrorTest extends TestCase
         }
         catch(Exception $exception)
         {
-            $this->assertEquals(7, $exception->getCode());
+            $this->assertEquals(CURLE_OPERATION_TIMEDOUT, $exception->getCode());
         }
     }
 

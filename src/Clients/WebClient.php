@@ -414,37 +414,30 @@ class WebClient extends Client
      */
     protected function exec(array $options = []): array
     {
-        try
+        // cURL init and options
+        $curl = curl_init();
+
+        // we avoid curl_setopt_array($curl, $options) because strange Windows behaviour (issue #8)
+        foreach($options as $option => $value)
         {
-            // cURL init and options
-            $curl = curl_init();
-
-            // we avoid curl_setopt_array($curl, $options) because strange Windows behaviour (issue #8)
-            foreach($options as $option => $value)
-            {
-                curl_setopt($curl, $option, $value);
-            }
-
-            // make the request directly
-            if(is_null($this->callback))
-            {
-                $this->response = curl_exec($curl) ?: '';
-            } // with a callback, the response is appended on each block inside the callback
-            else
-            {
-                $this->response = '';
-                curl_exec($curl);
-            }
-
-            // exception if cURL fails
-            if(curl_errno($curl))
-            {
-                throw new Exception(curl_error($curl), curl_errno($curl));
-            }
+            curl_setopt($curl, $option, $value);
         }
-        catch(Exception $exception)
+
+        // make the request directly
+        if(is_null($this->callback))
         {
-            throw new Exception('Unexpected error', 0, $exception);
+            $this->response = curl_exec($curl) ?: '';
+        } // with a callback, the response is appended on each block inside the callback
+        else
+        {
+            $this->response = '';
+            curl_exec($curl);
+        }
+
+        // exception if cURL fails
+        if(curl_errno($curl))
+        {
+            throw new Exception(curl_error($curl), curl_errno($curl));
         }
 
         // return the response and the status code
