@@ -13,6 +13,21 @@
 * `$client->getRecursiveMetadata()` returns an array as expected
 * `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
 
+## v0.9.3
+
+### Added
+* Recursive metadata in command line mode
+
+## v0.9.2
+
+### Changed
+* Tested up to Apache Tika 1.24.1
+
+## v0.9.1
+
+### Changed
+* Tested up to Apache Tika 1.24
+
 ## v0.9.0
 
 ### Added
