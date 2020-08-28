@@ -33,12 +33,9 @@ class ImageMetadata extends Metadata
     /**
      * Sets an attribute
      *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
+     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      */
-    protected function setAttribute($key, $value)
+    protected function setSpecificAttribute(string $key, $value): MetadataInterface
     {
         switch(mb_strtolower($key))
         {
@@ -63,11 +60,8 @@ class ImageMetadata extends Metadata
             case 'x-tika:content':
                 $this->content = $value;
                 break;
-
-            default:
-                return false;
         }
 
-        return true;
+        return $this;
     }
 }

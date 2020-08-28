@@ -4,10 +4,12 @@ namespace Vaites\ApacheTika;
 
 use Closure;
 use Exception;
+use stdClass;
 
 use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
 use Vaites\ApacheTika\Metadata\Metadata;
+use Vaites\ApacheTika\Metadata\MetadataInterface;
 
 /**
  * Apache Tika client interface
@@ -17,18 +19,7 @@ use Vaites\ApacheTika\Metadata\Metadata;
  */
 abstract class Client
 {
-    const MODE = null;
-
-    /**
-     * List of supported Apache Tika versions
-     *
-     * @var array
-     */
-    protected static $supportedVersions =
-    [
-        '1.7', '1.8', '1.9', '1.10', '1.11', '1.12', '1.13', '1.14', '1.15', '1.16',
-        '1.17', '1.18', '1.19', '1.19.1', '1.20', '1.21', '1.22', '1.23', '1.24', '1.24.1'
-    ];
+    protected const MODE = null;
 
     /**
      * Checked flag
@@ -61,14 +52,14 @@ abstract class Client
     /**
      * Text encoding
      *
-     * @var \Closure
+     * @var string|null
      */
     protected $encoding = null;
 
     /**
      * Callback called on secuential read
      *
-     * @var \Closure
+     * @var callable|null
      */
     protected $callback = null;
 
@@ -104,14 +95,14 @@ abstract class Client
     /**
      * Get a class instance throwing an exception if check fails
      *
-     * @param   string  $param1     path or host
-     * @param   int     $param2     Java binary path or port for web client
-     * @param   array   $options    options for cURL request
-     * @param   bool    $check      check JAR file or server connection
-     * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
-     * @throws  \Exception
+     * @param string     $param1 path or host
+     * @param string|int $param2 Java binary path or port for web client
+     * @param array      $options options for cURL request
+     * @param bool       $check check JAR file or server connection
+     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @throws \Exception
      */
-    public static function make($param1 = null, $param2 = null, $options = [], $check = true)
+    public static function make(string $param1 = null, $param2 = null, array $options = [], bool $check = true): Client
     {
         if(preg_match('/\.jar$/', func_get_arg(0)))
         {
@@ -126,23 +117,21 @@ abstract class Client
     /**
      * Get a class instance delaying the check
      *
-     * @param   string  $param1     path or host
-     * @param   int     $param2     Java binary path or port for web client
-     * @param   array   $options    options for cURL request
-     * @return  \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
-     * @throws  \Exception
+     * @param string $param1 path or host
+     * @param int    $param2 Java binary path or port for web client
+     * @param array  $options options for cURL request
+     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @throws \Exception
      */
-    public static function prepare($param1 = null, $param2 = null, $options = [])
+    public static function prepare($param1 = null, $param2 = null, $options = []): Client
     {
         return self::make($param1, $param2, $options, false);
     }
 
     /**
      * Get the encoding
-     *
-     * @return  \Closure|null
      */
-    public function getEncoding()
+    public function getEncoding(): ?string
     {
         return $this->encoding;
     }
@@ -150,23 +139,26 @@ abstract class Client
     /**
      * Set the encoding
      *
-     * @param   string   $encoding
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function setEncoding($encoding)
+    public function setEncoding(string $encoding): self
     {
-        $this->encoding = $encoding;
+        if(!empty($encoding))
+        {
+            $this->encoding = $encoding;
+        }
+        else
+        {
+            throw new Exception('Invalid encoding');
+        }
 
         return $this;
     }
 
     /**
      * Get the callback
-     *
-     * @return  \Closure|null
      */
-    public function getCallback()
+    public function getCallback(): ?Closure
     {
         return $this->callback;
     }
@@ -174,22 +166,19 @@ abstract class Client
     /**
      * Set the callback (callable or closure) for call on secuential read
      *
-     * @param   mixed   $callback
-     * @param   bool    $append
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function setCallback($callback, $append = true)
+    public function setCallback(callable $callback, bool $append = true): self
     {
-        if($callback instanceof Closure)
+        if($callback instanceof Closure || is_array($callback))
         {
             $this->callbackAppend = (bool) $append;
             $this->callback = $callback;
         }
-        elseif(is_callable($callback))
+        elseif(is_string($callback))
         {
             $this->callbackAppend = (bool) $append;
-            $this->callback = function($chunk) use($callback)
+            $this->callback = function($chunk) use ($callback)
             {
                 return call_user_func_array($callback, [$chunk]);
             };
@@ -204,10 +193,8 @@ abstract class Client
 
     /**
      * Get the chunk size
-     *
-     * @return  int
      */
-    public function getChunkSize()
+    public function getChunkSize(): int
     {
         return $this->chunkSize;
     }
@@ -215,23 +202,17 @@ abstract class Client
     /**
      * Set the chunk size for secuential read
      *
-     * @param   int     $size
-     * @return  $this
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function setChunkSize($size)
+    public function setChunkSize(int $size): self
     {
-        if(static::MODE == 'cli' && is_numeric($size))
+        if(static::MODE == 'cli')
         {
-            $this->chunkSize = (int)$size;
-        }
-        elseif(static::MODE == 'web')
-        {
-            throw new Exception('Chunk size is not supported on web mode');
+            $this->chunkSize = $size;
         }
         else
         {
-            throw new Exception("$size is not a valid chunk size");
+            throw new Exception('Chunk size is not supported on web mode');
         }
 
         return $this;
@@ -239,21 +220,16 @@ abstract class Client
 
     /**
      * Get the remote download flag
-     *
-     * @return  bool
      */
-    public function getDownloadRemote()
+    public function getDownloadRemote(): bool
     {
         return $this->downloadRemote;
     }
 
     /**
      * Set the remote download flag
-     *
-     * @param   bool    $download
-     * @return  $this
      */
-    public function setDownloadRemote($download)
+    public function setDownloadRemote(bool $download): self
     {
         $this->downloadRemote = (bool) $download;
 
@@ -261,53 +237,71 @@ abstract class Client
     }
 
     /**
-     * Gets file metadata using recursive if specified
+     * Gets file metadata
      *
-     * @link    https://wiki.apache.org/tika/TikaJAXRS#Recursive_Metadata_and_Content
-     * @param   string  $file
-     * @param   string  $recursive
-     * @return  \Vaites\ApacheTika\Metadata\Metadata|\Vaites\ApacheTika\Metadata\DocumentMetadata|\Vaites\ApacheTika\Metadata\ImageMetadata
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getMetadata($file, $recursive = null)
+    public function getMetadata(string $file): MetadataInterface
     {
-        if(is_null($recursive))
+        $response = $this->parseJsonResponse($this->request('meta', $file));
+
+        if($response instanceof stdClass == false)
         {
-            $response = $this->request('meta', $file);
-        }
-        elseif(in_array($recursive, ['text', 'html', 'ignore']))
-        {
-            $response = $this->request("rmeta/$recursive", $file);
-        }
-        else
-        {
-            throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
+            throw new Exception("Unexpected metadata response for $file");
         }
 
         return Metadata::make($response, $file);
     }
 
     /**
-     * Gets recursive file metadata (alias for getMetadata)
+     * Gets recursive file metadata where the returned array indexes are the file name.
      *
-     * @param   string  $file
-     * @param   string  $recursive
-     * @return  \Vaites\ApacheTika\Metadata\Metadata
-     * @throws  \Exception
+     * Example: for a sample.zip with an example.doc file, the return array looks like if be defined as:
+     *
+     *  [
+     *      'sample.zip' => new Metadata()
+     *      'sample.zip/example.doc' => new DocumentMetadata()
+     *  ]
+     *
+     * @link https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-RecursiveMetadataandContent
+     * @throws \Exception
      */
-    public function getRecursiveMetadata($file, $recursive)
+    public function getRecursiveMetadata(string $file, ?string $format = 'ignore'): array
     {
-        return $this->getMetadata($file, $recursive);
+        if(in_array($format, ['text', 'html', 'ignore']) == false)
+        {
+            throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
+        }
+
+        $response = $this->parseJsonResponse($this->request("rmeta/$format", $file));
+
+        if(is_array($response) == false)
+        {
+            throw new Exception("Unexpected metadata response for $file");
+        }
+
+        $metadata = [];
+
+        foreach($response as $item)
+        {
+            $name = basename($file);
+            if(isset($item->{'X-TIKA:embedded_resource_path'}))
+            {
+                $name .= $item->{'X-TIKA:embedded_resource_path'};
+            }
+
+            $metadata[$name] = Metadata::make($item, $file);
+        }
+
+        return $metadata;
     }
 
     /**
      * Detect language
      *
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getLanguage($file)
+    public function getLanguage(string $file): string
     {
         return $this->request('lang', $file);
     }
@@ -315,11 +309,9 @@ abstract class Client
     /**
      * Detect MIME type
      *
-     * @param   string  $file
-     * @return  string
      * @throws \Exception
      */
-    public function getMIME($file)
+    public function getMIME(string $file): string
     {
         return $this->request('mime', $file);
     }
@@ -327,13 +319,9 @@ abstract class Client
     /**
      * Extracts HTML
      *
-     * @param   string  $file
-     * @param   mixed   $callback
-     * @param   bool    $append
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getHTML($file, $callback = null, $append = true)
+    public function getHTML(string $file, callable $callback = null, bool $append = true): string
     {
         if(!is_null($callback))
         {
@@ -346,13 +334,9 @@ abstract class Client
     /**
      * Extracts text
      *
-     * @param   string  $file
-     * @param   mixed   $callback
-     * @param   bool    $append
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getText($file, $callback = null, $append = true)
+    public function getText(string $file, callable $callback = null, bool $append = true): string
     {
         if(!is_null($callback))
         {
@@ -365,13 +349,9 @@ abstract class Client
     /**
      * Extracts main text
      *
-     * @param   string  $file
-     * @param   mixed   $callback
-     * @param   bool    $append
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getMainText($file, $callback = null, $append = true)
+    public function getMainText(string $file, callable $callback = null, bool $append = true): string
     {
         if(!is_null($callback))
         {
@@ -382,45 +362,11 @@ abstract class Client
     }
 
     /**
-     * Returns the supported MIME types
-     *
-     * @return  string
-     * @throws  \Exception
-     */
-    public function getSupportedMIMETypes()
-    {
-        return $this->request('mime-types');
-    }
-
-    /**
-     * Returns the available detectors
-     *
-     * @return  string
-     * @throws  \Exception
-     */
-    public function getAvailableDetectors()
-    {
-        return $this->request('detectors');
-    }
-
-    /**
-     * Returns the available parsers
-     *
-     * @return  string
-     * @throws  \Exception
-     */
-    public function getAvailableParsers()
-    {
-        return $this->request('parsers');
-    }
-
-    /**
      * Returns current Tika version
      *
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->request('version');
     }
@@ -428,77 +374,72 @@ abstract class Client
     /**
      * Return the list of Apache Tika supported versions
      *
-     * @return array
+     * @throws \Exception
      */
-    public static function getSupportedVersions()
+    public function getSupportedVersions(): array
     {
-        return self::$supportedVersions;
+        static $versions = null;
+
+        if(is_null($versions))
+        {
+            $composer = json_decode(file_get_contents(dirname(__DIR__) . '/composer.json'), true);
+            $versions = $composer['extra']['supported-versions'] ?? null;
+
+            if(empty($versions))
+            {
+                throw new Exception("An error ocurred trying to read package's composer.json file");
+            }
+        }
+
+        return $versions;
     }
 
     /**
      * Sets the checked flag
-     *
-     * @param   bool    $checked
      */
-    public function setChecked($checked)
+    public function setChecked(bool $checked): self
     {
         $this->checked = (bool) $checked;
+
+        return $this;
     }
 
     /**
      * Checks if instance is checked
-     *
-     * @return  bool
      */
-    public function isChecked()
+    public function isChecked(): bool
     {
         return $this->checked;
     }
 
     /**
      * Check if a response is cached
-     *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  mixed
      */
-    protected function isCached($type, $file)
+    protected function isCached(string $type, string $file): bool
     {
         return isset($this->cache[sha1($file)][$type]);
     }
 
     /**
      * Get a cached response
-     *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  mixed
      */
-    protected function getCachedResponse($type, $file)
+    protected function getCachedResponse(string $type, string $file)
     {
-        return isset($this->cache[sha1($file)][$type]) ? $this->cache[sha1($file)][$type] : null;
+        return $this->cache[sha1($file)][$type] ?? null;
     }
 
     /**
      * Check if a request type must be cached
-     *
-     * @param   string  $type
-     * @return  bool
      */
-    protected function isCacheable($type)
+    protected function isCacheable(string $type): bool
     {
         return in_array($type, ['lang', 'meta']);
     }
 
     /**
      * Caches a response
-     *
-     * @param   string  $type
-     * @param   mixed   $response
-     * @param   string  $file
-     * @return  bool
      */
-    protected function cacheResponse($type, $response, $file)
+    protected function cacheResponse(string $type, $response, string $file): bool
     {
         $this->cache[sha1($file)][$type] = $response;
 
@@ -507,41 +448,44 @@ abstract class Client
 
     /**
      * Checks if a specific version is supported
-     *
-     * @param   string  $version
-     * @return  bool
      */
-    public static function isVersionSupported($version)
+    public function isVersionSupported(string $version): bool
     {
-        return in_array($version, self::getSupportedVersions());
+        return in_array($version, $this->getSupportedVersions());
+    }
+
+    /**
+     * Check if a mime type is supported
+     *
+     * @param string $mime
+     * @return bool
+     * @throws \Exception
+     */
+    public function isMIMETypeSupported(string $mime): bool
+    {
+        return array_key_exists($mime, $this->getSupportedMIMETypes());
     }
 
     /**
      * Check the request before executing
      *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function checkRequest($type, $file)
+    public function checkRequest(string $type, string $file = null): ?string
     {
         // no checks for getters
         if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             //
-        }
-        // invalid local file
+        } // invalid local file
         elseif(!preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
-        }
-        // invalid remote file
+        } // invalid remote file
         elseif(preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
         {
             throw new Exception("File $file can't be opened", 2);
-        }
-        // download remote file if required only for integrated downloader
+        } // download remote file if required only for integrated downloader
         elseif(preg_match('/^http/', $file) && $this->downloadRemote)
         {
             $file = $this->downloadFile($file);
@@ -551,14 +495,40 @@ abstract class Client
     }
 
     /**
+     * Parse the response returned by Apache Tika
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function parseJsonResponse(string $response)
+    {
+        // an empty response throws an error
+        if(empty($response) || trim($response) == '')
+        {
+            throw new Exception('Empty response');
+        }
+
+        // decode the JSON response
+        $json = json_decode($response);
+
+        // exceptions if metadata is not valid
+        if(json_last_error())
+        {
+            $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Error parsing JSON response';
+
+            throw new Exception($message, json_last_error());
+        }
+
+        return $json;
+    }
+
+    /**
      * Download file to a temporary folder
      *
-     * @link    https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @link https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
+     * @throws \Exception
      */
-    protected function downloadFile($file)
+    protected function downloadFile(string $file): string
     {
         $dest = tempnam(sys_get_temp_dir(), 'TIKA');
 
@@ -592,19 +562,35 @@ abstract class Client
     }
 
     /**
-     * Check Java binary, JAR path or server connection
+     * Must return the supported MIME types
      *
-     * @return  void
+     * @throws \Exception
      */
-    abstract public function check();
+    abstract public function getSupportedMIMETypes(): array;
+
+    /**
+     * Must return the available detectors
+     *
+     * @throws \Exception
+     */
+    abstract public function getAvailableDetectors(): array;
+
+    /**
+     * Must return the available parsers
+     *
+     * @throws \Exception
+     */
+    abstract public function getAvailableParsers(): array;
+
+    /**
+     * Check Java binary, JAR path or server connection
+     */
+    abstract public function check(): void;
 
     /**
      * Configure and make a request and return its results.
      *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    abstract public function request($type, $file = null);
+    abstract public function request(string $type, string $file = null): string;
 }

@@ -10,11 +10,11 @@ use Vaites\ApacheTika\Client;
  * Apache Tika command line interface client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    https://tika.apache.org/1.24/gettingstarted.html#Using_Tika_as_a_command_line_utility
+ * @link    https://tika.apache.org/1.23/gettingstarted.html#Using_Tika_as_a_command_line_utility
  */
 class CLIClient extends Client
 {
-    const MODE = 'cli';
+    protected const MODE = 'cli';
 
     /**
      * Apache Tika app path
@@ -33,12 +33,9 @@ class CLIClient extends Client
     /**
      * Configure client
      *
-     * @param   string  $path
-     * @param   string  $java
-     * @param   bool    $check
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function __construct($path = null, $java = null, $check = true)
+    public function __construct(string $path = null, string $java = null, bool $check = true)
     {
         parent::__construct();
 
@@ -60,21 +57,16 @@ class CLIClient extends Client
 
     /**
      * Get the path
-     *
-     * @return  null|string
      */
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
     /**
      * Set the path
-     *
-     * @param   string  $path
-     * @return  $this
      */
-    public function setPath($path)
+    public function setPath($path): self
     {
         $this->path = $path;
 
@@ -83,21 +75,16 @@ class CLIClient extends Client
 
     /**
      * Get the Java path
-     *
-     * @return  null|int
      */
-    public function getJava()
+    public function getJava(): ?string
     {
         return $this->java;
     }
 
     /**
      * Set the Java path
-     *
-     * @param   string    $java
-     * @return  $this
      */
-    public function setJava($java)
+    public function setJava($java): self
     {
         $this->java = $java;
 
@@ -105,12 +92,112 @@ class CLIClient extends Client
     }
 
     /**
+     * Returns the supported MIME types
+     *
+     * NOTE: the data provided by the CLI must be parsed: mime type has no spaces, aliases go next prefixed with spaces
+     *
+     * @throws \Exception
+     */
+    public function getSupportedMIMETypes(): array
+    {
+        $mime = null;
+        $mimeTypes = [];
+
+        $response = preg_split("/\n/", $this->request('mime-types'));
+
+        foreach($response as $line)
+        {
+            if(preg_match('/^\w+/', $line))
+            {
+                $mime = trim($line);
+                $mimeTypes[$mime] = ['alias' => []];
+            }
+            else
+            {
+                [$key, $value] = preg_split('/:\s+/', trim($line));
+
+                if($key == 'alias')
+                {
+                    $mimeTypes[$mime]['alias'][] = $value;
+                }
+                else
+                {
+                    $mimeTypes[$mime][$key] = $value;
+                }
+            }
+        }
+
+
+        return $mimeTypes;
+    }
+
+    /**
+     * Returns the available detectors
+     *
+     * @throws \Exception
+     */
+    public function getAvailableDetectors(): array
+    {
+        $detectors = [];
+
+        $split = preg_split("/\n/", $this->request('detectors'));
+
+        $parent = null;
+        foreach($split as $line)
+        {
+            if(preg_match('/composite/i', $line))
+            {
+                $parent = trim(preg_replace('/\(.+\):/', '', $line));
+                $detectors[$parent] = ['children' => [], 'composite' => true, 'name' => $parent];
+            }
+            else
+            {
+                $child = trim($line);
+                $detectors[$parent]['children'][$child] = ['composite' => false, 'name' => $child];
+            }
+        }
+
+        return $detectors;
+    }
+
+    /**
+     * Returns the available parsers
+     *
+     * @throws \Exception
+     */
+    public function getAvailableParsers(): array
+    {
+        $parsers = [];
+
+        $split = preg_split("/\n/", $this->request('parsers'));
+        array_shift($split);
+
+        $parent = null;
+        foreach($split as $line)
+        {
+            if(preg_match('/composite/i', $line))
+            {
+                $parent = trim(preg_replace('/\(.+\):/', '', $line));
+
+                $parsers[$parent] = ['children' => [], 'composite' => true, 'name' => $parent, 'decorated' => false];
+            }
+            else
+            {
+                $child = trim($line);
+
+                $parsers[$parent]['children'][$child] = ['composite' => false, 'name' => $child, 'decorated' => false];
+            }
+        }
+
+        return $parsers;
+    }
+
+    /**
      * Check Java binary, JAR path or server connection
      *
-     * @return  void
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function check()
+    public function check(): void
     {
         if($this->isChecked() === false)
         {
@@ -137,18 +224,15 @@ class CLIClient extends Client
     /**
      * Configure and make a request and return its results
      *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function request($type, $file = null)
+    public function request(string $type, string $file = null): string
     {
         // check if not checked
         $this->check();
 
         // check if is cached
-        if($this->isCached($type, $file))
+        if($file !== null && $this->isCached($type, $file))
         {
             return $this->getCachedResponse($type, $file);
         }
@@ -173,7 +257,7 @@ class CLIClient extends Client
         $response = $this->exec($command);
 
         // metadata response
-        if($type == 'meta')
+        if(in_array(preg_replace('/\/.+/', '', $type), ['meta', 'rmeta']))
         {
             // fix for invalid? json returned only with images
             $response = str_replace(basename($file) . '"}{', '", ', $response);
@@ -194,11 +278,9 @@ class CLIClient extends Client
     /**
      * Run the command and return its results
      *
-     * @param   string  $command
-     * @return  null|string
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public function exec($command)
+    public function exec(string $command): ?string
     {
         // run command
         $exit = -1;
@@ -240,12 +322,9 @@ class CLIClient extends Client
     /**
      * Get the arguments to run the command
      *
-     * @param   string  $type
-     * @param   string  $file
-     * @return  array
      * @throws  Exception
      */
-    protected function getArguments($type, $file = null)
+    protected function getArguments(string $type, string $file = null): array
     {
         $arguments = $this->encoding ? ["--encoding={$this->encoding}"] : [];
 
@@ -265,18 +344,6 @@ class CLIClient extends Client
 
             case 'meta':
                 $arguments[] = '--metadata --json';
-                break;
-    
-            case 'rmeta/ignore':
-                $arguments[] = '--metadata --jsonRecursive';
-                break;
-    
-            case 'rmeta/html':
-                $arguments[] = '--html --jsonRecursive';
-                break;
-    
-            case 'rmeta/text':
-                $arguments[] = '--text --jsonRecursive';
                 break;
 
             case 'text':
@@ -301,6 +368,18 @@ class CLIClient extends Client
 
             case 'version':
                 $arguments[] = '--version';
+                break;
+
+            case 'rmeta/ignore':
+                $arguments[] = '--metadata --jsonRecursive';
+                break;
+
+            case 'rmeta/html':
+                $arguments[] = '--html --jsonRecursive';
+                break;
+
+            case 'rmeta/text':
+                $arguments[] = '--text --jsonRecursive';
                 break;
 
             default:

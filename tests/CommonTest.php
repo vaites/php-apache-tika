@@ -1,13 +1,13 @@
 <?php namespace Vaites\ApacheTika\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 use Vaites\ApacheTika\Client;
 
 /**
  * Common test functionality
  */
-class CommonTest extends PHPUnit_Framework_TestCase
+class CommonTest extends TestCase
 {
     /**
      * Current tika version
@@ -32,13 +32,8 @@ class CommonTest extends PHPUnit_Framework_TestCase
 
     /**
      * Get env variables
-     *
-     * @param null      $name
-     * @param array     $data
-     * @param string    $dataName
-     * @throws \Exception
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct(string $name = null, array $data = array(), $dataName = '')
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
@@ -50,7 +45,7 @@ class CommonTest extends PHPUnit_Framework_TestCase
     /**
      * Set chunk size test
      */
-    public function testSetChunkSize()
+    public function testSetChunkSize(): void
     {
         self::$client->setChunkSize(42);
 
@@ -60,7 +55,7 @@ class CommonTest extends PHPUnit_Framework_TestCase
     /**
      * Set download remote
      */
-    public function testDownloadRemote()
+    public function testDownloadRemote(): void
     {
         self::$client->setDownloadRemote(true);
 
@@ -70,7 +65,7 @@ class CommonTest extends PHPUnit_Framework_TestCase
     /**
      * Set callback (closure) test
      */
-    public function testSetClosureCallback()
+    public function testSetClosureCallback(): void
     {
         self::$client->setCallback(function($chunk)
         {
@@ -83,7 +78,7 @@ class CommonTest extends PHPUnit_Framework_TestCase
     /**
      * Set callback (callable) test
      */
-    public function testSetCallableCallback()
+    public function testSetCallableCallback(): void
     {
         self::$client->setCallback('trim');
 
@@ -93,16 +88,16 @@ class CommonTest extends PHPUnit_Framework_TestCase
     /**
      * Get supported versions test
      */
-    public function testGetSupportedVersions()
+    public function testGetSupportedVersions(): void
     {
-        $this->assertTrue(in_array('1.10', Client::getSupportedVersions()));
+        $this->assertTrue(in_array(self::$version, self::$client->getSupportedVersions()));
     }
 
     /**
      * Is version supported vtest
      */
-    public function testIsVersionSupported()
+    public function testIsVersionSupported(): void
     {
-        $this->assertTrue(Client::isVersionSupported('1.10'));
+        $this->assertTrue(self::$client->isVersionSupported(self::$version));
     }
 }

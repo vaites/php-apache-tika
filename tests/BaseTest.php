@@ -2,12 +2,14 @@
 
 namespace Vaites\ApacheTika\Tests;
 
-use PHPUnit_Framework_TestCase;
+use Exception;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Common test functionality
  */
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * Current tika version
@@ -39,15 +41,18 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
     /**
      * Get env variables
-     *
-     * @param null      $name
-     * @param array     $data
-     * @param string    $dataName
+     * 
+     * @throws \Exception
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct(string $name = null, array $data = array(), $dataName = '')
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
+
+        if(empty(self::$version))
+        {
+            throw new Exception('APACHE_TIKA_VERSION environment variable not defined');
+        }
 
         parent::__construct($name, $data, $dataName);
     }
@@ -55,7 +60,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Version test
      */
-    public function testVersion()
+    public function testVersion(): void
     {
         $this->assertEquals('Apache Tika ' . self::$version, self::$client->getVersion());
     }
@@ -63,719 +68,395 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Metadata test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @param   string $class
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testMetadata($file, $class = 'Metadata')
+    public function testMetadata(string $file, string $class = 'Metadata'): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
-        }
+        $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
     }
 
     /**
      * Metadata test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @param   string $class
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadata($file, $class = 'DocumentMetadata')
+    public function testDocumentMetadata(string $file, string $class = 'DocumentMetadata'): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->testMetadata($file, $class);
-        }
+        $this->testMetadata($file, $class);
     }
 
     /**
      * Metadata title test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataTitle($file)
+    public function testDocumentMetadataTitle(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertEquals('Lorem ipsum dolor sit amet', self::$client->getMetadata($file)->title);
-        }
+        $this->assertEquals('Lorem ipsum dolor sit amet', self::$client->getMetadata($file)->title);
     }
 
     /**
      * Metadata author test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataAuthor($file)
+    public function testDocumentMetadataAuthor(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertEquals('David Martínez', self::$client->getMetadata($file)->author);
-        }
+        $this->assertEquals('David Martínez', self::$client->getMetadata($file)->author);
     }
 
     /**
      * Metadata dates test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataCreated($file)
+    public function testDocumentMetadataCreated(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->created);
-        }
+        $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->created);
     }
 
     /**
      * Metadata dates test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataUpdated($file)
+    public function testDocumentMetadataUpdated(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->updated);
-        }
+        $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->updated);
     }
 
     /**
      * Metadata keywords test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMetadataKeywords($file)
+    public function testDocumentMetadataKeywords(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertContains('ipsum', self::$client->getMetadata($file)->keywords);
-        }
+        $this->assertContains('ipsum', self::$client->getMetadata($file)->keywords);
     }
 
     /**
      * Recursive text metadata test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider recursiveProvider
      */
-    public function testTextRecursiveMetadata($file)
+    public function testTextRecursiveMetadata(string $file): void
     {
-        if(version_compare(self::$version, '1.11') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
-        }
-        else
-        {
-            $metadata = self::$client->getRecursiveMetadata($file, 'text');
+        $nested = 'sample8.zip/sample1.doc';
 
-            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
-        }
+        $metadata = self::$client->getRecursiveMetadata($file, 'text');
+
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
     }
 
     /**
      * Recursive HTML metadata test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider recursiveProvider
      */
-    public function testHtmlRecursiveMetadata($file)
+    public function testHtmlRecursiveMetadata(string $file): void
     {
-        if(version_compare(self::$version, '1.11') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
-        }
-        else
-        {
-            $metadata = self::$client->getMetadata($file, 'html');
+        $nested = 'sample8.zip/sample1.doc';
 
-            $this->assertContains('Sed do eiusmod tempor incididunt', $metadata->content);
-        }
+        $metadata = self::$client->getRecursiveMetadata($file, 'html');
+
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', $metadata[$nested]->content ?? 'ERROR');
     }
 
     /**
      * Recursive ignore metadata test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider ocrProvider
      */
-    public function testIgnoreRecursiveMetadata($file)
+    public function testIgnoreRecursiveMetadata(string $file): void
     {
-        if(version_compare(self::$version, '1.11') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks recursive metadata extraction');
-        }
-        else
-        {
-            $metadata = self::$client->getMetadata($file, 'ignore');
+        $metadata = self::$client->getRecursiveMetadata($file, 'ignore');
 
-            $this->assertNull($metadata->content);
-        }
+        $this->assertNull(array_shift($metadata)->content);
     }
 
     /**
      * Language test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentLanguage($file)
+    public function testDocumentLanguage(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks REST language identification');
-        }
-        else
-        {
-            $this->assertRegExp('/^[a-z]{2}$/', self::$client->getLanguage($file));
-        }
+        $this->assertRegExp('/^[a-z]{2}$/', self::$client->getLanguage($file));
     }
 
     /**
      * MIME test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMIME($file)
+    public function testDocumentMIME(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertNotEmpty(self::$client->getMIME($file));
-        }
+        $this->assertNotEmpty(self::$client->getMIME($file));
     }
 
     /**
      * HTML test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentHTML($file)
+    public function testDocumentHTML(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
-        }
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
     }
 
     /**
      * Text test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentText($file)
+    public function testDocumentText(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertContains('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
-        }
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', self::$client->getText($file));
     }
 
     /**
      * Main text test
      *
-     * @dataProvider    documentProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider documentProvider
      */
-    public function testDocumentMainText($file)
+    public function testDocumentMainText(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
-        {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks main content extraction');
-        }
-        else
-        {
-            $this->assertContains('Lorem ipsum dolor sit amet', self::$client->getMainText($file));
-        }
+        $this->assertStringContainsString('Lorem ipsum dolor sit amet', self::$client->getMainText($file));
     }
 
     /**
      * Metadata test
      *
-     * @dataProvider    imageProvider
-     *
-     * @param   string $file
-     * @param   string $class
-     * @throws  \Exception
+     * @dataProvider imageProvider
      */
-    public function testImageMetadata($file, $class = 'ImageMetadata')
+    public function testImageMetadata(string $file, string $class = 'ImageMetadata'): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        elseif($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
-        }
-        else
-        {
-            $this->testMetadata($file, $class);
-        }
+        $this->testMetadata($file, $class);
     }
 
     /**
      * Metadata width test
      *
-     * @dataProvider    imageProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider imageProvider
      */
-    public function testImageMetadataWidth($file)
+    public function testImageMetadataWidth(string $file): void
     {
-        $client =& self::$client;
+        $meta = self::$client->getMetadata($file);
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        elseif($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
-        }
-        else
-        {
-            $meta = self::$client->getMetadata($file);
-
-            $this->assertEquals(1600, $meta->width, basename($file));
-        }
+        $this->assertEquals(1600, $meta->width, basename($file));
     }
 
     /**
      * Metadata height test
      *
-     * @dataProvider    imageProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider imageProvider
      */
-    public function testImageMetadataHeight($file)
+    public function testImageMetadataHeight(string $file): void
     {
-        $client =& self::$client;
+        $meta = self::$client->getMetadata($file);
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        elseif($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
-        }
-        else
-        {
-            $meta = self::$client->getMetadata($file);
-
-            $this->assertEquals(900, $meta->height, basename($file));
-        }
+        $this->assertEquals(900, $meta->height, basename($file));
     }
 
     /**
      * OCR test
      *
-     * @dataProvider    ocrProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider ocrProvider
      */
-    public function testImageOCR($file)
+    public function testImageOCR(string $file): void
     {
-        $client =& self::$client;
+        $text = self::$client->getText($file);
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        elseif($client::MODE == 'web' && version_compare(self::$version, '1.14') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.14 throws "Expected \';\', got \',\'> when parsing some images');
-        }
-        else
-        {
-            $text = self::$client->getText($file);
-
-            $this->assertRegExp('/voluptate/i', $text);
-        }
+        $this->assertRegExp('/voluptate/i', $text);
     }
 
     /**
      * Text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testTextCallback($file)
+    public function testTextCallback(string $file): void
     {
-        $client =& self::$client;
-        
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            BaseTest::$shared = 0;
+        BaseTest::$shared = 0;
 
-            self::$client->getText($file, [$this, 'callableCallback']);
+        self::$client->getText($file, [$this, 'callableCallback']);
 
-            $this->assertGreaterThan(1, BaseTest::$shared);
-        }
+        $this->assertGreaterThan(1, BaseTest::$shared);
     }
 
     /**
      * Text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testTextCallbackWithoutAppend($file)
+    public function testTextCallbackWithoutAppend(string $file): void
     {
-        $client =& self::$client;
+        BaseTest::$shared = 0;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            BaseTest::$shared = 0;
+        $response = self::$client->getText($file, [$this, 'callableCallback'], false);
 
-            $response = self::$client->getText($file, [$this, 'callableCallback'], false);
-
-            $this->assertEmpty($response);
-        }
+        $this->assertEmpty($response);
     }
 
     /**
      * Main text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testMainTextCallback($file)
+    public function testMainTextCallback(string $file): void
     {
-        $client =& self::$client;
+        BaseTest::$shared = 0;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
+        self::$client->getMainText($file, function()
         {
-            $this->markTestSkipped('Apache Tika ' . self::$version . ' lacks main content extraction');
-        }
-        else
-        {
-            BaseTest::$shared = 0;
+            BaseTest::$shared++;
+        });
 
-            self::$client->getMainText($file, function()
-            {
-                BaseTest::$shared++;
-            });
-
-            $this->assertGreaterThan(1, BaseTest::$shared);
-        }
+        $this->assertGreaterThan(1, BaseTest::$shared);
     }
 
     /**
      * Main text callback test
      *
-     * @dataProvider    callbackProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider callbackProvider
      */
-    public function testHtmlCallback($file)
+    public function testHtmlCallback(string $file): void
     {
-        $client =& self::$client;
+        BaseTest::$shared = 0;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
+        self::$client->getHtml($file, function()
         {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            BaseTest::$shared = 0;
+            BaseTest::$shared++;
+        });
 
-            self::$client->getHtml($file, function()
-            {
-                BaseTest::$shared++;
-            });
-
-            $this->assertGreaterThan(1, BaseTest::$shared);
-        }
+        $this->assertGreaterThan(1, BaseTest::$shared);
     }
 
     /**
      * Remote file test with integrated download
      *
-     * @dataProvider    remoteProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider remoteProvider
      */
-    public function testRemoteDocumentText($file)
+    public function testRemoteDocumentText(string $file): void
     {
-        $client =& self::$client;
-
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $this->assertContains('Rationis enim perfectio est virtus', $client->getText($file));
-        }
+        $this->assertStringContainsString('Rationis enim perfectio est virtus', self::$client->getText($file));
     }
 
     /**
      * Remote file test with internal downloader
      *
-     * @dataProvider    remoteProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider remoteProvider
      */
-    public function testDirectRemoteDocumentText($file)
+    public function testDirectRemoteDocumentText(string $file): void
     {
         $client =& self::$client;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        elseif($client::MODE == 'web' && version_compare(self::$version, '1.15') < 0)
-        {
-            $this->markTestSkipped('Apache Tika between 1.10 and 1.14 doesn\'t supports unsecure features');
-        }
-        else
-        {
-            $client->setDownloadRemote(false);
+        $client->setDownloadRemote(false);
 
-            $this->assertContains('Rationis enim perfectio est virtus', $client->getText($file));
-        }
+        $this->assertStringContainsString('Rationis enim perfectio est virtus', $client->getText($file));
     }
 
     /**
      * Encoding tests
      *
-     * @dataProvider    encodingProvider
-     *
-     * @param   string $file
-     * @throws  \Exception
+     * @dataProvider encodingProvider
      */
-    public function testEncodingDocumentText($file)
+    public function testEncodingDocumentText(string $file): void
     {
         $client =& self::$client;
 
-        if($client::MODE == 'web' && version_compare(self::$version, '1.9') == 0)
-        {
-            $this->markTestSkipped('Apache Tika 1.9 throws random "Error while processing document" errors');
-        }
-        else
-        {
-            $client->setEncoding('UTF-8');
+        $client->setEncoding('UTF-8');
 
-            $this->assertThat($client->getText($file), $this->logicalAnd
-            (
-                $this->stringContains('L’espéranto'),
-                $this->stringContains('世界語'),
-                $this->stringContains('Эспера́нто')
-            ));
-        }
+        $this->assertThat($client->getText($file), $this->logicalAnd
+        (
+            $this->stringContains('L’espéranto'),
+            $this->stringContains('世界語'),
+            $this->stringContains('Эспера́нто')
+        ));
     }
 
     /**
      * Test available detectors
-     *
-     * @throws  \Exception
      */
-    public function testAvailableDetectors()
+    public function testAvailableDetectors(): void
     {
-        $this->assertContains('org.apache.tika.mime.MimeTypes', self::$client->getAvailableDetectors());
+        $detectors = self::$client->getAvailableDetectors();
+
+        $this->assertArrayHasKey('org.apache.tika.detect.DefaultDetector', $detectors);
     }
 
     /**
      * Test available parsers
-     *
-     * @throws  \Exception
      */
-    public function testAvailableParsers()
+    public function testAvailableParsers(): void
     {
-        $this->assertContains('org.apache.tika.parser.DefaultParser', self::$client->getAvailableParsers());
+        $parsers = self::$client->getAvailableParsers();
+
+        $this->assertArrayHasKey('org.apache.tika.parser.DefaultParser', $parsers);
     }
 
     /**
      * Test supported MIME types
-     *
-     * @throws  \Exception
      */
-    public function testSupportedMIMETypes()
+    public function testSupportedMIMETypes(): void
     {
-        $this->assertContains('application/x-pdf', self::$client->getSupportedMIMETypes());
+        $this->assertArrayHasKey('application/pdf', self::$client->getSupportedMIMETypes());
+    }
+
+
+    /**
+     * Test supported MIME types
+     */
+    public function testIsMIMETypeSupported(): void
+    {
+        $this->assertTrue(self::$client->isMIMETypeSupported('application/pdf'));
     }
 
     /**
      * Static method to test callback
      */
-    public static function callableCallback()
+    public static function callableCallback(): void
     {
         BaseTest::$shared++;
     }
 
     /**
      * Document file provider
-     *
-     * @return  array
      */
-    public function documentProvider()
+    public function documentProvider(): array
     {
         return $this->samples('sample1');
     }
 
     /**
      * Image file provider
-     *
-     * @return array
      */
-    public function imageProvider()
+    public function imageProvider(): array
     {
         return $this->samples('sample2');
     }
 
     /**
      * File provider for OCR testing
-     *
-     * @return array
      */
-    public function ocrProvider()
+    public function ocrProvider(): array
     {
         return $this->samples('sample3');
     }
 
     /**
      * File provider for callback testing
-     *
-     * @return array
      */
-    public function callbackProvider()
+    public function callbackProvider(): array
     {
         return $this->samples('sample5');
     }
 
     /**
      * File provider for remote testing
-     *
-     * @return array
      */
-    public function remoteProvider()
+    public function remoteProvider(): array
     {
         return
         [
@@ -787,21 +468,24 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
     /**
      * File provider for encoding testing
-     *
-     * @return array
      */
-    public function encodingProvider()
+    public function encodingProvider(): array
     {
         return $this->samples('sample7');
     }
 
     /**
-     * File provider using "samples" folder
-     *
-     * @param   string $sample
-     * @return  array
+     * File provider for recursive testing
      */
-    protected function samples($sample)
+    public function recursiveProvider(): array
+    {
+        return $this->samples('sample8');
+    }
+
+    /**
+     * File provider using "samples" folder
+     */
+    protected function samples(string $sample): array
     {
         $samples = [];
 

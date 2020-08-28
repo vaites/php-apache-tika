@@ -30,25 +30,28 @@ to work with the new versions of the tool.
 * Standarized metadata for documents
 * Support for local and remote resources
 * No heavyweight library dependencies
-* Compatible with Apache Tika 1.7 or greater
+* Compatible with Apache Tika 1.15 or greater
     * Tested up to 1.24.1
+* Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
 
-* PHP 5.4 or greater
+* PHP 7.2 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
-* Apache Tika 1.7 or greater
+* Apache Tika 1.15 or greater
 * Oracle Java or OpenJDK 
-    * Java 6 for Tika up to 1.9
-    * Java 7 for Tika 1.10 or greater
+    * Java 8 for Tika 1.19 or greater
+    * Java 7 for Tika from 1.15 to 1.18
 * [Tesseract](https://github.com/tesseract-ocr/tesseract) (optional for OCR recognition)
-    
+
+**NOTE**: the supported PHP version will remain synced with [the latest supported by PHP team](https://www.php.net/supported-versions.php)
+
 ## Installation
 
 Install using Composer:
 
-```php
+```bash
 composer require vaites/php-apache-tika
 ```
 
@@ -56,7 +59,8 @@ If you want to use OCR you must install [Tesseract](https://github.com/tesseract
 
 * **Fedora/CentOS**: `sudo yum install tesseract` (use dnf instead of yum on Fedora 22 or greater)
 * **Debian/Ubuntu**: `sudo apt-get install tesseract-ocr`
-* **Mac OS X**: `brew install tesseract` (using [Homebrew](http://brew.sh))
+* **macOS**: `brew install tesseract` (using [Homebrew](http://brew.sh))
+* **Windows**: `scoop install tesseract` (using [Scoop](http://scoop.sh))
 
 The library assumes `tesseract` binary is in path, so you can compile it yourself or install using any other method. 
 
@@ -140,6 +144,7 @@ Other Tika related methods:
 
 ```php
 $client->getSupportedMIMETypes();
+$client->getIsMIMETypeSupported('application/pdf');
 $client->getAvailableDetectors();
 $client->getAvailableParsers();
 $client->getVersion();
@@ -225,6 +230,18 @@ $client->setTimeout($seconds);
 $client->getTimeout();
 ```
 
+### Breaking changes
+
+Since 1.0 version there are some breaking changes:
+
+* Apache Tika versions prior to 1.15 are not supported (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older)
+* PHP minimum requirement is 7.2 or greater (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older)
+* `$client->getRecursiveMetadata()` returns an array as expected
+* `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
+* Values returned by `Client::getAvailableDetectors()` and `Client::getAvailableParsers()` are identical and have a new definition 
+
+See [CHANGELOG.md](CHANGELOG.md) for more details.
+
 ## Troubleshooting
 
 ### Empty responses or unexpected results
@@ -257,13 +274,12 @@ There are a few samples to test against:
 * **sample5**: huge text for callbacks 
 * **sample6**: remote calls 
 * **sample7**: text encoding
+* **sample8**: recursive metadatate
 
 ## Known issues
 
 There are some issues found during tests, not related with this library:
 
-* 1.9 version running Java 7 on server mode throws random error 500 (*Unexpected RuntimeException*)
-* 1.14 version on server mode throws random errors (*Expected ';', got ','*) when parsing image metadata
 * Tesseract slows down document parsing as described in [TIKA-2359](https://issues.apache.org/jira/browse/TIKA-2359)
     
 ## Integrations

@@ -2,9 +2,6 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
-use DateTime;
-use DateTimeZone;
-
 /**
  * Metadata class for documents
  *
@@ -45,7 +42,7 @@ class DocumentMetadata extends Metadata
     /**
      * Content encoding
      *
-     * @var null
+     * @var string
      */
     public $encoding = null;
 
@@ -80,15 +77,10 @@ class DocumentMetadata extends Metadata
     /**
      * Sets an attribute
      *
-     * @param   string  $key
-     * @param   mixed   $value
-     * @return  bool
      * @throws  \Exception
      */
-    protected function setAttribute($key, $value)
+    protected function setSpecificAttribute(string $key, $value): MetadataInterface
     {
-        $timezone = new DateTimeZone('UTC');
-
         if(is_array($value))
         {
             $value = array_shift($value);
@@ -119,11 +111,6 @@ class DocumentMetadata extends Metadata
                 $this->author = $value;
                 break;
 
-            case 'content-type':
-                $mime = $value ? preg_split('/;\s+/', $value) : [];
-                $this->mime = array_shift($mime);
-                break;
-
             case 'application-name':
             case 'generator':
             case 'producer':
@@ -142,17 +129,6 @@ class DocumentMetadata extends Metadata
                 $this->words = (int) $value;
                 break;
 
-            case 'creation-date':
-            case 'date':
-                $value = preg_replace('/\.\d+/', 'Z', $value);
-                $this->created = new DateTime($value, $timezone);
-                break;
-
-            case 'last-modified':
-                $value = preg_replace('/\.\d+/', 'Z', $value);
-                $this->updated = new DateTime($value, $timezone);
-                break;
-
             case 'content-encoding':
                 $this->encoding = $value;
                 break;
@@ -160,11 +136,8 @@ class DocumentMetadata extends Metadata
             case 'x-tika:content':
                 $this->content = $value;
                 break;
-
-            default:
-                return false;
         }
 
-        return true;
+        return $this;
     }
 }

@@ -1,3 +1,5 @@
+.phpunit.result.cache
+
 bin
 composer.lock
 reports

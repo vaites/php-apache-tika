@@ -2,14 +2,17 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
+use DateTime;
+use DateTimeZone;
 use Exception;
+use stdClass;
 
 /**
  * Standarized metadata class with common attributes for all document types
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
-abstract class Metadata
+abstract class Metadata implements MetadataInterface
 {
     /**
      * Title
@@ -49,29 +52,27 @@ abstract class Metadata
     /**
      * RAW attributes returned by Apache Tika
      *
-     * @var array
+     * @var \stdClass
      */
-    public $meta = [];
+    public $meta = null;
 
     /**
      * Parse Apache Tika response filling all properties
      *
-     * @param   string  $meta
-     * @param   string  $file
      * @throws \Exception
      */
-    public function __construct($meta, $file)
+    public function __construct(stdClass $meta, string $file)
     {
         $this->meta = $meta;
 
         // process each meta
-        foreach($this->meta as $key => $value)
+        foreach((array) $this->meta as $key => $value)
         {
             $this->setAttribute($key, $value);
         }
 
         // file name without extension if title is not detected
-        if(empty($this->title) && !is_null($file))
+        if(empty($this->title))
         {
             $this->title = preg_replace('/\..+$/', '', basename($file));
         }
@@ -86,33 +87,10 @@ abstract class Metadata
     /**
      * Return an instance of Metadata based on content type
      *
-     * @param   string  $response
-     * @param   string  $file
-     * @return  \Vaites\ApacheTika\Metadata\Metadata
-     * @throws  \Exception
+     * @throws \Exception
      */
-    public static function make($response, $file)
+    public static function make(stdClass $meta, string $file): MetadataInterface
     {
-        // an empty response throws an error
-        if(empty($response) || trim($response) == '')
-        {
-            throw new Exception('Empty response');
-        }
-
-        // decode the JSON response
-        $json = json_decode($response);
-
-        // get the meta info
-        $meta = is_array($json) ? current($json) : $json;
-
-        // exceptions if metadata is not valid
-        if(json_last_error())
-        {
-            $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Error parsing JSON response';
-
-            throw new Exception($message, json_last_error());
-        }
-
         // get content type
         $mime = is_array($meta->{'Content-Type'}) ? current($meta->{'Content-Type'}) : $meta->{'Content-Type'};
 
@@ -133,9 +111,44 @@ abstract class Metadata
     /**
      * Sets an attribute
      *
-     * @param   string  $key
-     * @param   mixed   $value
-     * @return  bool
+     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
      */
-    abstract protected function setAttribute($key, $value);
+    public final function setAttribute(string $key, $value): MetadataInterface
+    {
+        $timezone = new DateTimeZone('UTC');
+
+        switch(mb_strtolower($key))
+        {
+            case 'content-type':
+                $mime = $value ? preg_split('/;\s+/', $value) : [];
+                $this->mime = array_shift($mime);
+                break;
+
+            case 'creation-date':
+            case 'date':
+            case 'meta:creation-date':
+                $value = preg_replace('/\.\d+/', 'Z', $value);
+                $this->created = new DateTime(is_array($value) ? array_shift($value) : $value, $timezone);
+                break;
+
+            case 'last-modified':
+            case 'modified':
+                $value = preg_replace('/\.\d+/', 'Z', $value);
+                $this->updated = new DateTime(is_array($value) ? array_shift($value) : $value, $timezone);
+                break;
+
+            default:
+                $this->setSpecificAttribute($key, $value);
+
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets an speficic attribute for the file type
+     *
+     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
+     */
+    abstract protected function setSpecificAttribute(string $key, $value): MetadataInterface;
 }
