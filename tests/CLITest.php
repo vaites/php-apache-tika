@@ -52,6 +52,19 @@ class CLITest extends BaseTest
     }
 
     /**
+     * Set Java test
+     */
+    public function testSetArguments(): void
+    {
+        $path = self::getPathForVersion(self::$version);
+
+        $client = Client::make($path);
+        $client->setJavaArgs('-JXmx4g');
+
+        $this->assertEquals('-JXmx4g', $client->getJavaArgs());
+    }
+
+    /**
      * Test delayed check
      */
     public function testDelayedCheck(): void

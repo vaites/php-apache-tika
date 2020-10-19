@@ -31,6 +31,13 @@ class CLIClient extends Client
     protected $java = null;
 
     /**
+     * Java arguments
+     *
+     * @var string
+     */
+    protected $javaArgs = null;
+
+    /**
      * Configure client
      *
      * @throws \Exception
@@ -84,9 +91,29 @@ class CLIClient extends Client
     /**
      * Set the Java path
      */
-    public function setJava($java): self
+    public function setJava(string $java): self
     {
         $this->java = $java;
+
+        return $this;
+    }
+
+    /**
+     * Get the Java arguments
+     */
+    public function getJavaArgs(): ?string
+    {
+        return $this->javaArgs;
+    }
+
+    /**
+     * Set the Java arguments
+     *
+     * NOTE: to modify child process jvm args, prepend "J" to each argument (-JXmx4g)
+     */
+    public function setJavaArgs(string $args): self
+    {
+        $this->javaArgs = $args;
 
         return $this;
     }
@@ -251,7 +278,7 @@ class CLIClient extends Client
 
         // build command
         $jar = escapeshellarg($this->path);
-        $command = ($this->java ?: 'java') . " -jar $jar " . implode(' ', $arguments);
+        $command = trim(($this->java ?: 'java') . " -jar $jar " . implode(' ', $arguments) . " {$this->javaArgs}");
 
         // run command
         $response = $this->exec($command);

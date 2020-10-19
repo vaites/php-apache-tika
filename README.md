@@ -195,6 +195,9 @@ $client->getPath();
 
 $client->setJava($java);
 $client->getJava();
+
+$client->setJavaArgs('-JXmx4g');
+$client->getJavaArgs();
 ```
 
 #### Web client
