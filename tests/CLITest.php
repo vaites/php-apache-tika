@@ -18,6 +18,16 @@ class CLITest extends BaseTest
     }
 
     /**
+     * XHTML test
+     *
+     * @dataProvider encodingProvider
+     */
+    public function testDocumentHTML(string $file): void
+    {
+        $this->assertStringStartsWith('<?xml version="1.0"', self::$client->getXHTML($file));
+    }
+
+    /**
      * Set path test
      */
     public function testSetPath(): void

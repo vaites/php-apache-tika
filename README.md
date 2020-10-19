@@ -136,6 +136,7 @@ $client->getRecursiveMetadata($file, 'text');
 $client->getLanguage($file);
 $client->getMIME($file);
 $client->getHTML($file);
+$client->getXHTML($file); // only CLI mode
 $client->getText($file);
 $client->getMainText($file);
 ```

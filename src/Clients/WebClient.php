@@ -551,6 +551,10 @@ class WebClient extends Client
                 $resource = $type;
                 break;
 
+            case 'xhtml':
+                throw new Exception("Tika Server does not support XHTML output");
+                break;
+
             default:
                 throw new Exception("Unknown type $type");
         }

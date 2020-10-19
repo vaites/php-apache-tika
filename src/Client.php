@@ -332,6 +332,21 @@ abstract class Client
     }
 
     /**
+     * Extracts XHTML
+     *
+     * @throws \Exception
+     */
+    public function getXHTML(string $file, callable $callback = null, bool $append = true): string
+    {
+        if(!is_null($callback))
+        {
+            $this->setCallback($callback, $append);
+        }
+
+        return $this->request('xhtml', $file);
+    }
+
+    /**
      * Extracts text
      *
      * @throws \Exception

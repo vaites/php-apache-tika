@@ -382,6 +382,10 @@ class CLIClient extends Client
                 $arguments[] = '--text --jsonRecursive';
                 break;
 
+            case 'xhtml':
+                $arguments[] = '--xml';
+                break;
+
             default:
                 throw new Exception($file ? "Unknown type $type for $file" : "Unknown type $type");
         }
