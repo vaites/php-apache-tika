@@ -95,10 +95,10 @@ abstract class Client
     /**
      * Get a class instance throwing an exception if check fails
      *
-     * @param string     $param1 path or host
-     * @param string|int $param2 Java binary path or port for web client
-     * @param array      $options options for cURL request
-     * @param bool       $check check JAR file or server connection
+     * @param string|null     $param1   path or host
+     * @param string|int|null $param2   Java binary path or port for web client
+     * @param array           $options  options for cURL request
+     * @param bool            $check    check JAR file or server connection
      * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws \Exception
      */
@@ -106,20 +106,26 @@ abstract class Client
     {
         if(preg_match('/\.jar$/', func_get_arg(0)))
         {
-            return new CLIClient($param1, $param2, $check);
+            $path = $param1 ? (string) $param1 : null;
+            $java = $param2 ? (string) $param2 : null;
+
+            return new CLIClient($path, $java, $check);
         }
         else
         {
-            return new WebClient($param1, $param2, $options, $check);
+            $host = $param1 ? (string) $param1 : null;
+            $port = $param2 ? (int) $param2 : null;
+
+            return new WebClient($host, $port, $options, $check);
         }
     }
 
     /**
      * Get a class instance delaying the check
      *
-     * @param string $param1 path or host
-     * @param int    $param2 Java binary path or port for web client
-     * @param array  $options options for cURL request
+     * @param string|null $param1 path or host
+     * @param int|null    $param2 Java binary path or port for web client
+     * @param array       $options options for cURL request
      * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws \Exception
      */
@@ -158,7 +164,7 @@ abstract class Client
     /**
      * Get the callback
      */
-    public function getCallback(): ?Closure
+    public function getCallback(): ?callable
     {
         return $this->callback;
     }
@@ -397,8 +403,14 @@ abstract class Client
 
         if(is_null($versions))
         {
-            $composer = json_decode(file_get_contents(dirname(__DIR__) . '/composer.json'), true);
-            $versions = $composer['extra']['supported-versions'] ?? null;
+            $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
+
+            if($composer === false)
+            {
+                throw new Exception("An error ocurred trying to read package's composer.json file");
+            }
+
+            $versions = json_decode($composer, true)['extra']['supported-versions'] ?? null;
 
             if(empty($versions))
             {
@@ -501,9 +513,14 @@ abstract class Client
         {
             throw new Exception("File $file can't be opened");
         } // invalid remote file
-        elseif(preg_match('/^http/', $file) && !preg_match('/200/', get_headers($file)[0]))
+        elseif(preg_match('/^http/', $file))
         {
-            throw new Exception("File $file can't be opened", 2);
+            $headers = get_headers($file);
+
+            if(empty($headers) || !preg_match('/200/', $headers[0]))
+            {
+                throw new Exception("File $file can't be opened", 2);
+            }
         } // download remote file if required only for integrated downloader
         elseif(preg_match('/^http/', $file) && $this->downloadRemote)
         {
@@ -550,14 +567,26 @@ abstract class Client
     protected function downloadFile(string $file): string
     {
         $dest = tempnam(sys_get_temp_dir(), 'TIKA');
+
+        if($dest === false)
+        {
+            throw new Exception("Can't create a temporary file at " . sys_get_temp_dir());
+        }
+
         $fp = fopen($dest, 'w+');
 
-        if($dest === false || $fp === false)
+        if($fp === false)
         {
             throw new Exception("$dest can't be opened");
         }
 
         $ch = curl_init($file);
+
+        if($ch === false)
+        {
+            throw new Exception("$file can't be downloaded");
+        }
+
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_exec($ch);

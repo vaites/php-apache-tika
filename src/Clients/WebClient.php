@@ -107,16 +107,17 @@ class WebClient extends Client
      */
     public function setUrl(string $url): self
     {
-        $url = parse_url($url);
+        $host = parse_url($url, PHP_URL_HOST);
+        $port = parse_url($url, PHP_URL_PORT);
 
-        if(isset($url['host']))
+        if(!empty($host))
         {
-            $this->setHost($url['host']);
+            $this->setHost((string) $host);
         }
 
-        if(isset($url['port']))
+        if(!empty($port))
         {
-            $this->setPort($url['port']);
+            $this->setPort((int) $port);
         }
 
         return $this;
@@ -430,8 +431,9 @@ class WebClient extends Client
         // make the request directly
         if(is_null($this->callback))
         {
-            $this->response = curl_exec($curl) ?: '';
-        } // with a callback, the response is appended on each block inside the callback
+            $this->response = (string) curl_exec($curl);
+        }
+        // with a callback, the response is appended on each block inside the callback
         else
         {
             $this->response = '';
