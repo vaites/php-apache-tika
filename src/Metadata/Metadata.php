@@ -111,7 +111,9 @@ abstract class Metadata implements MetadataInterface
     /**
      * Sets an attribute
      *
-     * @return  \Vaites\ApacheTika\Metadata\MetadataInterface
+     * @param mixed $value
+     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
+     * @throws \Exception
      */
     public final function setAttribute(string $key, $value): MetadataInterface
     {
@@ -120,7 +122,7 @@ abstract class Metadata implements MetadataInterface
         switch(mb_strtolower($key))
         {
             case 'content-type':
-                $mime = $value ? preg_split('/;\s+/', $value) : [];
+                $mime = $value ? (preg_split('/;\s+/', $value) ?: []) : [];
                 $this->mime = array_shift($mime);
                 break;
 
@@ -148,6 +150,7 @@ abstract class Metadata implements MetadataInterface
     /**
      * Sets an speficic attribute for the file type
      *
+     * @param mixed $value
      * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      */
     abstract protected function setSpecificAttribute(string $key, $value): MetadataInterface;

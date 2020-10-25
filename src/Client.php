@@ -437,6 +437,8 @@ abstract class Client
 
     /**
      * Get a cached response
+     *
+     * @return mixed
      */
     protected function getCachedResponse(string $type, string $file)
     {
@@ -453,6 +455,8 @@ abstract class Client
 
     /**
      * Caches a response
+     *
+     * @param mixed $response
      */
     protected function cacheResponse(string $type, $response, string $file): bool
     {
@@ -546,10 +550,9 @@ abstract class Client
     protected function downloadFile(string $file): string
     {
         $dest = tempnam(sys_get_temp_dir(), 'TIKA');
-
         $fp = fopen($dest, 'w+');
 
-        if($fp === false)
+        if($dest === false || $fp === false)
         {
             throw new Exception("$dest can't be opened");
         }

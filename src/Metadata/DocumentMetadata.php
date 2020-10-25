@@ -77,6 +77,7 @@ class DocumentMetadata extends Metadata
     /**
      * Sets an attribute
      *
+     * @param mixed $value
      * @throws  \Exception
      */
     protected function setSpecificAttribute(string $key, $value): MetadataInterface

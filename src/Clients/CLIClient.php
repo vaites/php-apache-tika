@@ -73,7 +73,7 @@ class CLIClient extends Client
     /**
      * Set the path
      */
-    public function setPath($path): self
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -130,7 +130,7 @@ class CLIClient extends Client
         $mime = null;
         $mimeTypes = [];
 
-        $response = preg_split("/\n/", $this->request('mime-types'));
+        $response = preg_split("/\n/", $this->request('mime-types')) ?: [];
 
         foreach($response as $line)
         {
@@ -167,7 +167,7 @@ class CLIClient extends Client
     {
         $detectors = [];
 
-        $split = preg_split("/\n/", $this->request('detectors'));
+        $split = preg_split("/\n/", $this->request('detectors')) ?: [];
 
         $parent = null;
         foreach($split as $line)
@@ -196,7 +196,7 @@ class CLIClient extends Client
     {
         $parsers = [];
 
-        $split = preg_split("/\n/", $this->request('parsers'));
+        $split = preg_split("/\n/", $this->request('parsers')) ?: [];
         array_shift($split);
 
         $parent = null;

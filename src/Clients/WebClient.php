@@ -109,7 +109,10 @@ class WebClient extends Client
     {
         $url = parse_url($url);
 
-        $this->setHost($url['host']);
+        if(isset($url['host']))
+        {
+            $this->setHost($url['host']);
+        }
 
         if(isset($url['port']))
         {
@@ -196,6 +199,7 @@ class WebClient extends Client
      *
      * @link http://php.net/manual/en/curl.constants.php
      * @link http://php.net/manual/en/function.curl-setopt.php
+     * @param mixed $value
      * @throws \Exception
      */
     public function setOption(int $key, $value): self
@@ -553,7 +557,6 @@ class WebClient extends Client
 
             case 'xhtml':
                 throw new Exception("Tika Server does not support XHTML output");
-                break;
 
             default:
                 throw new Exception("Unknown type $type");
