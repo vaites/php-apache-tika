@@ -174,7 +174,7 @@ class CLIClient extends Client
         {
             if(preg_match('/composite/i', $line))
             {
-                $parent = trim(preg_replace('/\(.+\):/', '', $line));
+                $parent = trim(preg_replace('/\(.+\):/', '', $line) ?: '');
                 $detectors[$parent] = ['children' => [], 'composite' => true, 'name' => $parent];
             }
             else
@@ -204,7 +204,7 @@ class CLIClient extends Client
         {
             if(preg_match('/composite/i', $line))
             {
-                $parent = trim(preg_replace('/\(.+\):/', '', $line));
+                $parent = trim(preg_replace('/\(.+\):/', '', $line) ?: '');
 
                 $parsers[$parent] = ['children' => [], 'composite' => true, 'name' => $parent, 'decorated' => false];
             }
@@ -283,8 +283,14 @@ class CLIClient extends Client
         // run command
         $response = $this->exec($command);
 
+        // error if command fails
+        if($response === null)
+        {
+            throw new Exception('An error occurred running Java command');
+        }
+
         // metadata response
-        if(in_array(preg_replace('/\/.+/', '', $type), ['meta', 'rmeta']))
+        if($file !== null && in_array(preg_replace('/\/.+/', '', $type), ['meta', 'rmeta']))
         {
             // fix for invalid? json returned only with images
             $response = str_replace(basename($file) . '"}{', '", ', $response);
@@ -294,7 +300,7 @@ class CLIClient extends Client
         }
 
         // cache certain responses
-        if($this->isCacheable($type))
+        if($file !== null && $this->isCacheable($type))
         {
             $this->cacheResponse($type, $response, $file);
         }

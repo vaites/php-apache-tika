@@ -355,7 +355,7 @@ class WebClient extends Client
         {
             return $this->getCachedResponse($type, $file);
         }
-        elseif(!isset($retries[sha1($file)]))
+        elseif($file !== null && !isset($retries[sha1($file)]))
         {
             $retries[sha1($file)] = $this->retries;
         }
@@ -391,7 +391,7 @@ class WebClient extends Client
         if($status == 200)
         {
             // cache certain responses
-            if($this->isCacheable($type))
+            if($file !== null && $this->isCacheable($type))
             {
                 $this->cacheResponse($type, $response, $file);
             }
@@ -400,7 +400,7 @@ class WebClient extends Client
         {
             $response = null;
         } // retry on request failed with error 500
-        elseif($status == 500 && $retries[sha1($file)]--)
+        elseif($status == 500 && $file !== null && $retries[sha1($file)]--)
         {
             $response = $this->request($type, $file);
         } // other status code is an error
@@ -474,7 +474,7 @@ class WebClient extends Client
                 $message = 'Unprocessable document';
 
                 // using remote files require Tika server to be launched with specific options
-                if($this->downloadRemote == false && preg_match('/^http/', $file))
+                if($this->downloadRemote == false && $file !== null && preg_match('/^http/', $file))
                 {
                     $message .= ' (is server launched using "-enableUnsecureFeatures -enableFileUrl" arguments?)';
                 }
@@ -523,9 +523,13 @@ class WebClient extends Client
                 break;
 
             case 'mime':
-                $name = basename($file);
                 $resource = 'detect/stream';
-                $headers[] = "Content-Disposition: attachment, filename=$name";
+
+                if($file !== null)
+                {
+                    $name = basename($file);
+                    $headers[] = "Content-Disposition: attachment, filename=$name";
+                }
                 break;
 
             case 'detectors':

@@ -74,7 +74,7 @@ abstract class Metadata implements MetadataInterface
         // file name without extension if title is not detected
         if(empty($this->title))
         {
-            $this->title = preg_replace('/\..+$/', '', basename($file));
+            $this->title = (string) preg_replace('/\..+$/', '', basename($file));
         }
 
         // use creation date as last modified if not detected
@@ -123,7 +123,11 @@ abstract class Metadata implements MetadataInterface
         {
             case 'content-type':
                 $mime = $value ? (preg_split('/;\s+/', $value) ?: []) : [];
-                $this->mime = array_shift($mime);
+
+                if(count($mime))
+                {
+                    $this->mime = array_shift($mime);
+                }
                 break;
 
             case 'creation-date':

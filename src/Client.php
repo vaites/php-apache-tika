@@ -509,11 +509,11 @@ abstract class Client
         {
             //
         } // invalid local file
-        elseif(!preg_match('/^http/', $file) && !file_exists($file))
+        elseif($file !== null && !preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
         } // invalid remote file
-        elseif(preg_match('/^http/', $file))
+        elseif($file !== null && preg_match('/^http/', $file))
         {
             $headers = get_headers($file);
 
@@ -522,7 +522,7 @@ abstract class Client
                 throw new Exception("File $file can't be opened", 2);
             }
         } // download remote file if required only for integrated downloader
-        elseif(preg_match('/^http/', $file) && $this->downloadRemote)
+        elseif($file !== null && preg_match('/^http/', $file) && $this->downloadRemote)
         {
             $file = $this->downloadFile($file);
         }
