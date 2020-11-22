@@ -38,6 +38,13 @@ class CLIClient extends Client
     protected $javaArgs = null;
 
     /**
+     * Environment variables
+     *
+     * @var array
+     */
+    protected $envVars = [];
+
+    /**
      * Configure client
      *
      * @throws \Exception
@@ -114,6 +121,24 @@ class CLIClient extends Client
     public function setJavaArgs(string $args): self
     {
         $this->javaArgs = $args;
+
+        return $this;
+    }
+
+    /**
+     * Get the environment variables
+     */
+    public function getEnvVars(): array
+    {
+        return $this->envVars;
+    }
+
+    /**
+     * Set the environment variables
+     */
+    public function setEnvVars(array $variables): self
+    {
+        $this->envVars = $variables;
 
         return $this;
     }
@@ -319,7 +344,7 @@ class CLIClient extends Client
         $exit = -1;
         $logfile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tika-error.log';
         $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', $logfile, 'a']];
-        $process = proc_open($command, $descriptors, $pipes);
+        $process = proc_open($command, $descriptors, $pipes, null, $this->envVars);
         $callback = $this->callback;
 
         // get output if command runs ok

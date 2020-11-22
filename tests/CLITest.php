@@ -28,6 +28,16 @@ class CLITest extends BaseTest
     }
 
     /**
+     * Filename test
+     *
+     * @dataProvider filenameProvider
+     */
+    public function testFilename(string $file): void
+    {
+        $this->assertStringContainsString('Quam haec sunt contraria', self::$client->getText($file));
+    }
+
+    /**
      * Set path test
      */
     public function testSetPath(): void

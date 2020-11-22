@@ -483,13 +483,21 @@ abstract class BaseTest extends TestCase
     }
 
     /**
+     * File provider for filename testing
+     */
+    public function filenameProvider(): array
+    {
+        return $this->samples('*9.txt');
+    }
+
+    /**
      * File provider using "samples" folder
      */
     protected function samples(string $sample): array
     {
         $samples = [];
 
-        foreach(glob(dirname(__DIR__) . "/samples/$sample.*") as $sample)
+        foreach(glob(dirname(__DIR__) . "/samples/$sample*") as $sample)
         {
             $samples[basename($sample)] = [$sample];
         }
