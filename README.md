@@ -198,6 +198,9 @@ $client->getJava();
 
 $client->setJavaArgs('-JXmx4g');
 $client->getJavaArgs();
+
+$client->setEnvVars(['LANG' => 'es_ES.UTF-8']);
+$client->getEnvVars();
 ```
 
 #### Web client
