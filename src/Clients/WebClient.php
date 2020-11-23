@@ -474,7 +474,7 @@ class WebClient extends Client
                 $message = 'Unprocessable document';
 
                 // using remote files require Tika server to be launched with specific options
-                if($this->downloadRemote == false && $file !== null && preg_match('/^http/', $file))
+                if($this->downloadRemote === false && $file !== null && preg_match('/^http/', $file))
                 {
                     $message .= ' (is server launched using "-enableUnsecureFeatures -enableFileUrl" arguments?)';
                 }

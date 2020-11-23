@@ -251,7 +251,7 @@ abstract class Client
     {
         $response = $this->parseJsonResponse($this->request('meta', $file));
 
-        if($response instanceof stdClass == false)
+        if($response instanceof stdClass === false)
         {
             throw new Exception("Unexpected metadata response for $file");
         }
@@ -274,14 +274,14 @@ abstract class Client
      */
     public function getRecursiveMetadata(string $file, ?string $format = 'ignore'): array
     {
-        if(in_array($format, ['text', 'html', 'ignore']) == false)
+        if(in_array($format, ['text', 'html', 'ignore']) === false)
         {
             throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
         }
 
         $response = $this->parseJsonResponse($this->request("rmeta/$format", $file));
 
-        if(is_array($response) == false)
+        if(is_array($response) === false)
         {
             throw new Exception("Unexpected metadata response for $file");
         }
