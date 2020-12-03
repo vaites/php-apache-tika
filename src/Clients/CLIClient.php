@@ -340,11 +340,14 @@ class CLIClient extends Client
      */
     public function exec(string $command): ?string
     {
+        // get env variables for proc_open()
+        $env = empty($this->envVars) ? null : array_merge(getenv(), $this->envVars);
+
         // run command
         $exit = -1;
         $logfile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tika-error.log';
         $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', $logfile, 'a']];
-        $process = proc_open($command, $descriptors, $pipes, null, $this->envVars);
+        $process = proc_open($command, $descriptors, $pipes, null, $env);
         $callback = $this->callback;
 
         // get output if command runs ok
