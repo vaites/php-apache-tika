@@ -28,16 +28,6 @@ class CLITest extends BaseTest
     }
 
     /**
-     * Filename test
-     *
-     * @dataProvider filenameProvider
-     */
-    public function testFilename(string $file): void
-    {
-        $this->assertStringContainsString('Quam haec sunt contraria', self::$client->getText($file));
-    }
-
-    /**
      * Set path test
      */
     public function testSetPath(): void
@@ -62,7 +52,7 @@ class CLITest extends BaseTest
     }
 
     /**
-     * Set Java test
+     * Set arguments test
      */
     public function testSetArguments(): void
     {
@@ -72,6 +62,19 @@ class CLITest extends BaseTest
         $client->setJavaArgs('-JXmx4g');
 
         $this->assertEquals('-JXmx4g', $client->getJavaArgs());
+    }
+
+    /**
+     * Set Java test
+     */
+    public function testSetEnvVars(): void
+    {
+        $path = self::getPathForVersion(self::$version);
+
+        $client = Client::make($path);
+        $client->setEnvVars(['LANG' => 'UTF-8']);
+
+        $this->assertArrayHasKey('LANG', $client->getEnvVars());
     }
 
     /**

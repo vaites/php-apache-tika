@@ -1,9 +1,9 @@
 dist: trusty
 language: php
 php:
-- 7.2
 - 7.3
 - 7.4
+- 8.0
 sudo: false
 addons:
   apt:
@@ -26,6 +26,7 @@ env:
   - APACHE_TIKA_VERSION=1.23
   - APACHE_TIKA_VERSION=1.24
   - APACHE_TIKA_VERSION=1.24.1
+  - APACHE_TIKA_VERSION=1.25
 before_install:
 - pip install --user codecov
 install:

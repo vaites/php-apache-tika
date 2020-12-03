@@ -31,12 +31,12 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
-    * Tested up to 1.24.1
+    * Tested up to 1.25
 * Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
 
-* PHP 7.2 or greater
+* PHP 7.3 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
 * Apache Tika 1.15 or greater
