@@ -36,7 +36,7 @@ to work with the new versions of the tool.
 
 ## Requirements
 
-* PHP 7.3 or greater
+* PHP 7.2 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
 * Apache Tika 1.15 or greater

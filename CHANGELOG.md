@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.1
+
+* `CLIClient::setEnvVars()` to allow users to set its own environment variables (thanks to @gregoriopellegrino)
+* Tested up to Apache Tika 1.25
+
 ## v1.0.0
 
 ### Added
