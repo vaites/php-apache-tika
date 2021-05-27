@@ -124,6 +124,6 @@ class WebTest extends BaseTest
         $client = Client::prepare('localhost', 9997);
         $client->setPort(9998);
 
-        $this->assertStringEndsWith(self::$version, $client->getVersion());
+        $this->assertStringContainsString(self::$version, $client->getVersion());
     }
 }

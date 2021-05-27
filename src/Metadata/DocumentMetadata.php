@@ -89,16 +89,19 @@ class DocumentMetadata extends Metadata
 
         switch(mb_strtolower($key))
         {
+            case 'dc:title':
             case 'title':
                 $this->title = $value;
                 break;
 
             case 'comments':
+            case 'w:Comments':
                 $this->description = $value;
                 break;
 
             case 'keyword':
             case 'keywords':
+            case 'meta:keyword':
                 $keywords = preg_split(preg_match('/,/', $value) ? '/\s*,\s*/' : '/\s+/', $value);
                 $this->keywords = array_unique($keywords ?: []);
                 break;
@@ -108,6 +111,7 @@ class DocumentMetadata extends Metadata
                 break;
 
             case 'author':
+            case 'dc:creator':
             case 'initial-creator':
                 $this->author = $value;
                 break;

@@ -62,7 +62,7 @@ abstract class BaseTest extends TestCase
      */
     public function testVersion(): void
     {
-        $this->assertEquals('Apache Tika ' . self::$version, self::$client->getVersion());
+        $this->assertStringStartsWith('Apache Tika ' . self::$version, self::$client->getVersion());
     }
 
     /**

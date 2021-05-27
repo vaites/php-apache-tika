@@ -132,11 +132,13 @@ abstract class Metadata implements MetadataInterface
 
             case 'creation-date':
             case 'date':
+            case 'dcterms:created':
             case 'meta:creation-date':
                 $value = preg_replace('/\.\d+/', 'Z', $value);
                 $this->created = new DateTime(is_array($value) ? array_shift($value) : $value, $timezone);
                 break;
 
+            case 'dcterms:modified':
             case 'last-modified':
             case 'modified':
                 $value = preg_replace('/\.\d+/', 'Z', $value);
