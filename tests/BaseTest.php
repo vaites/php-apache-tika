@@ -182,7 +182,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDocumentLanguage(string $file): void
     {
-        $this->assertRegExp('/^[a-z]{2}$/', self::$client->getLanguage($file));
+        $this->assertMatchesRegularExpression('/^[a-z]{2}$/', self::$client->getLanguage($file));
     }
 
     /**
@@ -268,7 +268,7 @@ abstract class BaseTest extends TestCase
     {
         $text = self::$client->getText($file);
 
-        $this->assertRegExp('/voluptate/i', $text);
+        $this->assertMatchesRegularExpression('/voluptate/i', $text);
     }
 
     /**
