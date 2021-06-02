@@ -87,7 +87,7 @@ class CLITest extends BaseTest
         $client = Client::prepare('/nonexistent/path/to/apache-tika.jar');
         $client->setPath($path);
 
-        $this->assertStringEndsWith(self::$version, $client->getVersion());
+        $this->assertStringContainsString(self::$version, $client->getVersion());
     }
 
     /**
