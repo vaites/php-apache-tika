@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.0
+
+* Drop PHP 7.2 support
+* Preliminary support for Apache Tika 2.0
+* Tested up to Apache Tika 1.26
+
 ## v1.0.1
 
 * `CLIClient::setEnvVars()` to allow users to set its own environment variables (thanks to @gregoriopellegrino)
