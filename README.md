@@ -1,6 +1,5 @@
 [![Current release](https://img.shields.io/github/release/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/releases/latest)
 [![Package at Packagist](https://img.shields.io/packagist/dt/vaites/php-apache-tika.svg)](https://packagist.org/packages/vaites/php-apache-tika)
-[![Build status](https://travis-ci.org/vaites/php-apache-tika.svg?branch=master)](https://travis-ci.org/vaites/php-apache-tika)
 [![Code coverage](https://img.shields.io/codecov/c/github/vaites/php-apache-tika.svg)](https://codecov.io/github/vaites/php-apache-tika)
 [![Code quality](https://img.shields.io/scrutinizer/quality/g/vaites/php-apache-tika.svg)](https://scrutinizer-ci.com/g/vaites/php-apache-tika/)
 [![Code insight](https://img.shields.io/sensiolabs/i/ec066502-0fde-4455-9fc3-8e9fe6867834.svg)](https://insight.sensiolabs.com/projects/ec066502-0fde-4455-9fc3-8e9fe6867834)
@@ -31,12 +30,12 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
-    * Tested up to 1.25
+    * Tested up to 1.26 and 2.0.0
 * Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
 
-* PHP 7.2 or greater
+* PHP 7.3 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
 * Apache Tika 1.15 or greater
