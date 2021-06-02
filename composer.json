@@ -40,7 +40,8 @@
         "nunomaduro/phpinsights": "^1.14",
         "phpstan/phpstan": "^0.12.26",
         "symfony/var-dumper": "^5.1",
-        "filp/whoops": "^2.7"
+        "filp/whoops": "^2.7",
+        "psy/psysh": "^0.10.8"
     },
     "extra": {
         "supported-versions": [
