@@ -30,7 +30,7 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
-    * Tested up to 1.26 and 2.0.0
+    * Tested up to 1.27 and 2.0.0
 * Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
