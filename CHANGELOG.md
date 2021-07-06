@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.1
+
+* Tested up to Apache Tika 1.27
+
 ## v1.1.0
 
 * Drop PHP 7.2 support
