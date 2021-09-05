@@ -30,7 +30,7 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
-    * Tested up to 1.27 and 2.0.0
+    * Tested up to 1.27 and 2.1.0
 * Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
@@ -265,8 +265,8 @@ and open an issue if necessary.
 
 ### Encoding
 
-By default the returned text is encoded with UTF-8 but there are some issues with the encoding when using the app mode.
-The `Client::setEncoding()` method allows to set the expected encoding (this will be fixed in the upcoming 1.0 release). 
+By default the returned text is encoded with UTF-8, andthe `Client::setEncoding()` method allows to set the expected 
+encoding. 
 
 ## Tests
 

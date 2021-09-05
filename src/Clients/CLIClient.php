@@ -3,6 +3,7 @@
 namespace Vaites\ApacheTika\Clients;
 
 use Exception;
+use ZipArchive;
 
 use Vaites\ApacheTika\Client;
 
@@ -141,6 +142,34 @@ class CLIClient extends Client
         $this->envVars = $variables;
 
         return $this;
+    }
+
+    /**
+     * Returns current Tika version
+     *
+     * @throws \Exception
+     */
+    public function getVersion(): string
+    {
+        $manifest = [];
+
+        if(class_exists(ZipArchive::class) && file_exists($this->path))
+        {
+            $zip = new ZipArchive();
+
+            if($zip->open($this->path))
+            {
+                if(preg_match_all('/(.+):\s+(.+)\r?\n/U', $zip->getFromName('META-INF/MANIFEST.MF'), $match))
+                {
+                    foreach($match[1] as $index => $key)
+                    {
+                        $manifest[$key] = $match[2][$index];
+                    }
+                }
+            }
+        }
+
+        return $manifest['Implementation-Version'] ?? $this->request('version');
     }
 
     /**
@@ -321,7 +350,10 @@ class CLIClient extends Client
             $response = str_replace(basename($file) . '"}{', '", ', $response);
 
             // on Windows, response must be encoded to UTF8
-            $response = $this->platform == 'win' ? utf8_encode($response) : $response;
+            if(version_compare($this->getVersion(), '2.1.0', '<'))
+            {
+                $response = $this->platform == 'win' ? utf8_encode($response) : $response;
+            }
         }
 
         // cache certain responses
