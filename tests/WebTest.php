@@ -20,6 +20,36 @@ class WebTest extends BaseTest
     }
 
     /**
+     * OCR language test
+     */
+    public function testHttpHeader(): void
+    {
+        $client = Client::make('localhost', 9998)->setHeader('Foo', 'bar');
+
+        $this->assertEquals('bar', $client->getHeader('foo'));
+    }
+
+    /**
+     * OCR language test
+     */
+    public function testOCRLanguage(): void
+    {
+        $client = Client::make('localhost', 9998)->setOCRLanguage('spa');
+
+        $this->assertEquals(['spa'], $client->getOCRLanguages());
+    }
+
+    /**
+     * OCR languages test
+     */
+    public function testOCRLanguages(): void
+    {
+        $client = Client::make('localhost', 9998)->setOCRLanguages(['fra', 'spa']);
+
+        $this->assertEquals(['fra', 'spa'], $client->getOCRLanguages());
+    }
+
+    /**
      * cURL multiple options test
      */
     public function testCurlOptions(): void

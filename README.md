@@ -30,7 +30,7 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
-    * Tested up to 1.27 and 2.0.0
+    * Tested up to 1.27 and 2.1.0
 * Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
@@ -229,11 +229,28 @@ $client->setOption($option, $value);
 $client->getOption($option);
 ```
 
-Set/get cURL client common options:
+Set/get timeout:
 
 ```php
 $client->setTimeout($seconds);
 $client->getTimeout();
+```
+
+Set/get HTTP headers (see [TikaServer](https://cwiki.apache.org/confluence/display/TIKA/TikaServer)):
+
+```php
+$client->setHeader('Foo', 'bar');
+$client->getHeader('Foo');
+$client->setHeaders(['Foo' => 'bar', 'Bar' => 'baz']);
+$client->getHeaders();
+```
+
+Set/get OCR languages (see [TikaOCR](https://cwiki.apache.org/confluence/display/tika/tikaocr)):
+
+```php
+$client->setOCRLanguage($language);
+$client->setOCRLanguages($languages);
+$client->getOCRLanguages();
 ```
 
 ### Breaking changes
@@ -241,7 +258,7 @@ $client->getTimeout();
 Since 1.0 version there are some breaking changes:
 
 * Apache Tika versions prior to 1.15 are not supported (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older)
-* PHP minimum requirement is 7.2 or greater (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older)
+* PHP minimum requirement is 7.3 or greater (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older)
 * `$client->getRecursiveMetadata()` returns an array as expected
 * `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
 * Values returned by `Client::getAvailableDetectors()` and `Client::getAvailableParsers()` are identical and have a new definition 
@@ -265,8 +282,8 @@ and open an issue if necessary.
 
 ### Encoding
 
-By default the returned text is encoded with UTF-8 but there are some issues with the encoding when using the app mode.
-The `Client::setEncoding()` method allows to set the expected encoding (this will be fixed in the upcoming 1.0 release). 
+By default the returned text is encoded with UTF-8, andthe `Client::setEncoding()` method allows to set the expected 
+encoding. 
 
 ## Tests
 
