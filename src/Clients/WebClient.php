@@ -231,6 +231,95 @@ class WebClient extends Client
     }
 
     /**
+     * Get all the HTTP headers
+     */
+    public function getHeaders(): array
+    {
+        return $this->options[CURLOPT_HTTPHEADER];
+    }
+
+    /**
+     * Get an specified HTTP header
+     *
+     * @return  mixed
+     */
+    public function getHeader(string $name): ?string
+    {
+        $value = [];
+
+        foreach($this->options[CURLOPT_HTTPHEADER] as $header)
+        {
+            if(preg_match("/$name:\s+(.+)/i", $header, $match))
+            {
+                $value = $match[1];
+                break;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Set a cURL header to be set with curl_setopt()
+     *
+     * @param mixed $value
+     * @throws \Exception
+     */
+    public function setHeader(string $name, $value): self
+    {
+        $this->options[CURLOPT_HTTPHEADER][] = "$name: $value";
+
+        return $this;
+    }
+
+    /**
+     * Set the HTTP headers
+     *
+     * @throws \Exception
+     */
+    public function setHeaders(array $headers): self
+    {
+        foreach($headers as $name => $value)
+        {
+            $this->setHeader($name, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the accepted OCR languages
+     */
+    public function getOCRLanguages(): array
+    {
+        return explode('+', $this->getHeader('X-Tika-OCRLanguage') ?: '');
+    }
+
+    /**
+     * Set the accepted OCR language
+     *
+     * @throws \Exception
+     */
+    public function setOCRLanguage(string $language): self
+    {
+        $this->setHeader('X-Tika-OCRLanguage', $language);
+
+        return $this;
+    }
+
+    /**
+     * Set the accepted OCR languages
+     *
+     * @throws \Exception
+     */
+    public function setOCRLanguages(array $languages): self
+    {
+        $this->setHeader('X-Tika-OCRLanguage', implode('+', $languages));
+
+        return $this;
+    }
+
+    /**
      * Get the timeout value for cURL
      */
     public function getTimeout(): int

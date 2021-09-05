@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.0
+
+* Added specific methods to set OCR languages on web client (thanks to @aleksanm)
+* Fixed CLI client encoding on Windows (see [TIKA-3515](https://issues.apache.org/jira/browse/TIKA-3515))
+* Tested up to Apache Tika 2.1.0
+
 ## v1.1.1
 
 * Tested up to Apache Tika 1.27
@@ -7,7 +13,7 @@
 ## v1.1.0
 
 * Drop PHP 7.2 support
-* Preliminary support for Apache Tika 2.0
+* Preliminary support for Apache Tika 2.0.0
 * Tested up to Apache Tika 1.26
 
 ## v1.0.1
