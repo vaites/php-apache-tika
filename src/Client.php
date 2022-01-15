@@ -531,6 +531,25 @@ abstract class Client
     }
 
     /**
+     * Filter response to fix common issues
+     *
+     * @param string $response
+     * @return string
+     */
+    protected function filterResponse(string $response): string
+    {
+        // fix Log4j2 warning
+        $response = trim(str_replace
+        (
+            'WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.',
+            '',
+            $response
+        ));
+
+        return trim($response);
+    }
+
+    /**
      * Parse the response returned by Apache Tika
      *
      * @return mixed
@@ -550,6 +569,8 @@ abstract class Client
         // exceptions if metadata is not valid
         if(json_last_error())
         {
+            dd($response);
+
             $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Error parsing JSON response';
 
             throw new Exception($message, json_last_error());
@@ -639,5 +660,5 @@ abstract class Client
      *
      * @throws \Exception
      */
-    abstract public function request(string $type, string $file = null): string;
+    abstract public function request(string $type, string $file = null): ?string;
 }

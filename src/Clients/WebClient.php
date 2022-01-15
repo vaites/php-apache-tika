@@ -498,7 +498,7 @@ class WebClient extends Client
             $this->error($status, $resource, $file);
         }
 
-        return $response;
+        return $this->filterResponse($response);
     }
 
     /**
