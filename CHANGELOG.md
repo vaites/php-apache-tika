@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.1
+
+* Fix known issues before parsing response (see [LOG4J2-2537](https://issues.apache.org/jira/browse/LOG4J2-2537))
+* Tested up to Apache Tika 1.28 and 2.2.0
+
 ## v1.2.0
 
 * Added specific methods to set OCR languages on web client (thanks to @aleksanm)

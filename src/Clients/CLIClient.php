@@ -362,7 +362,7 @@ class CLIClient extends Client
             $this->cacheResponse($type, $response, $file);
         }
 
-        return $response;
+        return $this->filterResponse($response);
     }
 
     /**
@@ -409,7 +409,7 @@ class CLIClient extends Client
             throw new Exception("Unexpected exit value ($exit) for command $command");
         }
 
-        return trim($this->response);
+        return $this->filterResponse($this->response);
     }
 
     /**
