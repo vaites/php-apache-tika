@@ -1,9 +1,9 @@
 [![Current release](https://img.shields.io/github/release/vaites/php-apache-tika.svg)](https://github.com/vaites/php-apache-tika/releases/latest)
 [![Package at Packagist](https://img.shields.io/packagist/dt/vaites/php-apache-tika.svg)](https://packagist.org/packages/vaites/php-apache-tika)
-[![Build status]](https://img.shields.io/github/workflow/status/vaites/php-apache-tika/tests/1.x)](https://github.com/vaites/php-apache-tika/actions)
+[![Build status](https://img.shields.io/github/workflow/status/vaites/php-apache-tika/tests/1.x)](https://github.com/vaites/php-apache-tika/actions)
 [![Code coverage](https://img.shields.io/codecov/c/github/vaites/php-apache-tika.svg)](https://codecov.io/github/vaites/php-apache-tika)
 [![Code quality](https://img.shields.io/scrutinizer/quality/g/vaites/php-apache-tika.svg)](https://scrutinizer-ci.com/g/vaites/php-apache-tika/)
-[![Code insight](https://img.shields.io/sensiolabs/i/ec066502-0fde-4455-9fc3-8e9fe6867834.svg)](https://insight.sensiolabs.com/projects/ec066502-0fde-4455-9fc3-8e9fe6867834)
+[![Code insight](https://img.shields.io/sensiolabs/i/92852e11-8648-4d48-9698-653aee765df5.svg)](https://insight.sensiolabs.com/projects/92852e11-8648-4d48-9698-653aee765df5)
 [![License](https://img.shields.io/github/license/vaites/php-apache-tika.svg?color=%23999999)](https://github.com/vaites/php-apache-tika/blob/master/LICENSE)
 
 # PHP Apache Tika
