@@ -24,9 +24,9 @@ else
 fi
 
 if [ ! -f "$BINARIES/tika-app-$VERSION.jar" ]; then
-    wget "$APP_URL" -O "$BINARIES/tika-app-$VERSION.jar"
+    wget "$APP_URL" -nv -O "$BINARIES/tika-app-$VERSION.jar"
 fi
 
 if [ ! -f "$BINARIES/tika-server-$VERSION.jar" ]; then
-    wget "$SERVER_URL" -O "$BINARIES/tika-server-$VERSION.jar"
+    wget "$SERVER_URL" -nv -O "$BINARIES/tika-server-$VERSION.jar"
 fi
