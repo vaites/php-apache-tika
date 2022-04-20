@@ -13,7 +13,8 @@ jobs:
    runs-on: ubuntu-latest
    strategy:
      matrix:
-       php: [7.3, 7.4, 8.0, 8.1]
+       php: [7.3, 7.4],
+       tika: [1.28.1, 2.3.0]
  
    name: Test - PHP ${{ matrix.php }}
  
@@ -47,10 +48,10 @@ jobs:
        run: composer install --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
  
      - name: Download Apache Tika binaries
-       run: ./scripts/download.sh
+       run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/download.sh
  
      - name: Start Apache Tika server
-       run: ./scripts/spawn.sh
+       run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/spawn.sh
  
      - name: Execute tests
-       run: vendor/bin/phpunit --verbose
+       run: APACHE_TIKA_VERSION=${{ matrix.tika }} vendor/bin/phpunit --verbose
