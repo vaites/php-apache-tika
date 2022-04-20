@@ -13,7 +13,7 @@ jobs:
    runs-on: ubuntu-latest
    strategy:
      matrix:
-       php: [7.3, 7.4]
+       php: [7.3, 7.4, 8.0, 8.1]
        tika: [1.28.1, 2.3.0]
  
    name: PHP ${{ matrix.php }} - TIKA ${{ matrix.tika }}
@@ -45,7 +45,7 @@ jobs:
          coverage: none
  
      - name: Install dependencies
-       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --no-dev --prefer-dist
+       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
  
      - name: Download Apache Tika binaries
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/download.sh
