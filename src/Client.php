@@ -569,8 +569,6 @@ abstract class Client
         // exceptions if metadata is not valid
         if(json_last_error())
         {
-            dd($response);
-
             $message = function_exists('json_last_error_msg') ? json_last_error_msg() : 'Error parsing JSON response';
 
             throw new Exception($message, json_last_error());
