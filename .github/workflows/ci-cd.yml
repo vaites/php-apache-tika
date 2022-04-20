@@ -6,7 +6,7 @@ on:
      - 1.x
  
 env:
-  APACHE_TIKA_VERSION=1.28.1
+  APACHE_TIKA_VERSION: 1.28.1
 
 jobs:
  tests:
