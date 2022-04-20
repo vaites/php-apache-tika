@@ -1,4 +1,4 @@
-name: ci/cd workflow
+name: tests
  
 on:
  push:
@@ -13,7 +13,7 @@ jobs:
    runs-on: ubuntu-latest
    strategy:
      matrix:
-       php: [7.4]
+       php: [7.3, 7.4, 8.0, 8.1]
  
    name: Test - PHP ${{ matrix.php }}
  
