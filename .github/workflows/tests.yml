@@ -1,0 +1,86 @@
+name: tests
+ 
+on:
+ push:
+   branches:
+     - 1.x
+ 
+jobs:
+ tests:
+   runs-on: ubuntu-latest
+   strategy:
+     matrix:
+       php: 
+        - '7.3'
+        - '7.4'
+        - '8.0'
+        - '8.1'
+       tika: 
+        - '1.15'
+        - '1.16'
+        - '1.17'
+        - '1.18'
+        - '1.19'
+        - '1.19.1'
+        - '1.20'
+        - '1.21'
+        - '1.22'
+        - '1.23'
+        - '1.24'
+        - '1.24.1'
+        - '1.25'
+        - '1.26'
+        - '1.27'
+        - '1.28'
+        - '1.28.1'
+        - '2.0.0'
+        - '2.1.0'
+        - '2.2.0'
+        - '2.2.1'
+        - '2.3.0'
+ 
+   name: PHP ${{ matrix.php }} - TIKA ${{ matrix.tika }}
+ 
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+ 
+     - name: Cache Apache Tika binaries
+       uses: actions/cache@v1
+       with:
+         path: bin
+         key: binaries-apache-tika
+ 
+     - name: Cache PHP dependencies
+       uses: actions/cache@v1
+       with:
+         path: vendor
+         key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+ 
+     - name: Setup environment
+       run: sudo apt-get -y install tesseract-ocr
+
+     - name: Setup Java
+       uses: actions/setup-java@v3
+       with:
+        distribution: 'temurin'
+        java-version: '8'
+
+     - name: Setup PHP
+       uses: shivammathur/setup-php@v2
+       with:
+         php-version: ${{ matrix.php }}
+         extensions: curl, dom, gd, json, libxml, mbstring, zip
+         coverage: none
+ 
+     - name: Install dependencies
+       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+ 
+     - name: Download Apache Tika binaries
+       run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/download.sh
+ 
+     - name: Start Apache Tika server
+       run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/spawn.sh
+ 
+     - name: Execute tests
+       run: APACHE_TIKA_VERSION=${{ matrix.tika }} vendor/bin/phpunit --verbose
