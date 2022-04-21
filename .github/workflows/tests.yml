@@ -59,6 +59,10 @@ jobs:
  
      - name: Setup environment
        run: sudo apt-get -y install tesseract-ocr
+       uses: actions/setup-java@v3
+       with:
+        distribution: 'temurin'
+        java-version: '8'
 
      - name: Setup PHP
        uses: shivammathur/setup-php@v2
