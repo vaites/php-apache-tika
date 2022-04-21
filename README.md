@@ -304,6 +304,7 @@ There are a few samples to test against:
 
 There are some issues found during tests, not related with this library:
 
+* Apache Tika 1.17 and lower can't extract text from OCR as described in [TIKA-2509](https://issues.apache.org/jira/browse/TIKA-2509)
 * Tesseract slows down document parsing as described in [TIKA-2359](https://issues.apache.org/jira/browse/TIKA-2359)
     
 ## Integrations

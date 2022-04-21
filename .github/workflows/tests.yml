@@ -60,7 +60,7 @@ jobs:
      - name: Setup environment
        run: sudo apt-get -y install tesseract-ocr
 
-     - name: Setup environment
+     - name: Setup Java
        uses: actions/setup-java@v3
        with:
         distribution: 'temurin'
