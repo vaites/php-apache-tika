@@ -58,12 +58,9 @@ jobs:
          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
  
      - name: Setup environment
-       uses: actions/setup-java@v3
-       with:
-        distribution: 'temurin'
-        java-version: '8'
+       run: sudo apt-get -y install tesseract-ocr
 
-     - name: Setup Java
+     - name: Setup environment
        uses: actions/setup-java@v3
        with:
         distribution: 'temurin'
