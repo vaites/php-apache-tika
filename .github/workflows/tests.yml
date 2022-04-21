@@ -70,8 +70,10 @@ jobs:
        uses: shivammathur/setup-php@v2
        with:
          php-version: ${{ matrix.php }}
-         extensions: curl, dom, gd, json, libxml, mbstring, zip
-         coverage: none
+         extensions: curl, dom, gd, json, libxml, mbstring, zip, xdebug
+
+     - name: Setup code coverage
+       uses: codecov/codecov-action@v2
  
      - name: Install dependencies
        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
