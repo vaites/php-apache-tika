@@ -72,9 +72,6 @@ jobs:
          php-version: ${{ matrix.php }}
          extensions: curl, dom, gd, json, libxml, mbstring, zip, xdebug
 
-     - name: Setup code coverage
-       uses: codecov/codecov-action@v2
- 
      - name: Install dependencies
        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
  
@@ -86,3 +83,7 @@ jobs:
  
      - name: Execute tests
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} vendor/bin/phpunit --verbose
+
+     - name: Code coverage
+       uses: codecov/codecov-action@v2
+ 
