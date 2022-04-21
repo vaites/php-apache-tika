@@ -249,7 +249,7 @@ abstract class Client
      */
     public function getMetadata(string $file): MetadataInterface
     {
-        $response = $this->parseJsonResponse($this->request('meta', $file));
+        $response = $this->parseJsonResponse($this->request('meta', $file) ?: 'ERROR');
 
         if($response instanceof stdClass === false)
         {
@@ -279,7 +279,7 @@ abstract class Client
             throw new Exception("Unknown recursive type (must be text, html, ignore or null)");
         }
 
-        $response = $this->parseJsonResponse($this->request("rmeta/$format", $file));
+        $response = $this->parseJsonResponse($this->request("rmeta/$format", $file) ?: 'ERROR');
 
         if(is_array($response) === false)
         {
@@ -307,7 +307,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getLanguage(string $file): string
+    public function getLanguage(string $file): ?string
     {
         return $this->request('lang', $file);
     }
@@ -317,7 +317,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getMIME(string $file): string
+    public function getMIME(string $file): ?string
     {
         return $this->request('mime', $file);
     }
@@ -327,7 +327,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getHTML(string $file, callable $callback = null, bool $append = true): string
+    public function getHTML(string $file, callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -342,7 +342,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getXHTML(string $file, callable $callback = null, bool $append = true): string
+    public function getXHTML(string $file, callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -357,7 +357,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getText(string $file, callable $callback = null, bool $append = true): string
+    public function getText(string $file, callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -372,7 +372,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getMainText(string $file, callable $callback = null, bool $append = true): string
+    public function getMainText(string $file, callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -387,7 +387,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->request('version');
     }
