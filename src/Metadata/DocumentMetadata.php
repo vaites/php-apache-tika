@@ -2,6 +2,8 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
+use Vaites\ApacheTika\Contracts\Metadata as Contract;
+
 /**
  * Metadata class for documents
  *
@@ -62,7 +64,7 @@ class DocumentMetadata extends Metadata
      * @param mixed $value
      * @throws  \Exception
      */
-    protected function setSpecificAttribute(string $key, $value): MetadataInterface
+    protected function setSpecificAttribute(string $key, $value): Contract
     {
         if(is_array($value))
         {

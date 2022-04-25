@@ -2,6 +2,8 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
+use Vaites\ApacheTika\Contracts\Metadata as Contract;
+
 /**
  * Metadata class for images
  *
@@ -28,9 +30,8 @@ class ImageMetadata extends Metadata
      * Sets an attribute
      *
      * @param mixed $value
-     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      */
-    protected function setSpecificAttribute(string $key, $value): MetadataInterface
+    protected function setSpecificAttribute(string $key, $value): Contract
     {
         switch(mb_strtolower($key))
         {

@@ -9,7 +9,7 @@ use stdClass;
 use Vaites\ApacheTika\Clients\CLIClient;
 use Vaites\ApacheTika\Clients\WebClient;
 use Vaites\ApacheTika\Metadata\Metadata;
-use Vaites\ApacheTika\Metadata\MetadataInterface;
+use Vaites\ApacheTika\Contracts\Metadata as MetadataContract;
 
 /**
  * Apache Tika client interface
@@ -229,7 +229,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getMetadata(string $file): MetadataInterface
+    public function getMetadata(string $file): MetadataContract
     {
         $response = $this->parseJsonResponse($this->request('meta', $file) ?: 'ERROR');
 

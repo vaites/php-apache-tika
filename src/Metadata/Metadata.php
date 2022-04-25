@@ -7,12 +7,14 @@ use DateTimeZone;
 use Exception;
 use stdClass;
 
+use Vaites\ApacheTika\Contracts\Metadata as Contract;
+
 /**
  * Standarized metadata class with common attributes for all document types
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
-abstract class Metadata implements MetadataInterface
+abstract class Metadata implements Contract
 {
     /**
      * Title
@@ -77,7 +79,7 @@ abstract class Metadata implements MetadataInterface
      *
      * @throws \Exception
      */
-    public static function make(stdClass $meta, string $file): MetadataInterface
+    public static function make(stdClass $meta, string $file): Contract
     {
         // get content type
         $mime = is_array($meta->{'Content-Type'}) ? current($meta->{'Content-Type'}) : $meta->{'Content-Type'};
@@ -100,10 +102,9 @@ abstract class Metadata implements MetadataInterface
      * Sets an attribute
      *
      * @param mixed $value
-     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      * @throws \Exception
      */
-    public final function setAttribute(string $key, $value): MetadataInterface
+    public final function setAttribute(string $key, $value): Contract
     {
         $timezone = new DateTimeZone('UTC');
 
@@ -145,7 +146,6 @@ abstract class Metadata implements MetadataInterface
      * Sets an speficic attribute for the file type
      *
      * @param mixed $value
-     * @return \Vaites\ApacheTika\Metadata\MetadataInterface
      */
-    abstract protected function setSpecificAttribute(string $key, $value): MetadataInterface;
+    abstract protected function setSpecificAttribute(string $key, $value): Contract;
 }
