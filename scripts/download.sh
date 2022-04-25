@@ -4,7 +4,7 @@ set -e
 
 SOURCE=$(dirname $0)
 COMPOSER="$SOURCE/../composer.json"
-LATEST=$(php -r "echo array_pop(json_decode(file_get_contents('$COMPOSER'), true)['extra']['supported-versions']);")
+LATEST=$(tail -n 1 .github/workflows/tests.yml | awk -F"'" '{print $2}')
 
 BINARIES=${APACHE_TIKA_BINARIES:-bin}
 VERSION=${APACHE_TIKA_VERSION:-$LATEST}

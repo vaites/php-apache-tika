@@ -1,34 +1,68 @@
 # Changelog
 
+## v2.0.0
+
+### Added
+* Force internal download for remote files
+* Version list `composer.json` moved `Client.php`
+* `declare(strict_types=1)`to all files
+* Exception for unsupported Apache Tika versions
+
+### Removed
+
+* Support for PHP 7.3 and lower
+* Support for Apache Tika 1.18 and lower
+
+## v1.2.3
+
+### Added
+* New known issues to README.md
+
+### Changed
+* Removed debug statement when the JSON parse fails
+* Tests runs now on GitHub Actions
+
 ## v1.2.2
 
+### Changed
 * Fix known issues before parsing response (see [LOG4J2-2537](https://issues.apache.org/jira/browse/LOG4J2-2537))
 * Tested up to Apache Tika 1.28.1 and 2.3.0
 
 ## v1.2.1
 
+### Changed
 * Fix known issues before parsing response (see [LOG4J2-2537](https://issues.apache.org/jira/browse/LOG4J2-2537))
 * Tested up to Apache Tika 1.28 and 2.2.0
 
 ## v1.2.0
 
 * Added specific methods to set OCR languages on web client (thanks to @aleksanm)
+
+### Changed
 * Fixed CLI client encoding on Windows (see [TIKA-3515](https://issues.apache.org/jira/browse/TIKA-3515))
 * Tested up to Apache Tika 2.1.0
 
 ## v1.1.1
 
+### Changed
 * Tested up to Apache Tika 1.27
 
 ## v1.1.0
 
-* Drop PHP 7.2 support
+### Added
 * Preliminary support for Apache Tika 2.0.0
+
+### Removed
+* Drop PHP 7.2 support
+
+### Changed
 * Tested up to Apache Tika 1.26
 
 ## v1.0.1
 
 * `CLIClient::setEnvVars()` to allow users to set its own environment variables (thanks to @gregoriopellegrino)
+
+### Changed
 * Tested up to Apache Tika 1.25
 
 ## v1.0.0

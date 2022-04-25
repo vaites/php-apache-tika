@@ -15,7 +15,7 @@ use Vaites\ApacheTika\Metadata\MetadataInterface;
  * Apache Tika client interface
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    https://tika.apache.org/1.24/formats.html
+ * @link    https://tika.apache.org/2.3.0/formats.html
  */
 abstract class Client
 {
@@ -92,6 +92,17 @@ abstract class Client
     protected $downloadRemote = false;
 
     /**
+     * Supported version list
+     * 
+     * @var array
+     */
+    protected static $supportedVersions = 
+    [
+        "1.19", "1.19.1", "1.20", "1.21", "1.22", "1.23", "1.24", "1.24.1", "1.25", "1.26","1.27", "1.28", "1.28.1", 
+        "2.0.0", "2.1.0", "2.2.0", "2.2.1", "2.3.0"
+    ];
+
+    /**
      * Configure client
      */
     public function __construct()
@@ -109,9 +120,9 @@ abstract class Client
      * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws \Exception
      */
-    public static function make(string $param1 = null, $param2 = null, array $options = [], bool $check = true): Client
+    public static function make(string $param1 = null, $param2 = null, array $options = null, bool $check = true): Client
     {
-        if(preg_match('/\.jar$/', func_get_arg(0)))
+        if($param1 !== null && preg_match('/\.jar$/', $param1))
         {
             $path = $param1 ? (string) $param1 : null;
             $java = $param2 ? (string) $param2 : null;
@@ -409,6 +420,13 @@ abstract class Client
      */
     public function setVersion(string $version): self
     {
+        $version = trim(preg_replace('/Apache Tika/i', '', $version));
+
+        if(!in_array($version, $this->getSupportedVersions()))
+        {
+            throw new Exception("Apache Tika $version is unsupported");
+        }
+
         $this->checked = true;
         $this->version = $version;
 
@@ -417,31 +435,10 @@ abstract class Client
 
     /**
      * Return the list of Apache Tika supported versions
-     *
-     * @throws \Exception
      */
     public function getSupportedVersions(): array
     {
-        static $versions = null;
-
-        if(is_null($versions))
-        {
-            $composer = file_get_contents(dirname(__DIR__) . '/composer.json');
-
-            if($composer === false)
-            {
-                throw new Exception("An error ocurred trying to read package's composer.json file");
-            }
-
-            $versions = json_decode($composer, true)['extra']['supported-versions'] ?? null;
-
-            if(empty($versions))
-            {
-                throw new Exception("An error ocurred trying to read package's composer.json file");
-            }
-        }
-
-        return $versions;
+        return self::$supportedVersions;
     }
 
     /**
@@ -548,7 +545,7 @@ abstract class Client
                 throw new Exception("File $file can't be opened", 2);
             }
             // download remote file if required only for integrated downloader
-            elseif($this->downloadRemote)
+            elseif($file !== null && preg_match('/^http/', $file) && $this->downloadRemote)
             {
                 $file = $this->downloadFile($file);
             }

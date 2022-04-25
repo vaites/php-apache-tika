@@ -63,7 +63,7 @@ class WebClient extends Client
      *
      * @throws \Exception
      */
-    public function __construct(string $host = null, int $port = null, array $options = [], bool $check = true)
+    public function __construct(string $host = null, int $port = null, array $options = null, bool $check = true)
     {
         parent::__construct();
 
@@ -81,7 +81,7 @@ class WebClient extends Client
             $this->setPort($port);
         }
 
-        if(!empty($options))
+        if(is_array($options))
         {
             $this->setOptions($options);
         }
@@ -418,10 +418,8 @@ class WebClient extends Client
     {
         if($this->isChecked() === false)
         {
-            $this->setChecked(true);
-
             // throws an exception if server is unreachable or can't connect
-            $this->request('version');
+            $this->setVersion($this->request('version'))->setChecked(true);
         }
     }
 
@@ -435,7 +433,10 @@ class WebClient extends Client
         static $retries = [];
 
         // check if not checked
-        $this->check();
+        if($type !== 'version')
+        {
+            $this->check();
+        }
 
         // check if is cached
         if($file !== null && $this->isCached($type, $file))

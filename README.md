@@ -36,14 +36,14 @@ to work with the new versions of the tool.
 
 ## Requirements
 
-* PHP 7.3 or greater
+Minimum versions:
+
+* PHP 7.4 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
-* Apache Tika 1.15 or greater
-* Oracle Java or OpenJDK 
-    * Java 8 for Tika 1.19 or greater
-    * Java 7 for Tika from 1.15 to 1.18
-* [Tesseract](https://github.com/tesseract-ocr/tesseract) (optional for OCR recognition)
+* Apache Tika 1.18 or greater
+* Java 8
+* [Tesseract](https://github.com/tesseract-ocr/tesseract) 4.0 (optional for OCR recognition)
 
 **NOTE**: the supported PHP version will remain synced with [the latest supported by PHP team](https://www.php.net/supported-versions.php)
 
@@ -181,7 +181,7 @@ $client->getChunkSize();
 Enable/disable the internal remote file downloader:
 
 ```php
-$client->setDownloadRemote(true);
+$client->setDownloadRemote(false);
 $client->getDownloadRemote();
 ```
 
