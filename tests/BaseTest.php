@@ -348,14 +348,7 @@ abstract class BaseTest extends TestCase
      */
     public function testRemoteDocumentText(string $file): void
     {
-        if(version_compare(self::$version, '2.0') < 0)
-        {
-            $this->assertStringContainsString('Rationis enim perfectio est virtus', self::$client->getText($file));
-        }
-        else
-        {
-            $this->markTestSkipped('Apache Tika 2.0 server does not support remote documents yet');
-        }
+        $this->assertStringContainsString('Rationis enim perfectio est virtus', self::$client->getText($file));
     }
 
     /**

@@ -542,16 +542,17 @@ abstract class Client
         {
             $headers = get_headers($file);
 
+            // error if file can't be retrieved
             if(empty($headers) || !preg_match('/200/', $headers[0]))
             {
                 throw new Exception("File $file can't be opened", 2);
             }
+            // download remote file if required only for integrated downloader
+            elseif($this->downloadRemote)
+            {
+                $file = $this->downloadFile($file);
+            }
         } 
-        // download remote file if required only for integrated downloader
-        elseif($file !== null && preg_match('/^http/', $file) && $this->downloadRemote)
-        {
-            $file = $this->downloadFile($file);
-        }
 
         return $file;
     }

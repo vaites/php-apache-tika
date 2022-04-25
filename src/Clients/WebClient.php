@@ -691,16 +691,19 @@ class WebClient extends Client
         if($file && preg_match('/^http/', $file))
         {
             //
-        } // local file options
+        } 
+        // local file options
         elseif($file && file_exists($file) && is_readable($file))
         {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
             $options[CURLOPT_INFILESIZE] = filesize($file);
-        } // other options for specific requests
+        } 
+        // other options for specific requests
         elseif(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             $options[CURLOPT_PUT] = false;
-        } // file not accesible
+        } 
+        // file not accesible
         else
         {
             throw new Exception("File $file can't be opened");
