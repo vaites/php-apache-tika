@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika\Tests;
 
@@ -9,8 +9,6 @@ use Vaites\ApacheTika\Client;
  */
 class WebTest extends BaseTest
 {
-    protected static $process = null;
-
     /**
      * Start Tika server and create shared instance of clients
      */

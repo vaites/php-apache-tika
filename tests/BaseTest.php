@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika\Tests;
 
 use Exception;
 
 use PHPUnit\Framework\TestCase;
+use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Clients\WebClient;
 
 /**
@@ -14,31 +15,23 @@ abstract class BaseTest extends TestCase
 {
     /**
      * Current tika version
-     *
-     * @var string
      */
-    protected static $version = null;
+    protected static string $version;
 
     /**
      * Binary path (jars)
-     *
-     * @var string
      */
-    protected static $binaries = null;
+    protected static string $binaries;
 
     /**
      * Shared client instance
-     *
-     * @var \Vaites\ApacheTika\Client
      */
-    protected static $client = null;
+    protected static Client $client;
 
     /**
      * Shared variable to test callbacks
-     *
-     * @var mixed
      */
-    public static $shared = null;
+    public static int $shared = 0;
 
     /**
      * Get env variables
@@ -267,16 +260,9 @@ abstract class BaseTest extends TestCase
      */
     public function testImageOCR(string $file): void
     {
-        if(version_compare(self::$version, '1.18') >= 0)
-        {
-            $text = self::$client->getText($file);
+        $text = self::$client->getText($file);
 
-            $this->assertMatchesRegularExpression('/voluptate/i', $text);
-        }
-        else
-        {
-            $this->markTestSkipped('Apache Tika 1.17 and lower can\'t find Tesseract binaries');
-        }
+        $this->assertMatchesRegularExpression('/voluptate/i', $text);
     }
 
     /**
@@ -358,16 +344,16 @@ abstract class BaseTest extends TestCase
      */
     public function testDirectRemoteDocumentText(string $file): void
     {
-        if(version_compare(self::$version, '2.0') < 0)
+        if(self::$client instanceof WebClient && version_compare(self::$version, '2.0') >= 0)
+        {
+            $this->markTestSkipped('Apache Tika 2.0 server does not support remote documents yet');
+        }
+        else
         {
             $client =& self::$client;
             $client->setDownloadRemote(false);
 
             $this->assertStringContainsString('Rationis enim perfectio est virtus', $client->getText($file));
-        }
-        else
-        {
-            $this->markTestSkipped('Apache Tika 2.0 server does not support remote documents yet');
         }
     }
 

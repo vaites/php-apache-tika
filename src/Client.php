@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika;
 
@@ -19,82 +19,53 @@ use Vaites\ApacheTika\Metadata\MetadataInterface;
  */
 abstract class Client
 {
-    protected const MODE = null;
-
-    /**
-     * Checked flag
-     *
-     * @var bool
-     */
-    protected $checked = false;
-
-    /**
-     * Response using callbacks
-     *
-     * @var string
-     */
-    protected $response = null;
-
     /**
      * Platform (unix or win)
-     *
-     * @var string
      */
-    protected $platform = null;
+    protected string $platform;
 
     /**
      * Apache Tika version
-     * 
-     * @var string
      */
-    protected $version = null;
-
-    /**
-     * Cached responses to avoid multiple request for the same file.
-     *
-     * @var array
-     */
-    protected $cache = [];
+    protected string $version;
 
     /**
      * Text encoding
-     *
-     * @var string|null
      */
-    protected $encoding = null;
+    protected string $encoding;
+
+    /**
+     * Checked flag
+     */
+    protected bool $checked = false;
 
     /**
      * Callback called on secuential read
-     *
-     * @var callable|null
      */
-    protected $callback = null;
+    protected Closure $callback;
 
     /**
      * Enable or disable appending when using callback
-     *
-     * @var bool
      */
-    protected $callbackAppend = true;
+    protected bool $callbackAppend = true;
 
     /**
-     * Size of chunks for callback
-     *
-     * @var int
+     * Size of chunks for read callback
      */
-    protected $chunkSize = 1048576;
+    protected int $chunkSize = 1048576;
 
     /**
      * Remote download flag
-     *
-     * @var bool
      */
-    protected $downloadRemote = false;
+    protected bool $downloadRemote = false;
 
     /**
+     * Cached responses to avoid multiple request for the same file.
+     */
+    protected array $cache = [];
+    
+    /**
      * Supported version list
-     * 
-     * @var array
      */
     protected static $supportedVersions = 
     [
@@ -157,7 +128,7 @@ abstract class Client
      */
     public function getEncoding(): ?string
     {
-        return $this->encoding;
+        return $this->encoding ?? null;
     }
 
     /**
@@ -197,7 +168,7 @@ abstract class Client
         if($callback instanceof Closure || is_array($callback))
         {
             $this->callbackAppend = (bool) $append;
-            $this->callback = $callback;
+            $this->callback = $callback instanceof Closure ? $callback : Closure::fromCallable($callback);
         }
         elseif(is_string($callback))
         {
@@ -230,14 +201,7 @@ abstract class Client
      */
     public function setChunkSize(int $size): self
     {
-        if(static::MODE == 'cli')
-        {
-            $this->chunkSize = $size;
-        }
-        else
-        {
-            throw new Exception('Chunk size is not supported on web mode');
-        }
+        $this->chunkSize = $size;
 
         return $this;
     }
@@ -407,7 +371,7 @@ abstract class Client
      */
     public function getVersion(): ?string
     {
-        if(is_null($this->version))
+        if(!isset($this->version))
         {
             $this->setVersion($this->request('version'));
         }

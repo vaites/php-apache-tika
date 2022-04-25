@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika\Metadata;
 
@@ -16,45 +16,33 @@ abstract class Metadata implements MetadataInterface
 {
     /**
      * Title
-     *
-     * @var string
      */
-    public $title = null;
+    public ?string $title = null;
 
     /**
      * Content
-     *
-     * @var string
      */
-    public $content = null;
+    public ?string $content = null;
 
     /**
      * MIME type
-     *
-     * @var string
      */
-    public $mime = null;
+    public ?string $mime = null;
 
     /**
      * Date created
-     *
-     * @var \DateTime
      */
-    public $created = null;
+    public ?DateTime $created = null;
 
     /**
      * Date updated or last modified
-     *
-     * @var \DateTime
      */
-    public $updated = null;
+    public ?DateTime $updated = null;
 
     /**
      * RAW attributes returned by Apache Tika
-     *
-     * @var \stdClass
      */
-    public $meta = null;
+    public ?stdClass $meta = null;
 
     /**
      * Parse Apache Tika response filling all properties

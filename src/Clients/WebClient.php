@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika\Clients;
 
@@ -14,42 +14,25 @@ use Vaites\ApacheTika\Client;
  */
 class WebClient extends Client
 {
-    protected const MODE = 'web';
-
-    /**
-     * Cached responses to avoid multiple request for the same file
-     *
-     * @var array
-     */
-    protected $cache = [];
-
     /**
      * Apache Tika server host
-     *
-     * @var string
      */
-    protected $host = null;
+    protected string $host;
 
     /**
      * Apache Tika server port
-     *
-     * @var int
      */
-    protected $port = null;
+    protected int $port = 9998;
 
     /**
      * Number of retries on server error
-     *
-     * @var int
      */
-    protected $retries = 3;
+    protected int $retries = 3;
 
     /**
      * Default cURL options
-     *
-     * @var array
      */
-    protected $options =
+    protected array $options =
     [
         CURLINFO_HEADER_OUT     => true,
         CURLOPT_HTTPHEADER      => [],
@@ -517,7 +500,7 @@ class WebClient extends Client
         }
 
         // make the request directly
-        if(is_null($this->callback))
+        if(!isset($this->callback))
         {
             $this->response = (string) curl_exec($curl);
         }
@@ -670,7 +653,7 @@ class WebClient extends Client
         $options = $this->options;
 
         // callback
-        if(!is_null($this->callback))
+        if(isset($this->callback))
         {
             $callback = $this->callback;
 

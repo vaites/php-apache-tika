@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika\Clients;
 
@@ -15,35 +15,29 @@ use Vaites\ApacheTika\Client;
  */
 class CLIClient extends Client
 {
-    protected const MODE = 'cli';
-
     /**
      * Apache Tika app path
-     *
-     * @var string
      */
-    protected $path = null;
+    protected string $path;
 
     /**
      * Java binary path
-     *
-     * @var string
      */
-    protected $java = null;
+    protected string $java;
 
     /**
      * Java arguments
      *
      * @var string
      */
-    protected $javaArgs = null;
+    protected string $javaArgs;
 
     /**
      * Environment variables
      *
      * @var array
      */
-    protected $envVars = [];
+    protected array $envVars = [];
 
     /**
      * Configure client
@@ -54,12 +48,12 @@ class CLIClient extends Client
     {
         parent::__construct();
 
-        if($path)
+        if($path !== null)
         {
             $this->setPath($path);
         }
 
-        if($java)
+        if($java !== null)
         {
             $this->setJava($java);
         }
@@ -75,7 +69,7 @@ class CLIClient extends Client
      */
     public function getPath(): ?string
     {
-        return $this->path;
+        return $this->path ?? null;
     }
 
     /**
@@ -93,7 +87,7 @@ class CLIClient extends Client
      */
     public function getJava(): ?string
     {
-        return $this->java;
+        return $this->java ?? null;
     }
 
     /**
@@ -111,7 +105,7 @@ class CLIClient extends Client
      */
     public function getJavaArgs(): ?string
     {
-        return $this->javaArgs;
+        return $this->javaArgs ?? null;
     }
 
     /**
@@ -153,24 +147,31 @@ class CLIClient extends Client
     {
         $manifest = [];
 
-        if(class_exists(ZipArchive::class) && file_exists($this->path))
+        if(!isset($this->version))
         {
-            $zip = new ZipArchive();
+            $path = $this->getPath();
 
-            if($zip->open($this->path))
+            if($path !== null && file_exists($path) && class_exists(ZipArchive::class))
             {
-                $content = $zip->getFromName('META-INF/MANIFEST.MF') ?: 'ERROR';
-                if(preg_match_all('/(.+):\s+(.+)\r?\n/U', $content, $match))
+                $zip = new ZipArchive();
+
+                if($zip->open($path))
                 {
-                    foreach($match[1] as $index => $key)
+                    $content = $zip->getFromName('META-INF/MANIFEST.MF') ?: 'ERROR';
+                    if(preg_match_all('/(.+):\s+(.+)\r?\n/U', $content, $match))
                     {
-                        $manifest[$key] = $match[2][$index];
+                        foreach($match[1] as $index => $key)
+                        {
+                            $manifest[$key] = $match[2][$index];
+                        }
                     }
                 }
             }
+
+            $this->setVersion($manifest['Implementation-Version'] ?? $this->request('version'));
         }
 
-        return $manifest['Implementation-Version'] ?? $this->request('version');
+        return $this->version;
     }
 
     /**
@@ -286,17 +287,17 @@ class CLIClient extends Client
             // Java command must not return an error
             try
             {
-                $this->exec(($this->java ?: 'java') . ' -version');
+                $this->exec(($this->getJava() ?: 'java') . ' -version');
             }
             catch(Exception $exception)
             {
                 throw new Exception('Java command not found');
             }
 
-            // JAR path must exists
-            if(file_exists($this->path) === false)
+            // JAR path must exist
+            if($this->getPath() !== null && file_exists($this->getPath()) === false)
             {
-                throw new Exception('Apache Tika app JAR not found');
+                throw new Exception('Apache Tika app JAR not found on ' . $this->getPath());
             }
 
             $this->setChecked(true);
@@ -326,14 +327,15 @@ class CLIClient extends Client
         $file = $this->checkRequest($type, $file);
 
         // add last argument
-        if($file)
+        if($file !== null)
         {
             $arguments[] = escapeshellarg($file);
         }
 
         // build command
-        $jar = escapeshellarg($this->path);
-        $command = trim(($this->java ?: 'java') . " -jar $jar " . implode(' ', $arguments) . " {$this->javaArgs}");
+        $jar = escapeshellarg($this->getPath());
+        $java = trim($this->getJava() ?: 'java');
+        $command = sprintf('%s -jar %s %s %s', $java, $jar, implode(' ', $arguments), $this->getJavaArgs());
 
         // run command
         $response = $this->exec($command);
@@ -381,7 +383,7 @@ class CLIClient extends Client
         $logfile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tika-error.log';
         $descriptors = [['pipe', 'r'], ['pipe', 'w'], ['file', $logfile, 'a']];
         $process = proc_open($command, $descriptors, $pipes, null, $env);
-        $callback = $this->callback;
+        $callback = $this->callback ?? null;
 
         // get output if command runs ok
         if(is_resource($process))
@@ -420,7 +422,8 @@ class CLIClient extends Client
      */
     protected function getArguments(string $type, string $file = null): array
     {
-        $arguments = $this->encoding ? ["--encoding={$this->encoding}"] : [];
+        $encoding = $this->getEncoding();
+        $arguments = $encoding ? ["--encoding=$encoding"] : [];
 
         switch($type)
         {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika\Metadata;
 
@@ -11,68 +11,50 @@ class DocumentMetadata extends Metadata
 {
     /**
      * Title (if not detected by Apache Tika, name without extension is used)
-     *
-     * @var string
      */
-    public $title = null;
+    public ?string $title = null;
 
     /**
-     * Description.
-     *
-     * @var string
+     * Description
      */
-    public $description = null;
+    public ?string $description = null;
 
     /**
      * Keywords
-     *
-     * @var array
      */
-    public $keywords = [];
+    public array $keywords = [];
 
     /**
      * Two-letter language code (ISO-639-1)
      *
      * @link https://en.wikipedia.org/wiki/ISO_639-1
-     *
-     * @var string
      */
-    public $language = null;
+    public ?string $language = null;
 
     /**
      * Content encoding
-     *
-     * @var string
      */
-    public $encoding = null;
+    public ?string $encoding = null;
 
     /**
      * Author
-     *
-     * @var string
      */
-    public $author = null;
+    public ?string $author = null;
 
     /**
      * Software used to generate document
-     *
-     * @var string
      */
-    public $generator = null;
+    public ?string $generator = null;
 
     /**
      * Number of pages
-     *
-     * @var int
      */
-    public $pages = 0;
+    public int $pages = 0;
 
     /**
-     * Number of words.
-     *
-     * @var int
+     * Number of words
      */
-    public $words = 0;
+    public int $words = 0;
 
     /**
      * Sets an attribute

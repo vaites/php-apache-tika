@@ -6,10 +6,10 @@
 * Force internal download for remote files
 * Version list `composer.json` moved `Client.php`
 * `declare(strict_types=1)`to all files
+* Typed class properties
 * Exception for unsupported Apache Tika versions
 
 ### Removed
-
 * Support for PHP 7.3 and lower
 * Support for Apache Tika 1.18 and lower
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Vaites\ApacheTika\Metadata;
 
@@ -11,24 +11,18 @@ class ImageMetadata extends Metadata
 {
     /**
      * Image width in pixels
-     *
-     * @var int
      */
-    public $width = 0;
+    public int $width = 0;
 
     /**
      * Image height in pixels
-     *
-     * @var int
      */
-    public $height = 0;
+    public int $height = 0;
 
     /**
-     * Lossy/Lossless.
-     *
-     * @var bool
+     * Lossy/Lossless
      */
-    public $lossless = true;
+    public bool $lossless = true;
 
     /**
      * Sets an attribute

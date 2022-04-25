@@ -1,4 +1,6 @@
-<?php namespace Vaites\ApacheTika\Tests;
+<?php declare(strict_types=1);
+
+namespace Vaites\ApacheTika\Tests;
 
 use Exception;
 
@@ -14,17 +16,13 @@ class ErrorTest extends TestCase
 {
     /**
      * Current tika version
-     *
-     * @var string
      */
-    protected static $version = null;
+    protected static string $version;
 
     /**
      * Binary path (jars)
-     *
-     * @var string
      */
-    protected static $binaries = null;
+    protected static string $binaries;
 
     /**
      * Get env variables
@@ -211,22 +209,6 @@ class ErrorTest extends TestCase
         catch(Exception $exception)
         {
             $this->assertStringContainsString('Unknown recursive type', $exception->getMessage());
-        }
-    }
-
-    /**
-     * Test invalid chunk size
-     */
-    public function testUnsupportedChunkSize(): void
-    {
-        try
-        {
-            $client = Client::make('localhost', 9998);
-            $client->setChunkSize(1024);
-        }
-        catch(Exception $exception)
-        {
-            $this->assertStringContainsString('Chunk size is not supported', $exception->getMessage());
         }
     }
 

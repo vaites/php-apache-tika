@@ -1,4 +1,6 @@
-<?php namespace Vaites\ApacheTika\Tests;
+<?php declare(strict_types=1);
+
+namespace Vaites\ApacheTika\Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -11,24 +13,18 @@ class CommonTest extends TestCase
 {
     /**
      * Current tika version
-     *
-     * @var string
      */
-    protected static $version = null;
+    protected static string $version;
 
     /**
      * Binary path (jars)
-     *
-     * @var string
      */
-    protected static $binaries = null;
+    protected static string $binaries;
 
     /**
      * Shared client instance
-     *
-     * @var \Vaites\ApacheTika\Client
      */
-    protected static $client = null;
+    protected static Client $client;
 
     /**
      * Get env variables
