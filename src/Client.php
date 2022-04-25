@@ -43,6 +43,13 @@ abstract class Client
     protected $platform = null;
 
     /**
+     * Apache Tika version
+     * 
+     * @var string
+     */
+    protected $version = null;
+
+    /**
      * Cached responses to avoid multiple request for the same file.
      *
      * @var array
@@ -389,7 +396,23 @@ abstract class Client
      */
     public function getVersion(): ?string
     {
-        return $this->request('version');
+        if(is_null($this->version))
+        {
+            $this->setVersion($this->request('version'));
+        }
+
+        return $this->version;
+    }
+
+    /**
+     * Set the Tika version
+     */
+    public function setVersion(string $version): self
+    {
+        $this->checked = true;
+        $this->version = $version;
+
+        return $this;
     }
 
     /**
@@ -508,11 +531,13 @@ abstract class Client
         if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             //
-        } // invalid local file
+        } 
+        // invalid local file
         elseif($file !== null && !preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
-        } // invalid remote file
+        } 
+        // invalid remote file
         elseif($file !== null && preg_match('/^http/', $file))
         {
             $headers = get_headers($file);
@@ -521,7 +546,8 @@ abstract class Client
             {
                 throw new Exception("File $file can't be opened", 2);
             }
-        } // download remote file if required only for integrated downloader
+        } 
+        // download remote file if required only for integrated downloader
         elseif($file !== null && preg_match('/^http/', $file) && $this->downloadRemote)
         {
             $file = $this->downloadFile($file);
@@ -578,7 +604,7 @@ abstract class Client
     }
 
     /**
-     * Download file to a temporary folder
+     * Download file to a temporary folder and return its path
      *
      * @link https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
      * @throws \Exception
