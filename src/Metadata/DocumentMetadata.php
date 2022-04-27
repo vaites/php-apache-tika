@@ -79,13 +79,16 @@ class DocumentMetadata extends Metadata
                 break;
 
             case 'comments':
-            case 'w:Comments':
+            case 'dc:description':
+            case 'description':
+            case 'w:comments':
                 $this->description = $value;
                 break;
 
             case 'keyword':
             case 'keywords':
             case 'meta:keyword':
+            case 'pdf:docinfo:keywords':
                 $keywords = preg_split(preg_match('/,/', $value) ? '/\s*,\s*/' : '/\s+/', $value);
                 $this->keywords = array_unique($keywords ?: []);
                 break;
@@ -101,7 +104,9 @@ class DocumentMetadata extends Metadata
                 break;
 
             case 'application-name':
+            case 'extended-properties:application':
             case 'generator':
+            case 'pdf:producer':
             case 'producer':
                 $value = preg_replace('/\$.+/', '', $value);
                 $this->generator = trim($value);
