@@ -30,6 +30,11 @@ class WebClient extends Client
     protected int $retries = 3;
 
     /**
+     * List of OCR languages
+     */
+    protected array $ocrLanguages;
+
+    /**
      * Default cURL options
      */
     protected array $options =
@@ -273,7 +278,7 @@ class WebClient extends Client
      */
     public function getOCRLanguages(): array
     {
-        return explode('+', $this->getHeader('X-Tika-OCRLanguage') ?: '');
+        return $this->ocrLanguages ?? [];
     }
 
     /**
@@ -282,10 +287,8 @@ class WebClient extends Client
      * @throws \Exception
      */
     public function setOCRLanguage(string $language): self
-    {
-        $this->setHeader('X-Tika-OCRLanguage', $language);
-
-        return $this;
+    {  
+        return $this->setOCRLanguages([$language]);
     }
 
     /**
@@ -295,6 +298,7 @@ class WebClient extends Client
      */
     public function setOCRLanguages(array $languages): self
     {
+        $this->ocrLanguages = $languages;
         $this->setHeader('X-Tika-OCRLanguage', implode('+', $languages));
 
         return $this;
@@ -548,6 +552,11 @@ class WebClient extends Client
                 if($this->downloadRemote === false && $file !== null && preg_match('/^http/', $file))
                 {
                     $message .= ' (is server launched using "-enableUnsecureFeatures -enableFileUrl" arguments?)';
+                }
+                // using custom OCR languages require Tesseract's language files too
+                elseif(isset($this->ocrLanguages))
+                {
+                    $message .= sprintf(' (have Tesseract trained data for %s?)', implode(', ', $this->ocrLanguages));
                 }
 
                 break;
