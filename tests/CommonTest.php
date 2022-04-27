@@ -2,8 +2,6 @@
 
 namespace Vaites\ApacheTika\Tests;
 
-use PHPUnit\Framework\TestCase;
-
 use Vaites\ApacheTika\Client;
 
 /**
@@ -11,16 +9,6 @@ use Vaites\ApacheTika\Client;
  */
 class CommonTest extends TestCase
 {
-    /**
-     * Current tika version
-     */
-    protected static string $version;
-
-    /**
-     * Binary path (jars)
-     */
-    protected static string $binaries;
-
     /**
      * Shared client instance
      */
@@ -31,11 +19,9 @@ class CommonTest extends TestCase
      */
     public function __construct(string $name = null, array $data = array(), $dataName = '')
     {
-        self::$version = getenv('APACHE_TIKA_VERSION');
-        self::$binaries = getenv('APACHE_TIKA_BINARIES');
-        self::$client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar', 'java');
-
         parent::__construct($name, $data, $dataName);
+
+        self::$client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar', 'java');
     }
 
     /**

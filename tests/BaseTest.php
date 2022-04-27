@@ -5,7 +5,6 @@ namespace Vaites\ApacheTika\Tests;
 use DateTime;
 use Exception;
 
-use PHPUnit\Framework\TestCase;
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Metadata;
 use Vaites\ApacheTika\Metadata\Document;
@@ -18,16 +17,6 @@ use Vaites\ApacheTika\Clients\REST;
 abstract class BaseTest extends TestCase
 {
     /**
-     * Current tika version
-     */
-    protected static string $version;
-
-    /**
-     * Binary path (jars)
-     */
-    protected static string $binaries;
-
-    /**
      * Shared client instance
      */
     protected static Client $client;
@@ -36,24 +25,6 @@ abstract class BaseTest extends TestCase
      * Shared variable to test callbacks
      */
     public static int $shared = 0;
-
-    /**
-     * Get env variables
-     * 
-     * @throws \Exception
-     */
-    public function __construct(string $name = null, array $data = array(), $dataName = '')
-    {
-        self::$version = getenv('APACHE_TIKA_VERSION');
-        self::$binaries = getenv('APACHE_TIKA_BINARIES');
-
-        if(empty(self::$version))
-        {
-            throw new Exception('APACHE_TIKA_VERSION environment variable not defined');
-        }
-
-        parent::__construct($name, $data, $dataName);
-    }
 
     /**
      * Version test

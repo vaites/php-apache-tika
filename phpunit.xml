@@ -9,9 +9,6 @@
             <clover outputFile="reports/coverage.xml"/>
         </report>
     </coverage>
-    <php>
-        <env name="APACHE_TIKA_BINARIES" value="bin"/>
-    </php>
     <testsuites>
         <testsuite name="php-apache-tika">
             <directory>tests</directory>

@@ -4,8 +4,6 @@ namespace Vaites\ApacheTika\Tests;
 
 use Exception;
 
-use PHPUnit\Framework\TestCase;
-
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Metadata\Metadata;
 
@@ -14,27 +12,6 @@ use Vaites\ApacheTika\Metadata\Metadata;
  */
 class ErrorTest extends TestCase
 {
-    /**
-     * Current tika version
-     */
-    protected static string $version;
-
-    /**
-     * Binary path (jars)
-     */
-    protected static string $binaries;
-
-    /**
-     * Get env variables
-     */
-    public function __construct(string $name = null, array $data = array(), $dataName = '')
-    {
-        self::$version = getenv('APACHE_TIKA_VERSION');
-        self::$binaries = getenv('APACHE_TIKA_BINARIES');
-
-        parent::__construct($name, $data, $dataName);
-    }
-
     /**
      * Test wrong command line mode path
      */
@@ -282,13 +259,5 @@ class ErrorTest extends TestCase
             [[self::getPathForVersion(self::$version)]],
             [['localhost', 9998]]
         ];
-    }
-
-    /**
-     * Get the full path of Tika app for a specified version
-     */
-    private static function getPathForVersion(string $version): string
-    {
-        return self::$binaries . "/tika-app-{$version}.jar";
     }
 }

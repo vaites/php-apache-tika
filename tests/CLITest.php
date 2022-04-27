@@ -89,12 +89,4 @@ class CLITest extends BaseTest
 
         $this->assertStringContainsString(self::$version, $client->getVersion());
     }
-
-    /**
-     * Get the full path of Tika app for a specified version
-     */
-    private static function getPathForVersion(string $version): string
-    {
-        return self::$binaries . "/tika-app-{$version}.jar";
-    }
 }

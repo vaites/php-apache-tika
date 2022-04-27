@@ -403,6 +403,15 @@ abstract class Client
     {
         return self::$supportedVersions;
     }
+    
+
+    /**
+     * Return the latest Apache Tika supported version
+     */
+    public function getLatestSupportedVersion(): string
+    {
+        return end(self::$supportedVersions);
+    }
 
     /**
      * Sets the checked flag
