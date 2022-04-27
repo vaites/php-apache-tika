@@ -8,6 +8,7 @@
 * `declare(strict_types=1)`to all files
 * Typed class properties
 * Exception for unsupported Apache Tika versions
+* `tika()` helper
 
 ### Removed
 * Support for PHP 7.3 and lower

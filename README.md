@@ -30,7 +30,7 @@ to work with the new versions of the tool.
 * Standarized metadata for documents
 * Support for local and remote resources
 * No heavyweight library dependencies
-* Compatible with Apache Tika 1.15 or greater
+* Compatible with Apache Tika 1.19 or greater
     * Tested up to 1.28.1 and 2.3.0
 * Works on Linux, macOS, Windows and probably on FreeBSD
 
@@ -97,6 +97,12 @@ You can use an URL too:
 ```php
 $client = \Vaites\ApacheTika\Client::make('http://localhost:9998');
 $client = \Vaites\ApacheTika\Client::prepare('http://localhost:9998');
+```
+
+If you prefer a shorter version, use the `tika()` helper:
+
+```php
+$client = tika('localhost');
 ```
 
 Use the class to extract text from documents:

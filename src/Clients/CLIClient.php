@@ -41,7 +41,7 @@ class CLIClient extends Client
 
     /**
      * Configure client
-     *
+     * 
      * @throws \Exception
      */
     public function __construct(string $path = null, string $java = null, bool $check = true)
