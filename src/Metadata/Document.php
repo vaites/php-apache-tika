@@ -2,6 +2,7 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
+use Vaites\ApacheTika\Metadata;
 use Vaites\ApacheTika\Contracts\Metadata as Contract;
 
 /**
@@ -9,7 +10,7 @@ use Vaites\ApacheTika\Contracts\Metadata as Contract;
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
-class DocumentMetadata extends Metadata
+class Document extends Metadata
 {
     /**
      * Title (if not detected by Apache Tika, name without extension is used)

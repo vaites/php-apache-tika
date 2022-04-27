@@ -10,6 +10,9 @@
 * Exception for unsupported Apache Tika versions
 * `tika()` helper
 
+### Changed
+* Renamed client and metadata classes (class aliases added to keep compatibility)
+
 ### Removed
 * Support for PHP 7.3 and lower
 * Support for Apache Tika 1.18 and lower

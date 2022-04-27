@@ -2,6 +2,7 @@
 
 namespace Vaites\ApacheTika\Metadata;
 
+use Vaites\ApacheTika\Metadata;
 use Vaites\ApacheTika\Contracts\Metadata as Contract;
 
 /**
@@ -9,7 +10,7 @@ use Vaites\ApacheTika\Contracts\Metadata as Contract;
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
-class ImageMetadata extends Metadata
+class Image extends Metadata
 {
     /**
      * Image width in pixels

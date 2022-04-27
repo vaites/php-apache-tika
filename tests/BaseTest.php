@@ -2,11 +2,15 @@
 
 namespace Vaites\ApacheTika\Tests;
 
+use DateTime;
 use Exception;
 
 use PHPUnit\Framework\TestCase;
 use Vaites\ApacheTika\Client;
-use Vaites\ApacheTika\Clients\WebClient;
+use Vaites\ApacheTika\Metadata;
+use Vaites\ApacheTika\Metadata\Document;
+use Vaites\ApacheTika\Metadata\Image;
+use Vaites\ApacheTika\Clients\REST;
 
 /**
  * Common test functionality
@@ -64,9 +68,9 @@ abstract class BaseTest extends TestCase
      *
      * @dataProvider documentProvider
      */
-    public function testMetadata(string $file, string $class = 'Metadata'): void
+    public function testMetadata(string $file, string $class = Metadata::class): void
     {
-        $this->assertInstanceOf("\\Vaites\\ApacheTika\\Metadata\\$class", self::$client->getMetadata($file));
+        $this->assertInstanceOf($class, self::$client->getMetadata($file));
     }
 
     /**
@@ -74,7 +78,7 @@ abstract class BaseTest extends TestCase
      *
      * @dataProvider documentProvider
      */
-    public function testDocumentMetadata(string $file, string $class = 'DocumentMetadata'): void
+    public function testDocumentMetadata(string $file, string $class = Document::Class): void
     {
         $this->testMetadata($file, $class);
     }
@@ -106,7 +110,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDocumentMetadataCreated(string $file): void
     {
-        $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->created);
+        $this->assertInstanceOf(DateTime::class, self::$client->getMetadata($file)->created);
     }
 
     /**
@@ -116,7 +120,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDocumentMetadataUpdated(string $file): void
     {
-        $this->assertInstanceOf('DateTime', self::$client->getMetadata($file)->updated);
+        $this->assertInstanceOf(DateTime::class, self::$client->getMetadata($file)->updated);
     }
 
     /**
@@ -224,7 +228,7 @@ abstract class BaseTest extends TestCase
      *
      * @dataProvider imageProvider
      */
-    public function testImageMetadata(string $file, string $class = 'ImageMetadata'): void
+    public function testImageMetadata(string $file, string $class = Image::class): void
     {
         $this->testMetadata($file, $class);
     }
@@ -344,7 +348,7 @@ abstract class BaseTest extends TestCase
      */
     public function testDirectRemoteDocumentText(string $file): void
     {
-        if(self::$client instanceof WebClient && version_compare(self::$version, '2.0') >= 0)
+        if(self::$client instanceof REST && version_compare(self::$version, '2.0') >= 0)
         {
             $this->markTestSkipped('Apache Tika 2.0 server does not support remote documents yet');
         }

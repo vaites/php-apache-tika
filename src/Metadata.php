@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Vaites\ApacheTika\Metadata;
+namespace Vaites\ApacheTika;
 
 use DateTime;
 use DateTimeZone;
@@ -88,11 +88,11 @@ abstract class Metadata implements Contract
         switch(current(explode('/', $mime)))
         {
             case 'image':
-                $instance = new ImageMetadata($meta, $file);
+                $instance = new Metadata\Image($meta, $file);
                 break;
 
             default:
-                $instance = new DocumentMetadata($meta, $file);
+                $instance = new Metadata\Document($meta, $file);
         }
 
         return $instance;

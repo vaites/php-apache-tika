@@ -7,12 +7,12 @@ use Exception;
 use Vaites\ApacheTika\Client;
 
 /**
- * Apache Tika web client
+ * Apache Tika rest client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
  * @link    https://cwiki.apache.org/confluence/display/TIKA/TikaServer
  */
-class WebClient extends Client
+class REST extends Client
 {
     /**
      * Apache Tika server host

@@ -6,9 +6,8 @@ use Closure;
 use Exception;
 use stdClass;
 
-use Vaites\ApacheTika\Clients\CLIClient;
-use Vaites\ApacheTika\Clients\WebClient;
-use Vaites\ApacheTika\Metadata\Metadata;
+use Vaites\ApacheTika\Clients\CLI;
+use Vaites\ApacheTika\Clients\REST;
 use Vaites\ApacheTika\Contracts\Metadata as MetadataContract;
 
 /**
@@ -88,7 +87,7 @@ abstract class Client
      * @param string|int|null $param2   Java binary path or port for web client
      * @param array           $options  options for cURL request
      * @param bool            $check    check JAR file or server connection
-     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @return \Vaites\ApacheTika\Clients\CLI|\Vaites\ApacheTika\Clients\REST
      * @throws \Exception
      */
     public static function make(string $param1 = null, $param2 = null, array $options = null, bool $check = true): Client
@@ -98,14 +97,14 @@ abstract class Client
             $path = $param1 ? (string) $param1 : null;
             $java = $param2 ? (string) $param2 : null;
 
-            return new CLIClient($path, $java, $check);
+            return new CLI($path, $java, $check);
         }
         else
         {
             $host = $param1 ? (string) $param1 : null;
             $port = $param2 ? (int) $param2 : null;
 
-            return new WebClient($host, $port, $options, $check);
+            return new REST($host, $port, $options, $check);
         }
     }
 
@@ -115,7 +114,7 @@ abstract class Client
      * @param string|null $param1 path or host
      * @param int|null    $param2 Java binary path or port for web client
      * @param array       $options options for cURL request
-     * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
+     * @return \Vaites\ApacheTika\Clients\CLI|\Vaites\ApacheTika\Clients\REST
      * @throws \Exception
      */
     public static function prepare($param1 = null, $param2 = null, $options = []): Client
@@ -248,7 +247,7 @@ abstract class Client
      *
      *  [
      *      'sample.zip' => new Metadata()
-     *      'sample.zip/example.doc' => new DocumentMetadata()
+     *      'sample.zip/example.doc' => new Metadata\Document()
      *  ]
      *
      * @link https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-RecursiveMetadataandContent
