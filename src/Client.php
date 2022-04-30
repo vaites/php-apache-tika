@@ -85,27 +85,16 @@ abstract class Client
      *
      * @param string|null     $param1   path or host
      * @param string|int|null $param2   Java binary path or port for web client
-     * @param array           $options  options for cURL request
+     * @param array           $options  Java args or options for cURL request
      * @param bool            $check    check JAR file or server connection
      * @return \Vaites\ApacheTika\Clients\CLI|\Vaites\ApacheTika\Clients\REST
      * @throws \Exception
      */
     public static function make(string $param1 = null, $param2 = null, array $options = null, bool $check = true): Client
     {
-        if($param1 !== null && preg_match('/\.jar$/', $param1))
-        {
-            $path = $param1 ? (string) $param1 : null;
-            $java = $param2 ? (string) $param2 : null;
+        $client = $param1 !== null && preg_match('/\.jar$/', $param1) ? CLI::class : REST::class;
 
-            return new CLI($path, $java, $check);
-        }
-        else
-        {
-            $host = $param1 ? (string) $param1 : null;
-            $port = $param2 ? (int) $param2 : null;
-
-            return new REST($host, $port, $options, $check);
-        }
+        return new $client($param1, $param2, $options, $check);
     }
 
     /**

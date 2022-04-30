@@ -44,7 +44,7 @@ class CLI extends Client
      * 
      * @throws \Exception
      */
-    public function __construct(string $path = null, string $java = null, bool $check = true)
+    public function __construct(string $path = null, string $java = null, array $args = null, bool $check = true)
     {
         parent::__construct();
 
@@ -56,6 +56,11 @@ class CLI extends Client
         if($java !== null)
         {
             $this->setJava($java);
+        }
+
+        if($args !== null)
+        {
+            $this->setJavaArgs(implode(' ', $args));
         }
 
         if($check === true)
