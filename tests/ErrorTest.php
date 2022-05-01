@@ -5,7 +5,8 @@ namespace Vaites\ApacheTika\Tests;
 use Exception;
 
 use Vaites\ApacheTika\Client;
-use Vaites\ApacheTika\Metadata\Metadata;
+use Vaites\ApacheTika\Clients\CLI;
+use Vaites\ApacheTika\Metadata;
 
 /**
  * Error tests
@@ -37,16 +38,11 @@ class ErrorTest extends TestCase
 
         try
         {
-            $client = Client::make($path);
-
-            rename($path, $path . '.bak');
-
-            $client->getVersion();
+            $client = new CLI(__FILE__);
+            $client->getVersion(true);
         }
         catch(Exception $exception)
         {
-            rename($path . '.bak', $path);
-
             $this->assertStringContainsString('Unexpected exit value', $exception->getMessage());
         }
     }
@@ -60,8 +56,8 @@ class ErrorTest extends TestCase
 
         try
         {
-            $client = Client::make($path, '/nonexistent/path/to/java');
-            $client->getVersion();
+            $client = new CLI($path, '/nonexistent/path/to/java');
+            $version = $client->getVersion(true);
         }
         catch(Exception $exception)
         {

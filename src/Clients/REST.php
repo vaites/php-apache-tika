@@ -51,7 +51,7 @@ class REST extends Client
      *
      * @throws \Exception
      */
-    public function __construct(string $host = null, int $port = null, array $options = null, bool $check = true)
+    public function __construct(string $host = null, int $port = null, array $options = null, bool $check = null)
     {
         parent::__construct();
 

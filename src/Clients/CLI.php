@@ -44,7 +44,7 @@ class CLI extends Client
      * 
      * @throws \Exception
      */
-    public function __construct(string $path = null, string $java = null, array $args = null, bool $check = true)
+    public function __construct(string $path = null, string $java = null, array $args = null, bool $check = null)
     {
         parent::__construct();
 
@@ -148,28 +148,36 @@ class CLI extends Client
      *
      * @throws \Exception
      */
-    public function getVersion(): string
+    public function getVersion(bool $request = false): string
     {
         $manifest = [];
 
-        if(!isset($this->version))
+        if($request === true || !isset($this->version))
         {
             $path = $this->getPath();
 
-            if($path !== null && file_exists($path) && class_exists(ZipArchive::class))
+            // try to get version using MANIFEST.MF file inside Apache Tika's JAR file
+            if($request === false && $path !== null && file_exists($path) && class_exists(ZipArchive::class))
             {
-                $zip = new ZipArchive();
-
-                if($zip->open($path))
+                try
                 {
-                    $content = $zip->getFromName('META-INF/MANIFEST.MF') ?: 'ERROR';
-                    if(preg_match_all('/(.+):\s+(.+)\r?\n/U', $content, $match))
+                    $zip = new ZipArchive();
+
+                    if($zip->open($path))
                     {
-                        foreach($match[1] as $index => $key)
+                        $content = $zip->getFromName('META-INF/MANIFEST.MF') ?: 'ERROR';
+                        if(preg_match_all('/(.+):\s+(.+)\r?\n/U', $content, $match))
                         {
-                            $manifest[$key] = $match[2][$index];
+                            foreach($match[1] as $index => $key)
+                            {
+                                $manifest[$key] = $match[2][$index];
+                            }
                         }
                     }
+                }
+                catch(\Throwable $exception)
+                {
+                    //
                 }
             }
 

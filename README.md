@@ -105,7 +105,17 @@ If you prefer a shorter version, use the `tika()` helper:
 $client = tika('localhost');
 ```
 
-Use the class to extract text from documents:
+This library will make a first request to check the Apache Tika version unless a version is set using the 
+`APACHE_TIKA_VERSION` env variable or using the class method:
+
+```
+$client = \Vaites\ApacheTika\Client::prepare('http://localhost:9998');
+$client->setVersion('2.0.0');
+```
+
+The version can also be set using  en variable.
+
+Now, you can use the class to extract text from documents:
 
 ```php
 $language = $client->getLanguage('/path/to/your/document');
@@ -264,7 +274,9 @@ $client->getOCRLanguages();
 
 Since 1.0 version there are some breaking changes:
 
-* Apache Tika versions prior to 1.15 are not supported (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older)
+* Apache Tika versions prior to 1.19 are not supported
+    * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 1.18 and older) 
+    * use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older)
 * PHP minimum requirement is 7.3 or greater (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older)
 * `$client->getRecursiveMetadata()` returns an array as expected
 * `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically

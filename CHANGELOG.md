@@ -6,8 +6,9 @@
 * Force internal download for remote files
 * Version list `composer.json` moved `Client.php`
 * `declare(strict_types=1)`to all files
-* Typed class properties
 * Exception for unsupported Apache Tika versions
+* Configuration using env variables
+* Typed class properties
 * `tika()` helper
 
 ### Changed

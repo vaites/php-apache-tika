@@ -77,6 +77,13 @@ abstract class Client
      */
     public function __construct()
     {
+        $version = getenv('APACHE_TIKA_VERSION');
+
+        if($version !== false)
+        {
+            $this->setVersion($version);
+        }
+
         $this->platform = defined('PHP_WINDOWS_VERSION_MAJOR') ? 'win' : 'unix';
     }
 
@@ -90,7 +97,7 @@ abstract class Client
      * @return \Vaites\ApacheTika\Clients\CLI|\Vaites\ApacheTika\Clients\REST
      * @throws \Exception
      */
-    public static function make(string $param1 = null, $param2 = null, array $options = null, bool $check = true): Client
+    public static function make(string $param1 = null, $param2 = null, array $options = null, bool $check = null): Client
     {
         $client = $param1 !== null && preg_match('/\.jar$/', $param1) ? CLI::class : REST::class;
 
@@ -357,9 +364,9 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getVersion(): ?string
+    public function getVersion(bool $request = false): ?string
     {
-        if(!isset($this->version))
+        if($request === true || !isset($this->version))
         {
             $this->setVersion($this->request('version'));
         }
