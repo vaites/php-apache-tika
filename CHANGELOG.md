@@ -18,6 +18,11 @@
 * Support for PHP 7.3 and lower
 * Support for Apache Tika 1.18 and lower
 
+## v1.2.4
+
+### Changed
+* Tested up to Apache Tika 1.28.2 and 2.4.0
+
 ## v1.2.3
 
 ### Added
