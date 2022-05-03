@@ -75,7 +75,9 @@ jobs:
          extensions: curl, dom, gd, json, libxml, mbstring, zip, xdebug
 
      - name: Install dependencies
-       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+       run: |
+        composer config platform.php 7.3.0
+        composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
  
      - name: Download Apache Tika binaries
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/download.sh
