@@ -19,7 +19,7 @@ jobs:
        uses: actions/cache@v1
        with:
          path: bin
-         key: binaries-apache-tika
+         key: binaries-apache-tika-${{ matrix.tika }}
  
      - name: Cache PHP dependencies
        uses: actions/cache@v1
@@ -43,7 +43,9 @@ jobs:
          extensions: curl, dom, gd, json, libxml, mbstring, zip, xdebug
 
      - name: Install dependencies
-       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+       run: |
+        composer config platform.php 7.4.0
+        composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
  
      - name: Download Apache Tika binaries
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/download.sh
