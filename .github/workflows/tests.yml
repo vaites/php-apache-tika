@@ -51,7 +51,7 @@ jobs:
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/download.sh
  
      - name: Start Apache Tika server
-       run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/spawn.sh
+       run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/spawn.sh --background
  
      - name: Execute tests
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} vendor/bin/phpunit --verbose

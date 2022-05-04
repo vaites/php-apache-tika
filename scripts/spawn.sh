@@ -26,13 +26,13 @@ if [ $(ps aux | grep -c tika-server-$VERSION) -lt 2 ]; then
         COMMAND="$JAVA -jar $BINARIES/tika-server-$VERSION.jar -p $PORT"
     fi
 
-    if [ "$1" == "--foreground" ]; then
-        echo "Starting Tika Server $VERSION in foreground"
-        $COMMAND
-    else
+    if [ "$1" == "--background" ]; then
         echo "Starting Tika Server $VERSION in background"
         $COMMAND 2> /tmp/tika-server-$VERSION.log &
         sleep 5
+    else
+        echo "Starting Tika Server $VERSION in foreground"
+        $COMMAND
     fi
 else
     echo "Tika Server $VERSION already running"
