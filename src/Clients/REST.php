@@ -64,7 +64,7 @@ class REST extends Client
             $this->setHost($host);
         }
 
-        if(is_numeric($port))
+        if(is_numeric($port) && $port)
         {
             $this->setPort($port);
         }
@@ -132,7 +132,7 @@ class REST extends Client
     /**
      * Get the port
      */
-    public function getPort(): ?int
+    public function getPort(): int
     {
         return $this->port;
     }
@@ -248,10 +248,9 @@ class REST extends Client
     /**
      * Set a cURL header to be set with curl_setopt()
      *
-     * @param mixed $value
      * @throws \Exception
      */
-    public function setHeader(string $name, $value): self
+    public function setHeader(string $name, string $value): self
     {
         $this->options[CURLOPT_HTTPHEADER][] = "$name: $value";
 
@@ -309,7 +308,9 @@ class REST extends Client
      */
     public function getTimeout(): int
     {
-        return $this->getOption(CURLOPT_TIMEOUT);
+        $timeout = $this->getOption(CURLOPT_TIMEOUT);
+
+        return is_numeric($timeout) ? (int) $timeout : 0;
     }
 
     /**
@@ -333,7 +334,14 @@ class REST extends Client
     {
         $mimeTypes = json_decode($this->request('mime-types'), true);
 
-        ksort($mimeTypes);
+        if(is_array($mimeTypes))
+        {
+            ksort($mimeTypes);
+        }
+        else
+        {
+            $mimeTypes = [];
+        }
 
         return $mimeTypes;
     }
@@ -345,23 +353,32 @@ class REST extends Client
      */
     public function getAvailableDetectors(): array
     {
-        $detectors = [json_decode($this->request('detectors'), true)];
+        $response = json_decode($this->request('detectors'), true);
 
-        foreach($detectors as $index => $parent)
+        if(is_array($response))
         {
-            $detectors[$parent['name']] = $parent;
+            $detectors = [$response];
 
-            if(isset($parent['children']))
+            foreach($detectors as $index => $parent)
             {
-                foreach($parent['children'] as $subindex => $child)
+                $detectors[$parent['name']] = $parent;
+
+                if(isset($parent['children']))
                 {
-                    $detectors[$parent['name']]['children'][$child['name']] = $child;
+                    foreach($parent['children'] as $subindex => $child)
+                    {
+                        $detectors[$parent['name']]['children'][$child['name']] = $child;
 
-                    unset($detectors[$parent['name']]['children'][$subindex]);
+                        unset($detectors[$parent['name']]['children'][$subindex]);
+                    }
                 }
-            }
 
-            unset($detectors[$index]);
+                unset($detectors[$index]);
+            }
+        }
+        else
+        {
+            $detectors = [];
         }
 
         return $detectors;
@@ -374,23 +391,32 @@ class REST extends Client
      */
     public function getAvailableParsers(): array
     {
-        $parsers = [json_decode($this->request('parsers'), true)];
+        $response = json_decode($this->request('parsers'), true);
 
-        foreach($parsers as $index => $parent)
+        if(is_array($response))
         {
-            $parsers[$parent['name']] = $parent;
-
-            if(isset($parent['children']))
+            $parsers = [$response];
+        
+            foreach($parsers as $index => $parent)
             {
-                foreach($parent['children'] as $subindex => $child)
+                $parsers[$parent['name']] = $parent;
+
+                if(isset($parent['children']))
                 {
-                    $parsers[$parent['name']]['children'][$child['name']] = $child;
+                    foreach($parent['children'] as $subindex => $child)
+                    {
+                        $parsers[$parent['name']]['children'][$child['name']] = $child;
 
-                    unset($parsers[$parent['name']]['children'][$subindex]);
+                        unset($parsers[$parent['name']]['children'][$subindex]);
+                    }
                 }
-            }
 
-            unset($parsers[$index]);
+                unset($parsers[$index]);
+            }
+        }
+        else
+        {
+            $parsers = [];
         }
 
         return $parsers;
@@ -428,7 +454,7 @@ class REST extends Client
         // check if is cached
         if($file !== null && $this->isCached($type, $file))
         {
-            return $this->getCachedResponse($type, $file);
+            return (string) $this->getCachedResponse($type, $file);
         }
         elseif($file !== null && !isset($retries[sha1($file)]))
         {

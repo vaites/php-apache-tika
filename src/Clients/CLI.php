@@ -210,13 +210,13 @@ class CLI extends Client
             }
             else
             {
-                [$key, $value] = preg_split('/:\s+/', trim($line));
+                [$key, $value] = (preg_split('/:\s+/', trim($line)) ?: ['error', 'error']);
 
-                if($key == 'alias')
+                if($key === 'alias')
                 {
                     $mimeTypes[$mime]['alias'][] = $value;
                 }
-                else
+                elseif($key !== 'error')
                 {
                     $mimeTypes[$mime][$key] = $value;
                 }
@@ -330,7 +330,7 @@ class CLI extends Client
         // check if is cached
         if($file !== null && $this->isCached($type, $file))
         {
-            return $this->getCachedResponse($type, $file);
+            return (string) $this->getCachedResponse($type, $file);
         }
 
         // command arguments
@@ -346,7 +346,7 @@ class CLI extends Client
         }
 
         // build command
-        $jar = escapeshellarg($this->getPath());
+        $jar = escapeshellarg($this->getPath() ?: 'error');
         $java = trim($this->getJava() ?: 'java');
         $command = sprintf('%s -jar %s %s %s', $java, $jar, implode(' ', $arguments), $this->getJavaArgs());
 
@@ -403,7 +403,7 @@ class CLI extends Client
         {
             fclose($pipes[0]);
             $this->response = '';
-            while($chunk = stream_get_line($pipes[1], $this->chunkSize))
+            while($chunk = stream_get_line($pipes[1], $this->getChunkSize()))
             {
                 if(!is_null($callback))
                 {
@@ -425,7 +425,7 @@ class CLI extends Client
             throw new Exception("Unexpected exit value ($exit) for command $command");
         }
 
-        return $this->filterResponse($this->response);
+        return isset($this->response) ? $this->filterResponse($this->response) : null;
     }
 
     /**

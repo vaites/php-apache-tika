@@ -58,7 +58,10 @@ abstract class Metadata implements Contract
         // process each meta
         foreach((array) $this->meta as $key => $value)
         {
-            $this->setAttribute($key, $value);
+            if(!empty($value) && (is_string($value) || is_numeric($value)))
+            {
+                $this->setAttribute($key, $value);
+            }
         }
 
         // file name without extension if title is not detected
@@ -101,10 +104,9 @@ abstract class Metadata implements Contract
     /**
      * Sets an attribute
      *
-     * @param mixed $value
      * @throws \Exception
      */
-    public final function setAttribute(string $key, $value): Contract
+    public final function setAttribute(string $key, string $value): Contract
     {
         $timezone = new DateTimeZone('UTC');
 
@@ -123,15 +125,15 @@ abstract class Metadata implements Contract
             case 'date':
             case 'dcterms:created':
             case 'meta:creation-date':
-                $value = preg_replace('/\.\d+/', 'Z', $value);
-                $this->created = new DateTime(is_array($value) ? array_shift($value) : $value, $timezone);
+                $value = (string) preg_replace('/\.\d+/', 'Z', $value);
+                $this->created = new DateTime($value, $timezone);
                 break;
 
             case 'dcterms:modified':
             case 'last-modified':
             case 'modified':
-                $value = preg_replace('/\.\d+/', 'Z', $value);
-                $this->updated = new DateTime(is_array($value) ? array_shift($value) : $value, $timezone);
+                $value = (string) preg_replace('/\.\d+/', 'Z', $value);
+                $this->updated = new DateTime($value, $timezone);
                 break;
 
             default:
@@ -144,8 +146,6 @@ abstract class Metadata implements Contract
 
     /**
      * Sets an speficic attribute for the file type
-     *
-     * @param mixed $value
      */
-    abstract protected function setSpecificAttribute(string $key, $value): Contract;
+    abstract protected function setSpecificAttribute(string $key, string $value): Contract;
 }

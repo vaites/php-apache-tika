@@ -62,16 +62,10 @@ class Document extends Metadata
     /**
      * Sets an attribute
      *
-     * @param mixed $value
      * @throws  \Exception
      */
-    protected function setSpecificAttribute(string $key, $value): Contract
+    protected function setSpecificAttribute(string $key, string $value): Contract
     {
-        if(is_array($value))
-        {
-            $value = array_shift($value);
-        }
-
         switch(mb_strtolower($key))
         {
             case 'dc:title':
@@ -109,7 +103,7 @@ class Document extends Metadata
             case 'generator':
             case 'pdf:producer':
             case 'producer':
-                $value = preg_replace('/\$.+/', '', $value);
+                $value = (string) preg_replace('/\$.+/', '', $value);
                 $this->generator = trim($value);
                 break;
 

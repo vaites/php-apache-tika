@@ -34,6 +34,11 @@ abstract class Client
     protected string $encoding;
 
     /**
+     * Request response
+     */
+    protected string $response;
+
+    /**
      * Checked flag
      */
     protected bool $checked = false;
@@ -66,7 +71,7 @@ abstract class Client
     /**
      * Supported version list
      */
-    protected static $supportedVersions = 
+    protected static array $supportedVersions = 
     [
         "1.19", "1.19.1", "1.20", "1.21", "1.22", "1.23", "1.24", "1.24.1", "1.25", "1.26","1.27", 
         "1.28", "1.28.1", "1.28.2",
@@ -100,9 +105,16 @@ abstract class Client
      */
     public static function make(string $param1 = null, $param2 = null, array $options = null, bool $check = null): Client
     {
-        $client = $param1 !== null && preg_match('/\.jar$/', $param1) ? CLI::class : REST::class;
+        if($param1 !== null && preg_match('/\.jar$/', $param1))
+        {
+            $client = new CLI($param1, (string) $param2, $options, $check);
+        }
+        else
+        {
+            $client = new REST($param1, (int) $param2, $options, $check);
+        }
 
-        return new $client($param1, $param2, $options, $check);
+        return $client;
     }
 
     /**
@@ -369,7 +381,12 @@ abstract class Client
     {
         if($request === true || !isset($this->version))
         {
-            $this->setVersion($this->request('version'));
+            $version = $this->request('version');
+        
+            if($version !== null)
+            {
+                $this->setVersion($version);
+            }
         }
 
         return $this->version;
@@ -380,7 +397,7 @@ abstract class Client
      */
     public function setVersion(string $version): self
     {
-        $version = trim(preg_replace('/Apache Tika/i', '', $version));
+        $version = trim(preg_replace('/Apache Tika/i', '', $version) ?: '');
 
         if(!in_array($version, $this->getSupportedVersions()))
         {
@@ -438,10 +455,8 @@ abstract class Client
 
     /**
      * Get a cached response
-     *
-     * @return mixed
      */
-    protected function getCachedResponse(string $type, string $file)
+    protected function getCachedResponse(string $type, string $file): ?string
     {
         return $this->cache[sha1($file)][$type] ?? null;
     }
@@ -456,10 +471,8 @@ abstract class Client
 
     /**
      * Caches a response
-     *
-     * @param mixed $response
      */
-    protected function cacheResponse(string $type, $response, string $file): bool
+    protected function cacheResponse(string $type, string $response, string $file): bool
     {
         $this->cache[sha1($file)][$type] = $response;
 
@@ -514,7 +527,7 @@ abstract class Client
                 throw new Exception("File $file can't be opened", 2);
             }
             // download remote file if required only for integrated downloader
-            elseif($file !== null && preg_match('/^http/', $file) && $this->downloadRemote)
+            elseif($this->downloadRemote)
             {
                 $file = $this->downloadFile($file);
             }

@@ -29,10 +29,8 @@ class Image extends Metadata
 
     /**
      * Sets an attribute
-     *
-     * @param mixed $value
      */
-    protected function setSpecificAttribute(string $key, $value): Contract
+    protected function setSpecificAttribute(string $key, string $value): Contract
     {
         switch(mb_strtolower($key))
         {
@@ -55,7 +53,7 @@ class Image extends Metadata
                 break;
 
             case 'x-tika:content':
-                $this->content = $value;
+                $this->content = (string) $value;
                 break;
         }
 
