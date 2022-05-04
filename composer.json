@@ -48,6 +48,7 @@
         "nunomaduro/collision": "^5.11"
     },
     "scripts": {
+        "analyse": "vendor/bin/phpstan analyse -c phpstan.neon",
         "test": "vendor/bin/phpunit --coverage-html reports"
     }
 }
