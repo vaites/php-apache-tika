@@ -33,11 +33,13 @@ jobs:
         - '1.27'
         - '1.28'
         - '1.28.1'
+        - '1.28.2'
         - '2.0.0'
         - '2.1.0'
         - '2.2.0'
         - '2.2.1'
         - '2.3.0'
+        - '2.4.0'
  
    name: PHP ${{ matrix.php }} - TIKA ${{ matrix.tika }}
  
@@ -49,7 +51,7 @@ jobs:
        uses: actions/cache@v1
        with:
          path: bin
-         key: binaries-apache-tika
+         key: binaries-apache-tika-${{ matrix.tika }}
  
      - name: Cache PHP dependencies
        uses: actions/cache@v1
@@ -70,11 +72,12 @@ jobs:
        uses: shivammathur/setup-php@v2
        with:
          php-version: ${{ matrix.php }}
-         extensions: curl, dom, gd, json, libxml, mbstring, zip
-         coverage: none
- 
+         extensions: curl, dom, gd, json, libxml, mbstring, zip, xdebug
+
      - name: Install dependencies
-       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+       run: |
+        composer config platform.php 7.3.0
+        composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
  
      - name: Download Apache Tika binaries
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} scripts/download.sh
@@ -84,3 +87,7 @@ jobs:
  
      - name: Execute tests
        run: APACHE_TIKA_VERSION=${{ matrix.tika }} vendor/bin/phpunit --verbose
+
+     - name: Code coverage
+       uses: codecov/codecov-action@v2
+ 
