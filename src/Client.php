@@ -237,7 +237,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getMetadata(string $file): MetadataContract
+    public function getMetadata(string $file, bool $content = false): MetadataContract
     {
         $response = $this->parseJsonResponse($this->request('meta', $file) ?: 'ERROR');
 
@@ -245,8 +245,15 @@ abstract class Client
         {
             throw new Exception("Unexpected metadata response for $file");
         }
+        
+        $metadata = Metadata::make($response, $file);
 
-        return Metadata::make($response, $file);
+        if($content === true)
+        {
+            $metadata->content = $this->getText($file);
+        }
+
+        return $metadata;
     }
 
     /**

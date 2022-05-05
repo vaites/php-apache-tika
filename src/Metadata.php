@@ -85,7 +85,14 @@ abstract class Metadata implements Contract
     public static function make(stdClass $meta, string $file): Contract
     {
         // get content type
-        $mime = is_array($meta->{'Content-Type'}) ? current($meta->{'Content-Type'}) : $meta->{'Content-Type'};
+        try
+        {
+            $mime = is_array($meta->{'Content-Type'}) ? current($meta->{'Content-Type'}) : $meta->{'Content-Type'};
+        }
+        catch(\Exception $exception)
+        {
+            $mime = 'application/octet-stream';
+        }
 
         // instance based on content type
         switch(current(explode('/', $mime)))

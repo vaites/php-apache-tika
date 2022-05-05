@@ -55,6 +55,16 @@ abstract class BaseTest extends TestCase
     }
 
     /**
+     * Metadata content
+     *
+     * @dataProvider documentProvider
+     */
+    public function testDocumentMetadataContent(string $file): void
+    {
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', self::$client->getMetadata($file, true)->content);
+    }
+
+    /**
      * Metadata title test
      *
      * @dataProvider documentProvider
