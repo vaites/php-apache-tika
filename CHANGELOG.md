@@ -8,6 +8,7 @@
 * `declare(strict_types=1)`to all files
 * Exception for unsupported Apache Tika versions
 * Configuration using env variables
+* Metadata timezone customization
 * Typed class properties
 * `tika()` helper
 

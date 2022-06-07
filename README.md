@@ -78,6 +78,13 @@ If you are using JRE instead of JDK, you must run if you have Java 9 or greater:
 java --add-modules java.se.ee -jar tika-server-x.xx.jar
 ```
 
+You can also use the [official Docker image](https://hub.docker.com/r/apache/tika):
+
+```bash
+docker pull apache/tika:latest-full
+docker run -d -p 9998:9998 apache/tika:latest-full
+```
+
 Instantiate the class, checking if JAR exists or server is running:
 
 ```php
