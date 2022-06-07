@@ -38,10 +38,10 @@ to work with the new versions of the tool.
 
 Minimum versions:
 
-* PHP 7.4 or greater
+* PHP 8.0 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
-* Apache Tika 1.18 or greater
+* Apache Tika 1.19 or greater
 * Java 8
 * [Tesseract](https://github.com/tesseract-ocr/tesseract) 4.0 (optional for OCR recognition)
 
@@ -277,14 +277,16 @@ $client->setOCRLanguages($languages);
 $client->getOCRLanguages();
 ```
 
-### Breaking changes
+## Breaking changes
 
 Since 1.0 version there are some breaking changes:
 
 * Apache Tika versions prior to 1.19 are not supported
-    * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 1.18 and older) 
-    * use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older)
-* PHP minimum requirement is 7.3 or greater (use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older)
+    * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 1.18 and older
+    * use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older
+* PHP minimum requirement is 8.0 or greater 
+    * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 7.4 and older
+    * Use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older
 * `$client->getRecursiveMetadata()` returns an array as expected
 * `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
 * Values returned by `Client::getAvailableDetectors()` and `Client::getAvailableParsers()` are identical and have a new definition 

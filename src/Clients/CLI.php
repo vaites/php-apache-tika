@@ -436,69 +436,26 @@ class CLI extends Client
     protected function getArguments(string $type, string $file = null): array
     {
         $encoding = $this->getEncoding();
+
         $arguments = $encoding ? ["--encoding=$encoding"] : [];
-
-        switch($type)
+        $arguments[] = match($type)
         {
-            case 'html':
-                $arguments[] = '--html';
-                break;
-
-            case 'lang':
-                $arguments[] = '--language';
-                break;
-
-            case 'mime':
-                $arguments[] = '--detect';
-                break;
-
-            case 'meta':
-                $arguments[] = '--metadata --json';
-                break;
-
-            case 'text':
-                $arguments[] = '--text';
-                break;
-
-            case 'text-main':
-                $arguments[] = '--text-main';
-                break;
-
-            case 'mime-types':
-                $arguments[] = '--list-supported-types';
-                break;
-
-            case 'detectors':
-                $arguments[] = '--list-detectors';
-                break;
-
-            case 'parsers':
-                $arguments[] = '--list-parsers';
-                break;
-
-            case 'version':
-                $arguments[] = '--version';
-                break;
-
-            case 'rmeta/ignore':
-                $arguments[] = '--metadata --jsonRecursive';
-                break;
-
-            case 'rmeta/html':
-                $arguments[] = '--html --jsonRecursive';
-                break;
-
-            case 'rmeta/text':
-                $arguments[] = '--text --jsonRecursive';
-                break;
-
-            case 'xhtml':
-                $arguments[] = '--xml';
-                break;
-
-            default:
-                throw new Exception($file ? "Unknown type $type for $file" : "Unknown type $type");
-        }
+            'html'          => '--html',
+            'lang'          => '--language',
+            'mime'          => '--detect',
+            'meta'          => '--metadata --json',
+            'text'          => '--text',
+            'text-main'     => '--text-main',
+            'mime-types'    => '--list-supported-types',
+            'detectors'     => '--list-detectors',
+            'parsers'       => '--list-parsers',
+            'version'       => '--version',
+            'rmeta/ignore'  => '--metadata --jsonRecursive',
+            'rmeta/html'    => '--html --jsonRecursive',
+            'rmeta/text'    => '--text --jsonRecursive',
+            'xhtml'         => '--xml',
+            default         => throw new Exception($file ? "Unknown type $type for $file" : "Unknown type $type")
+        };
 
         return $arguments;
     }

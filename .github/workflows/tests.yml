@@ -44,7 +44,7 @@ jobs:
 
      - name: Install dependencies
        run: |
-        composer config platform.php 7.4.0
+        composer config platform.php 8.0.0
         composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
  
      - name: Download Apache Tika binaries
@@ -62,7 +62,6 @@ jobs:
    strategy:
      matrix:
        php: 
-        - '7.4'
         - '8.0'
         - '8.1'
        tika: 

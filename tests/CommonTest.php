@@ -49,10 +49,7 @@ class CommonTest extends TestCase
      */
     public function testSetClosureCallback(): void
     {
-        self::$client->setCallback(function($chunk)
-        {
-            return trim($chunk);
-        });
+        self::$client->setCallback(fn($chunk) => trim($chunk));
 
         $this->assertInstanceOf('Closure', self::$client->getCallback());
     }

@@ -302,10 +302,7 @@ abstract class BaseTest extends TestCase
     {
         BaseTest::$shared = 0;
 
-        self::$client->getMainText($file, function()
-        {
-            BaseTest::$shared++;
-        });
+        self::$client->getMainText($file, fn() => BaseTest::$shared++);
 
         $this->assertGreaterThan(1, BaseTest::$shared);
     }
@@ -319,10 +316,7 @@ abstract class BaseTest extends TestCase
     {
         BaseTest::$shared = 0;
 
-        self::$client->getHtml($file, function()
-        {
-            BaseTest::$shared++;
-        });
+        self::$client->getHtml($file, fn() => BaseTest::$shared++);
 
         $this->assertGreaterThan(1, BaseTest::$shared);
     }

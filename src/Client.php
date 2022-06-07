@@ -186,10 +186,7 @@ abstract class Client
         elseif(is_string($callback))
         {
             $this->callbackAppend = (bool) $append;
-            $this->callback = function($chunk) use ($callback)
-            {
-                return call_user_func_array($callback, [$chunk]);
-            };
+            $this->callback = fn($chunk) => call_user_func_array($callback, [$chunk]);
         }
         else
         {

@@ -101,15 +101,11 @@ abstract class Metadata implements Contract
         }
 
         // instance based on content type
-        switch(current(explode('/', $mime)))
+        $instance = match(current(explode('/', $mime)))
         {
-            case 'image':
-                $instance = new Metadata\Image($meta, $file, $timezone);
-                break;
-
-            default:
-                $instance = new Metadata\Document($meta, $file, $timezone);
-        }
+            'image' => new Metadata\Image($meta, $file, $timezone),
+            default => new Metadata\Document($meta, $file, $timezone)
+        };
 
         return $instance;
     }

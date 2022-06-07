@@ -647,10 +647,7 @@ class REST extends Client
             case 'rmeta/text':
                 $resource = $type;
                 $headers[] = 'Accept: application/json';
-                $callback = function($response)
-                {
-                    return json_decode($response, true);
-                };
+                $callback = fn($response) => json_decode($response, true);
                 break;
 
             case 'text':
