@@ -68,6 +68,18 @@ class CommonTest extends TestCase
     }
 
     /**
+     * Set timezone test
+     */
+    public function testGetTimezone(): void
+    {
+        $timezone = 'Europe/Madrid';
+
+        self::$client->setTimezone($timezone);
+
+        $this->assertEquals($timezone, self::$client->getTimezone());
+    }
+
+    /**
      * Get supported versions test
      */
     public function testGetSupportedVersions(): void

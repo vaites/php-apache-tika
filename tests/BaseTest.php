@@ -3,6 +3,7 @@
 namespace Vaites\ApacheTika\Tests;
 
 use DateTime;
+use DateTimeZone;
 use Exception;
 
 use Vaites\ApacheTika\Client;
@@ -102,6 +103,20 @@ abstract class BaseTest extends TestCase
     public function testDocumentMetadataUpdated(string $file): void
     {
         $this->assertInstanceOf(DateTime::class, self::$client->getMetadata($file)->updated);
+    }
+
+    /**
+     * Metadata timezone test
+     *
+     * @dataProvider documentProvider
+     */
+    public function testDocumentMetadataTimezone(string $file): void
+    {
+        $timezone = new DateTimeZone('Europe/Madrid');
+
+        $metadata = self::$client->setTimezone($timezone->getName())->getMetadata($file);
+
+        $this->assertEquals($metadata->updated->getTimezone()->getName(), $timezone->getName());
     }
 
     /**

@@ -44,21 +44,27 @@ abstract class Metadata implements Contract
     /**
      * RAW attributes returned by Apache Tika
      */
-    public ?stdClass $meta = null;
+    public stdClass $meta;
+
+    /**
+     * Timezone
+     */
+    protected DateTimeZone $timezone;
 
     /**
      * Parse Apache Tika response filling all properties
      *
      * @throws \Exception
      */
-    public function __construct(stdClass $meta, string $file)
+    public function __construct(stdClass $meta, string $file, string $timezone)
     {
         $this->meta = $meta;
-
+        $this->timezone = new DateTimeZone($timezone);
+        
         // process each meta
         foreach((array) $this->meta as $key => $value)
         {
-            if(!empty($value) && (is_string($value) || is_numeric($value)))
+            if(!empty($value) && is_string($value))
             {
                 $this->setAttribute($key, $value);
             }
@@ -82,7 +88,7 @@ abstract class Metadata implements Contract
      *
      * @throws \Exception
      */
-    public static function make(stdClass $meta, string $file): Contract
+    public static function make(stdClass $meta, string $file, string $timezone): Contract
     {
         // get content type
         try
@@ -98,11 +104,11 @@ abstract class Metadata implements Contract
         switch(current(explode('/', $mime)))
         {
             case 'image':
-                $instance = new Metadata\Image($meta, $file);
+                $instance = new Metadata\Image($meta, $file, $timezone);
                 break;
 
             default:
-                $instance = new Metadata\Document($meta, $file);
+                $instance = new Metadata\Document($meta, $file, $timezone);
         }
 
         return $instance;
@@ -115,8 +121,6 @@ abstract class Metadata implements Contract
      */
     public final function setAttribute(string $key, string $value): Contract
     {
-        $timezone = new DateTimeZone('UTC');
-
         switch(mb_strtolower($key))
         {
             case 'content-type':
@@ -133,14 +137,16 @@ abstract class Metadata implements Contract
             case 'dcterms:created':
             case 'meta:creation-date':
                 $value = (string) preg_replace('/\.\d+/', 'Z', $value);
-                $this->created = new DateTime($value, $timezone);
+                $this->created = new DateTime($value);
+                $this->created->setTimezone($this->timezone);
                 break;
 
             case 'dcterms:modified':
             case 'last-modified':
             case 'modified':
                 $value = (string) preg_replace('/\.\d+/', 'Z', $value);
-                $this->updated = new DateTime($value, $timezone);
+                $this->updated = new DateTime($value);
+                $this->updated->setTimezone($this->timezone);
                 break;
 
             default:

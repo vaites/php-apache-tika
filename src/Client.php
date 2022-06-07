@@ -64,6 +64,11 @@ abstract class Client
     protected bool $downloadRemote = false;
 
     /**
+     * Timezone
+     */
+    protected string $timezone = 'UTC';
+
+    /**
      * Cached responses to avoid multiple request for the same file.
      */
     protected array $cache = [];
@@ -204,12 +209,28 @@ abstract class Client
 
     /**
      * Set the chunk size for secuential read
-     *
-     * @throws \Exception
      */
     public function setChunkSize(int $size): self
     {
         $this->chunkSize = $size;
+
+        return $this;
+    }
+
+    /**
+     * Get the timezone
+     */
+    public function getTimezone(): string
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * Set the timezone
+     */
+    public function setTimezone(string $timezone): self
+    {
+        $this->timezone = $timezone;
 
         return $this;
     }
@@ -246,7 +267,7 @@ abstract class Client
             throw new Exception("Unexpected metadata response for $file");
         }
         
-        $metadata = Metadata::make($response, $file);
+        $metadata = Metadata::make($response, $file, $this->getTimezone());
 
         if($content === true)
         {
@@ -293,7 +314,7 @@ abstract class Client
                 $name .= $item->{'X-TIKA:embedded_resource_path'};
             }
 
-            $metadata[$name] = Metadata::make($item, $file);
+            $metadata[$name] = Metadata::make($item, $file, $this->getTimezone());
         }
 
         return $metadata;

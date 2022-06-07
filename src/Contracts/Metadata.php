@@ -4,8 +4,5 @@ namespace Vaites\ApacheTika\Contracts;
 
 interface Metadata
 {
-    /**
-     * Sets an attribute
-     */
     public function setAttribute(string $key, string $value): Metadata;
 }
