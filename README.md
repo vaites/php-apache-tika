@@ -185,6 +185,9 @@ Supported versions related methods:
 ```php
 $client->getSupportedVersions();
 $client->isVersionSupported($version);
+$client->allowUnsupportedVersions();
+$client->disallowUnsupportedVersions();
+$client->areUnsupportedVersionsAllowed();
 ```
 
 Set/get a callback for sequential read of response:
@@ -272,8 +275,8 @@ $client->getHeaders();
 Set/get OCR languages (see [TikaOCR](https://cwiki.apache.org/confluence/display/tika/tikaocr)):
 
 ```php
-$client->setOCRLanguage($language);
-$client->setOCRLanguages($languages);
+$client->setOCRLanguage('spa');
+$client->setOCRLanguages(['fra', 'spa']);
 $client->getOCRLanguages();
 ```
 
@@ -310,7 +313,6 @@ Summary
   'php scripts/bench.php --rest' ran
     9.62 ± 1.27 times faster than 'php scripts/bench.php --cli'
 ```
-
 
 ## Troubleshooting
 
@@ -350,7 +352,6 @@ There are a few samples to test against:
 
 There are some issues found during tests, not related with this library:
 
-* Apache Tika 1.17 and lower can't extract text from OCR as described in [TIKA-2509](https://issues.apache.org/jira/browse/TIKA-2509)
 * Tesseract slows down document parsing as described in [TIKA-2359](https://issues.apache.org/jira/browse/TIKA-2359)
     
 ## Integrations

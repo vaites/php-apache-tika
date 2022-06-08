@@ -11,10 +11,10 @@
 * Metadata timezone customization
 * Typed class properties
 * `tika()` helper
-* Tested up to Apache Tika 1.28.3 and 2.4.0
 
 ### Changed
 * Renamed client and metadata classes (class aliases added to keep compatibility)
+* Tested up to Apache Tika 1.28.3 and 2.4.0
 
 ### Removed
 * Support for PHP 7.3 and lower

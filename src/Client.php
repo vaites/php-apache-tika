@@ -64,6 +64,11 @@ abstract class Client
     protected bool $downloadRemote = false;
 
     /**
+     * Allow unsupported versions
+     */
+    protected bool $unsupportedVersions = false;
+
+    /**
      * Timezone
      */
     protected string $timezone = 'UTC';
@@ -424,7 +429,7 @@ abstract class Client
     {
         $version = trim(preg_replace('/Apache Tika/i', '', $version) ?: '');
 
-        if(!in_array($version, $this->getSupportedVersions()))
+        if(!in_array($version, $this->getSupportedVersions()) && $this->unsupportedVersions === false)
         {
             throw new Exception("Apache Tika $version is unsupported");
         }
@@ -450,6 +455,34 @@ abstract class Client
     public function getLatestSupportedVersion(): string
     {
         return end(self::$supportedVersions);
+    }
+
+    /**
+     * Allow usage with unsupported versions
+     */
+    public function allowUnsupportedVersions(): self
+    {
+        $this->unsupportedVersions = true;
+
+        return $this;
+    }
+
+    /**
+     * Disallow usage with unsupported versions
+     */
+    public function disallowUnsupportedVersions(): self
+    {
+        $this->unsupportedVersions = true;
+
+        return $this;
+    }
+
+    /**
+     * Check if unsupported versions are allowed
+     */
+    public function areUnsupportedVersionsAllowed(): bool
+    {
+        return $this->unsupportedVersions;
     }
 
     /**

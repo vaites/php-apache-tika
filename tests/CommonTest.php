@@ -91,4 +91,24 @@ class CommonTest extends TestCase
     {
         $this->assertTrue(self::$client->isVersionSupported(self::$version));
     }
+
+    /**
+     * @testdox Unsupported versions can be allowed
+     */
+    public function testAllowUnsupportedVersions(): void
+    {
+        self::$client->allowUnsupportedVersions();
+
+        $this->assertTrue(self::$client->areUnsupportedVersionsAllowed());
+    }
+
+    /**
+     * @testdox Unsupported versions can be disallowed
+     */
+    public function testDisallowUnsupportedVersions(): void
+    {
+        self::$client->disallowUnsupportedVersions();
+
+        $this->assertTrue(self::$client->areUnsupportedVersionsAllowed());
+    }
 }
