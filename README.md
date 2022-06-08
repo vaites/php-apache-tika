@@ -15,7 +15,7 @@ The following modes are supported:
 * **App mode**: run app JAR via command line interface
 * **Server mode**: make HTTP requests to [JSR 311 network server](https://cwiki.apache.org/confluence/display/TIKA/TikaServer)
 
-Server mode is recommended because is 5 times faster, but some shared hosts don't allow run processes in background.
+Server mode is recommended because is 5-10 times faster, but some shared hosts don't allow run processes in background.
 
 Although the library contains a list of supported versions, any version of Apache Tika should be compatible as long as
 backward compatibility is maintained by Tika team. Therefore, it is not necessary to wait for an update of the library 
@@ -283,8 +283,8 @@ Since 1.0 version there are some breaking changes:
 
 * Apache Tika versions prior to 1.19 are not supported
     * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 1.18 and older
-    * use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older
-* PHP minimum requirement is 8.0 or greater 
+    * Use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older
+* PHP minimum requirement is 8.0
     * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 7.4 and older
     * Use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older
 * `$client->getRecursiveMetadata()` returns an array as expected
@@ -292,6 +292,25 @@ Since 1.0 version there are some breaking changes:
 * Values returned by `Client::getAvailableDetectors()` and `Client::getAvailableParsers()` are identical and have a new definition 
 
 See [CHANGELOG.md](CHANGELOG.md) for more details.
+
+## Benchmarks
+
+A simple benchmark done with [Hyperfine](https://github.com/sharkdp/hyperfine) shows that server is 10 time faster than app:
+
+```
+Benchmark 1: php scripts/bench.php --cli
+  Time (mean ± σ):      3.422 s ±  0.063 s    [User: 0.004 s, System: 0.003 s]
+  Range (min … max):    3.337 s …  3.518 s    10 runs
+
+Benchmark 2: php scripts/bench.php --rest
+  Time (mean ± σ):     355.6 ms ±  46.3 ms    [User: 3.6 ms, System: 9.0 ms]
+  Range (min … max):   292.1 ms … 424.5 ms    10 runs
+
+Summary
+  'php scripts/bench.php --rest' ran
+    9.62 ± 1.27 times faster than 'php scripts/bench.php --cli'
+```
+
 
 ## Troubleshooting
 
