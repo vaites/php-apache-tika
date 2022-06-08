@@ -22,6 +22,8 @@ class ErrorTest extends TestCase
         {
             $client = Client::prepare('/nonexistent/path/to/apache-tika.jar');
             $client->getVersion();
+
+            $this->fail();
         }
         catch(Exception $exception)
         {
@@ -40,6 +42,8 @@ class ErrorTest extends TestCase
         {
             $client = new CLI(__FILE__);
             $client->getVersion(true);
+
+            $this->fail();
         }
         catch(Exception $exception)
         {
@@ -58,6 +62,8 @@ class ErrorTest extends TestCase
         {
             $client = new CLI($path, '/nonexistent/path/to/java');
             $version = $client->getVersion(true);
+
+            $this->fail();
         }
         catch(Exception $exception)
         {
@@ -95,6 +101,8 @@ class ErrorTest extends TestCase
         try
         {
             Client::make('localhost', 9998, [CURLOPT_PUT => false]);
+
+            $this->fail();
         }
         catch(Exception $exception)
         {
