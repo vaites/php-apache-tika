@@ -18,7 +18,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * OCR language test
+     * @testdox Custom header can be set
      */
     public function testHttpHeader(): void
     {
@@ -28,7 +28,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * OCR language test
+     * @testdox Single OCR language can be set
      */
     public function testOCRLanguage(): void
     {
@@ -38,7 +38,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * OCR languages test
+     * @testdox Multiple OCR languages can be set
      */
     public function testOCRLanguages(): void
     {
@@ -48,7 +48,17 @@ class WebTest extends BaseTest
     }
 
     /**
-     * cURL multiple options test
+     * @testdox Single cURL options can be set
+     */
+    public function testCurlSingleOption(): void
+    {
+        $client = Client::make('localhost', 9998)->setOption(CURLOPT_TIMEOUT, 3);
+
+        $this->assertEquals(3, $client->getOption(CURLOPT_TIMEOUT));
+    }
+
+    /**
+     * @testdox Multiple cURL options can be set
      */
     public function testCurlOptions(): void
     {
@@ -59,17 +69,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * cURL single option test
-     */
-    public function testCurlSingleOption(): void
-    {
-        $client = Client::make('localhost', 9998)->setOption(CURLOPT_TIMEOUT, 3);
-
-        $this->assertEquals(3, $client->getOption(CURLOPT_TIMEOUT));
-    }
-
-    /**
-     * cURL timeout option test
+     * @testdox cURL timeout can be set
      */
     public function testCurlTimeoutOption(): void
     {
@@ -79,7 +79,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * cURL headers test
+     * @testdox cURL header can be set
      */
     public function testCurlHeaders(): void
     {
@@ -92,7 +92,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * Set host test
+     * @testdox Host can be set
      */
     public function testSetHost(): void
     {
@@ -103,7 +103,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * Set port test
+     * @testdox Port can be set
      */
     public function testSetPort(): void
     {
@@ -114,7 +114,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * Set url host test
+     * @testdox Host can be set using an URL
      */
     public function testSetUrlHost(): void
     {
@@ -124,7 +124,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * Set url port test
+     * @testdox Port can be set using an URL
      */
     public function testSetUrlPort(): void
     {
@@ -134,7 +134,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * Set retries test
+     * @testdox Retries can be set using
      */
     public function testSetRetries(): void
     {
@@ -145,7 +145,7 @@ class WebTest extends BaseTest
     }
 
     /**
-     * Test delayed check
+     * @testdox Version check can be delayed
      */
     public function testDelayedCheck(): void
     {

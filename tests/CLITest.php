@@ -18,17 +18,17 @@ class CLITest extends BaseTest
     }
 
     /**
-     * XHTML test
+     * @testdox Document XHTML content is extracted
      *
      * @dataProvider encodingProvider
      */
-    public function testDocumentHTML(string $file): void
+    public function testDocumentXHTML(string $file): void
     {
         $this->assertStringStartsWith('<?xml version="1.0"', self::$client->getXHTML($file));
     }
 
     /**
-     * Set path test
+     * @testdox Tika path can be set
      */
     public function testSetPath(): void
     {
@@ -40,7 +40,7 @@ class CLITest extends BaseTest
     }
 
     /**
-     * Set Java test
+     * @testdox Java binary can be set
      */
     public function testSetBinary(): void
     {
@@ -52,7 +52,7 @@ class CLITest extends BaseTest
     }
 
     /**
-     * Set arguments test
+     * @testdox Java arguments can be set
      */
     public function testSetArguments(): void
     {
@@ -65,7 +65,7 @@ class CLITest extends BaseTest
     }
 
     /**
-     * Set Java test
+     * @testdox Environment variables can be set
      */
     public function testSetEnvVars(): void
     {
@@ -78,7 +78,7 @@ class CLITest extends BaseTest
     }
 
     /**
-     * Test delayed check
+     * @testdox Version check can be delayed
      */
     public function testDelayedCheck(): void
     {

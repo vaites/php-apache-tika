@@ -14,7 +14,7 @@ use Vaites\ApacheTika\Metadata;
 class ErrorTest extends TestCase
 {
     /**
-     * Test wrong command line mode path
+     * @testdox Invalid JAR path must throw an exception
      */
     public function testAppPath(): void
     {
@@ -30,7 +30,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test unexpected exit value for command line mode
+     * @testdox Invalid JAR file must throw an exception
      */
     public function testAppExitValue(): void
     {
@@ -48,7 +48,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test invalid Java binary path for command line mode
+     * @testdox Invalid Java binary must throw an exception
      */
     public function testJavaBinary(): void
     {
@@ -66,7 +66,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test wrong server
+     * @testdox Invalid server host and port must throw an exception
      */
     public function testServerConnection(): void
     {
@@ -88,25 +88,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test wrong request options
-     */
-    public function testRequestOptions(): void
-    {
-        try
-        {
-            $client = Client::make('localhost', 9998);
-            $client->request('bad');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertStringContainsString('Unknown type bad', $exception->getMessage());
-        }
-    }
-
-    /**
-     * Test invalidrequest options
+     * @testdox Invalid request options must throw an exception
      */
     public function testRequestRestrictedOptions(): void
     {
@@ -121,7 +103,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test wrong recursive metadata type
+     * @testdox Invalid non recursive file must throw an exception
      */
     public function testRequestMetadataType(): void
     {
@@ -139,7 +121,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test unsupported media type
+     * @testdox Unsupported media must throw an exception
      *
      * NOTE: return value was changed in version 1.23
      *
@@ -168,7 +150,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test unknown recursive metadata type
+     * @testdox Invalid recursive format must throw an exception
      */
     public function testUnknownRecursiveMetadataType(): void
     {
@@ -186,7 +168,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test wrong request type for all clients
+     * @testdox Invalid request type must throw an exception
      *
      * @dataProvider    parameterProvider
      */
@@ -206,7 +188,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test nonexistent local file for all clients
+     * @testdox Non existent file must throw an exception
      *
      * @dataProvider    parameterProvider
      */
@@ -226,7 +208,7 @@ class ErrorTest extends TestCase
     }
 
     /**
-     * Test nonexistent remote file for all clients
+     * @testdox Non existent URL must throw an exception
      *
      * @dataProvider    parameterProvider
      */

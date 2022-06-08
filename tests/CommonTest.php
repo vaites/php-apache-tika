@@ -25,7 +25,7 @@ class CommonTest extends TestCase
     }
 
     /**
-     * Set chunk size test
+     * @testdox Chunk size can be set
      */
     public function testSetChunkSize(): void
     {
@@ -35,7 +35,7 @@ class CommonTest extends TestCase
     }
 
     /**
-     * Set download remote
+     * @testdox Remote download can be enabled
      */
     public function testDownloadRemote(): void
     {
@@ -45,7 +45,7 @@ class CommonTest extends TestCase
     }
 
     /**
-     * Set callback (closure) test
+     * @testdox Closure read callback can be set
      */
     public function testSetClosureCallback(): void
     {
@@ -55,7 +55,7 @@ class CommonTest extends TestCase
     }
 
     /**
-     * Set callback (callable) test
+     * @testdox Callable read callback can be set
      */
     public function testSetCallableCallback(): void
     {
@@ -65,7 +65,7 @@ class CommonTest extends TestCase
     }
 
     /**
-     * Set timezone test
+     * @testdox Timezone can be set
      */
     public function testGetTimezone(): void
     {
@@ -77,7 +77,7 @@ class CommonTest extends TestCase
     }
 
     /**
-     * Get supported versions test
+     * @testdox Supported versions can be readed
      */
     public function testGetSupportedVersions(): void
     {
@@ -85,7 +85,7 @@ class CommonTest extends TestCase
     }
 
     /**
-     * Is version supported vtest
+     * @testdox Current version is supported
      */
     public function testIsVersionSupported(): void
     {

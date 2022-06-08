@@ -28,7 +28,7 @@ abstract class BaseTest extends TestCase
     public static int $shared = 0;
 
     /**
-     * Version test
+     * @testdox Current version matches
      */
     public function testVersion(): void
     {
@@ -36,7 +36,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata test
+     * @testdox Generic metadata is extracted
      *
      * @dataProvider documentProvider
      */
@@ -46,7 +46,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata test
+     * @testdox Document metadata is extracted
      *
      * @dataProvider documentProvider
      */
@@ -56,7 +56,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata content
+     * @testdox Document metadata with content is extracted
      *
      * @dataProvider documentProvider
      */
@@ -66,7 +66,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata title test
+     * @testdox Document title is extracted
      *
      * @dataProvider documentProvider
      */
@@ -76,7 +76,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata author test
+     * @testdox Document author is extracted
      *
      * @dataProvider documentProvider
      */
@@ -86,7 +86,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata dates test
+     * @testdox Document creation date is extracted
      *
      * @dataProvider documentProvider
      */
@@ -96,7 +96,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata dates test
+     * @testdox Document modification date is extracted
      *
      * @dataProvider documentProvider
      */
@@ -106,7 +106,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata timezone test
+     * @testdox Document creation timezone matches
      *
      * @dataProvider documentProvider
      */
@@ -120,7 +120,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata keywords test
+     * @testdox Document keywords are extracted
      *
      * @dataProvider documentProvider
      */
@@ -130,7 +130,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Recursive text metadata test
+     * @testdox Document recursive text content is extracted
      *
      * @dataProvider recursiveProvider
      */
@@ -144,7 +144,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Recursive HTML metadata test
+     * @testdox Document recursive HTML content is extracted
      *
      * @dataProvider recursiveProvider
      */
@@ -158,7 +158,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Recursive ignore metadata test
+     * @testdox Document recursive content can be ignored
      *
      * @dataProvider ocrProvider
      */
@@ -170,7 +170,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Language test
+     * @testdox Document language is detected
      *
      * @dataProvider documentProvider
      */
@@ -180,7 +180,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * MIME test
+     * @testdox Document MIME type is extracted
      *
      * @dataProvider documentProvider
      */
@@ -190,17 +190,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * HTML test
-     *
-     * @dataProvider documentProvider
-     */
-    public function testDocumentHTML(string $file): void
-    {
-        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
-    }
-
-    /**
-     * Text test
+     * @testdox Document text content is extracted
      *
      * @dataProvider documentProvider
      */
@@ -210,7 +200,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Main text test
+     * @testdox Document main text is extracted
      *
      * @dataProvider documentProvider
      */
@@ -220,7 +210,17 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata test
+     * @testdox Document HTML content is extracted
+     *
+     * @dataProvider documentProvider
+     */
+    public function testDocumentHTML(string $file): void
+    {
+        $this->assertStringContainsString('Zenonis est, inquam, hoc Stoici', self::$client->getHTML($file));
+    }
+
+    /**
+     * @testdox Image metadata is extracted
      *
      * @dataProvider imageProvider
      */
@@ -230,7 +230,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata width test
+     * @testdox Image width is extracted
      *
      * @dataProvider imageProvider
      */
@@ -242,7 +242,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Metadata height test
+     * @testdox Image height is extracted
      *
      * @dataProvider imageProvider
      */
@@ -254,7 +254,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * OCR test
+     * @testdox Image text is extracted using OCR
      *
      * @dataProvider ocrProvider
      */
@@ -266,7 +266,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Text callback test
+     * @testdox Read callback is applied for text content
      *
      * @dataProvider callbackProvider
      */
@@ -280,7 +280,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Text callback test
+     * @testdox Read callback is applied for text content without appending
      *
      * @dataProvider callbackProvider
      */
@@ -294,7 +294,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Main text callback test
+     * @testdox Read callback is applied for main text content
      *
      * @dataProvider callbackProvider
      */
@@ -308,7 +308,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Main text callback test
+     * @testdox Read callback is applied for HTML content
      *
      * @dataProvider callbackProvider
      */
@@ -322,7 +322,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Remote file test with integrated download
+     * @testdox Remote file is downloaded using Apache Tika
      *
      * @dataProvider remoteProvider
      */
@@ -332,7 +332,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Remote file test with internal downloader
+     * @testdox Remote file is downloaded using cURL
      *
      * @dataProvider remoteProvider
      */
@@ -352,7 +352,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Encoding tests
+     * @testdox UTF text is extracted
      *
      * @dataProvider encodingProvider
      */
@@ -371,7 +371,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Test available detectors
+     * @testdox Available detectors can be listed
      */
     public function testAvailableDetectors(): void
     {
@@ -381,7 +381,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Test available parsers
+     * @testdox Available parsers can be listed
      */
     public function testAvailableParsers(): void
     {
@@ -391,7 +391,7 @@ abstract class BaseTest extends TestCase
     }
 
     /**
-     * Test supported MIME types
+     * @testdox Supported MIME types can be listed
      */
     public function testSupportedMIMETypes(): void
     {
@@ -400,7 +400,7 @@ abstract class BaseTest extends TestCase
 
 
     /**
-     * Test supported MIME types
+     * @testdox Supported MIME type can be checked
      */
     public function testIsMIMETypeSupported(): void
     {
