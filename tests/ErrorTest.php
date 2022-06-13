@@ -40,7 +40,7 @@ class ErrorTest extends TestCase
 
         try
         {
-            $client = new CLI(__FILE__);
+            $client = CLI::prepare(__FILE__);
             $client->getVersion(true);
 
             $this->fail();
@@ -60,7 +60,7 @@ class ErrorTest extends TestCase
 
         try
         {
-            $client = new CLI($path, '/nonexistent/path/to/java');
+            $client = CLI::prepare($path, '/nonexistent/path/to/java');
             $version = $client->getVersion(true);
 
             $this->fail();
