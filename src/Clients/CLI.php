@@ -157,7 +157,7 @@ class CLI extends Client
             $path = $this->getPath();
 
             // try to get version using MANIFEST.MF file inside Apache Tika's JAR file
-            if($request === false && $path !== null && file_exists($path) && class_exists(ZipArchive::class))
+            if($path !== null && file_exists($path) && class_exists(ZipArchive::class))
             {
                 try
                 {
@@ -289,11 +289,11 @@ class CLI extends Client
     }
 
     /**
-     * Check Java binary, JAR path or server connection
+     * Check Java binary and JAR path
      *
      * @throws \Exception
      */
-    public function check(): void
+    protected function check(): void
     {
         if($this->isChecked() === false)
         {
@@ -322,7 +322,7 @@ class CLI extends Client
      *
      * @throws \Exception
      */
-    public function request(string $type, string $file = null): string
+    protected function request(string $type, string $file = null): string
     {
         // check if not checked
         $this->check();
@@ -348,7 +348,7 @@ class CLI extends Client
         // build command
         $jar = escapeshellarg($this->getPath() ?: 'error');
         $java = trim($this->getJava() ?: 'java');
-        $command = sprintf('%s -jar %s %s %s', $java, $jar, implode(' ', $arguments), $this->getJavaArgs());
+        $command = trim(sprintf('%s -jar %s %s %s', $java, $jar, implode(' ', $arguments), $this->getJavaArgs()));
 
         // run command
         $response = $this->exec($command);
@@ -386,7 +386,7 @@ class CLI extends Client
      *
      * @throws \Exception
      */
-    public function exec(string $command): ?string
+    protected function exec(string $command): ?string
     {
         // get env variables for proc_open()
         $env = empty($this->envVars) ? null : array_merge(getenv(), $this->envVars);

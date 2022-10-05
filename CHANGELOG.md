@@ -14,10 +14,11 @@
 
 ### Changed
 * Renamed client and metadata classes (class aliases added to keep compatibility)
+* `Client::check()` and `Client::request()` are now protected
 * Tested up to Apache Tika 1.28.3 and 2.4.0
 
 ### Removed
-* Support for PHP 7.3 and lower
+* Support for PHP 7.4 and lower
 * Support for Apache Tika 1.18 and lower
 
 ## v1.2.4

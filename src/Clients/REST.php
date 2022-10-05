@@ -423,11 +423,11 @@ class REST extends Client
     }
 
     /**
-     * Check if server is running
+     * Check server conection
      *
      * @throws \Exception
      */
-    public function check(): void
+    protected function check(): void
     {
         if($this->isChecked() === false)
         {
@@ -441,7 +441,7 @@ class REST extends Client
      *
      * @throws \Exception
      */
-    public function request(string $type, string $file = null): string
+    protected function request(string $type, string $file = null): string
     {
         static $retries = [];
 

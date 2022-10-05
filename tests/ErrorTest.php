@@ -20,8 +20,8 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = Client::prepare('/nonexistent/path/to/apache-tika.jar');
-            $client->getVersion();
+            $client = Client::make('/nonexistent/path/to/apache-tika.jar');
+            $client->getSupportedMIMETypes();
 
             $this->fail();
         }
@@ -36,12 +36,10 @@ class ErrorTest extends TestCase
      */
     public function testAppExitValue(): void
     {
-        $path = self::getPathForVersion(self::$version);
-
         try
         {
-            $client = CLI::prepare(__FILE__);
-            $client->getVersion(true);
+            $client = CLI::make(__FILE__);
+            $client->getSupportedMIMETypes();
 
             $this->fail();
         }
@@ -56,12 +54,10 @@ class ErrorTest extends TestCase
      */
     public function testJavaBinary(): void
     {
-        $path = self::getPathForVersion(self::$version);
-
         try
         {
-            $client = CLI::prepare($path, '/nonexistent/path/to/java');
-            $version = $client->getVersion(true);
+            $client = CLI::make('/nonexistent/path/to/apache-tika.jar', '/nonexistent/path/to/java');
+            $version = $client->getSupportedMIMETypes();
 
             $this->fail();
         }
@@ -79,7 +75,7 @@ class ErrorTest extends TestCase
         try
         {
             $client = Client::prepare('localhost', 9997);
-            $client->getVersion();
+            $client->getSupportedMIMETypes();
 
             $this->fail();
         }
