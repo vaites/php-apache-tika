@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.5
+
+* Tested up to Apache Tika 1.28.5 and 2.7.0
+
 ## v1.2.4
 
 * Fix known issues before parsing response (see [LOG4J2-2537](https://issues.apache.org/jira/browse/LOG4J2-2537))

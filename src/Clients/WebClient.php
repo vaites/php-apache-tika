@@ -38,6 +38,13 @@ class WebClient extends Client
     protected $port = null;
 
     /**
+     * Apache Tika server connection scheme
+     *
+     * @var int
+     */
+    protected $scheme = 'http';
+
+    /**
      * Number of retries on server error
      *
      * @var int
@@ -99,7 +106,7 @@ class WebClient extends Client
      */
     public function getUrl(): string
     {
-        return sprintf('http://%s:%d', $this->host, $this->port ?: 9998);
+        return sprintf('%s://%s:%d', $this->scheme ?: 'http', $this->host, $this->port ?: 9998);
     }
 
     /**
@@ -107,8 +114,14 @@ class WebClient extends Client
      */
     public function setUrl(string $url): self
     {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
         $host = parse_url($url, PHP_URL_HOST);
         $port = parse_url($url, PHP_URL_PORT);
+
+        if(!empty($scheme))
+        {
+            $this->setScheme((string) $scheme);
+        }
 
         if(!empty($host))
         {
@@ -155,6 +168,24 @@ class WebClient extends Client
     public function setPort(int $port): self
     {
         $this->port = $port;
+
+        return $this;
+    }
+
+    /**
+     * Get the scheme
+     */
+    public function getScheme(): string
+    {
+        return $this->scheme;
+    }
+
+    /**
+     * Set the scheme
+     */
+    public function setScheme(string $scheme): self
+    {
+        $this->scheme = $scheme;
 
         return $this;
     }
@@ -691,7 +722,8 @@ class WebClient extends Client
         if($file && preg_match('/^http/', $file))
         {
             //
-        } // local file options
+        }
+        // local file options
         elseif($file && file_exists($file) && is_readable($file))
         {
             $options[CURLOPT_INFILE] = fopen($file, 'r');
