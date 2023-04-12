@@ -116,6 +116,16 @@ class WebTest extends BaseTest
     }
 
     /**
+     * Set scheme test
+     */
+    public function testSetScheme(): void
+    {
+        $client = Client::make('https://localhost', 443, [], false);
+
+        $this->assertEquals('https', $client->getScheme());
+    }
+
+    /**
      * Set url host test
      */
     public function testSetUrlHost(): void
