@@ -40,7 +40,7 @@ class WebClient extends Client
     /**
      * Apache Tika server connection scheme
      *
-     * @var int
+     * @var string
      */
     protected $scheme = 'http';
 

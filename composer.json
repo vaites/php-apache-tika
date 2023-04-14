@@ -53,5 +53,10 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit --coverage-html reports"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
     }
 }
