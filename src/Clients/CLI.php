@@ -148,7 +148,7 @@ class CLI extends Client
             $path = $this->getPath();
 
             // try to get version using MANIFEST.MF file inside Apache Tika's JAR file
-            if($path !== null && file_exists($path) && class_exists(\ZipArchive::class))
+            if($path !== null && file_exists($path) && extension_loaded('zip'))
             {
                 try
                 {
@@ -203,7 +203,7 @@ class CLI extends Client
             {
                 [$key, $value] = (preg_split('/:\s+/', trim($line)) ?: ['error', 'error']);
 
-                if($key === 'alias')
+                if($key === 'alias' && is_array($mimeTypes[$mime]['alias']))
                 {
                     $mimeTypes[$mime]['alias'][] = $value;
                 }

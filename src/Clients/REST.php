@@ -163,11 +163,11 @@ class REST extends Client
     }
 
     /**
-     * Get an specified HTTP header
+     * Get the specified HTTP header
      */
     public function getHeader(string $name): ?string
     {
-        $value = [];
+        $value = null;
 
         foreach($this->options[CURLOPT_HTTPHEADER] as $header)
         {

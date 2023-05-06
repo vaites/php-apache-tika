@@ -34,7 +34,7 @@ class REST extends Client
      */
     public function getHost(): string
     {
-        return parse_url($this->url, PHP_URL_HOST);
+        return (string) parse_url($this->url, PHP_URL_HOST);
     }
 
     /**
@@ -52,7 +52,7 @@ class REST extends Client
      */
     public function getPort(): int
     {
-        return parse_url($this->url, PHP_URL_PORT);
+        return (int) parse_url($this->url, PHP_URL_PORT);
     }
 
     /**

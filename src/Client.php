@@ -105,7 +105,7 @@ abstract class Client
     /**
      * Get a class instance throwing an exception if check fails
      */
-    public static function make(string $param1 = null, $param2 = null, array $options = null, bool $check = null): CLI|REST
+    public static function make(string $param1 = null, int|string $param2 = null, array $options = null, bool $check = null): CLI|REST
     {
         if($param1 !== null && preg_match('/\.jar$/', $param1))
         {
@@ -127,7 +127,7 @@ abstract class Client
     /**
      * Get a class instance delaying the check
      */
-    public static function prepare($param1 = null, $param2 = null, $options = []): CLI|REST
+    public static function prepare(string $param1 = null, int|string $param2 = null, array $options = []): CLI|REST
     {
         return self::make($param1, $param2, $options, false);
     }
