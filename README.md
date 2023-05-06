@@ -8,7 +8,7 @@
 
 # PHP Apache Tika
 
-This tool provides [Apache Tika](https://tika.apache.org) bindings for PHP, allowing to extract text and metadata 
+Zero dependency [Apache Tika](https://tika.apache.org) bindings for PHP, allowing to extract text and metadata 
 from documents, images and other formats. 
 
 The following modes are supported:
@@ -27,7 +27,7 @@ to work with the new versions of the tool.
     * Text and HTML extraction
     * Metadata extraction
     * OCR recognition
-* Standarized metadata for documents
+* Standardized metadata for documents
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.19 or greater

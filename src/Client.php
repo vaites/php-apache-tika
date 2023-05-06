@@ -13,7 +13,7 @@ use Vaites\ApacheTika\Exceptions\Exception;
  * Apache Tika client interface
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    https://tika.apache.org/2.3.0/formats.html
+ * @link    https://tika.apache.org/2.7.0/formats.html
  */
 abstract class Client
 {
@@ -43,7 +43,7 @@ abstract class Client
     protected bool $checked = false;
 
     /**
-     * Callback called on secuential read
+     * Callback called on sequential read
      */
     protected Closure $callback;
 
@@ -82,9 +82,9 @@ abstract class Client
      */
     protected static array $supportedVersions = 
     [
-        "1.19", "1.19.1", "1.20", "1.21", "1.22", "1.23", "1.24", "1.24.1", "1.25",
-        "1.26", "1.27", "1.28", "1.28.1", "1.28.2", "1.28.3", "1.28.4", "1.28.5",
-        "2.0.0", "2.1.0", "2.2.0", "2.2.1", "2.3.0", "2.4.0", "2.5.0", "2.6.0", "2.7.0"
+        '1.19', '1.19.1', '1.20', '1.21', '1.22', '1.23', '1.24', '1.24.1', '1.25',
+        '1.26', '1.27', '1.28', '1.28.1', '1.28.2', '1.28.3', '1.28.4', '1.28.5',
+        '2.0.0', '2.1.0', '2.2.0', '2.2.1', '2.3.0', '2.4.0', '2.5.0', '2.6.0', '2.7.0'
     ];
 
     /**
@@ -174,14 +174,14 @@ abstract class Client
      */
     public function setCallback(callable $callback, bool $append = true): self
     {
+        $this->callbackAppend = $append;
+
         if($callback instanceof Closure || is_array($callback))
         {
-            $this->callbackAppend = (bool) $append;
             $this->callback = $callback instanceof Closure ? $callback : Closure::fromCallable($callback);
         }
         elseif(is_string($callback))
         {
-            $this->callbackAppend = (bool) $append;
             $this->callback = fn($chunk) => call_user_func_array($callback, [$chunk]);
         }
         else
@@ -437,7 +437,6 @@ abstract class Client
     {
         return self::$supportedVersions;
     }
-    
 
     /**
      * Return the latest Apache Tika supported version
