@@ -4,10 +4,10 @@ namespace Vaites\ApacheTika;
 
 use DateTime;
 use DateTimeZone;
-use Exception;
 use stdClass;
 
 use Vaites\ApacheTika\Contracts\Metadata as Contract;
+use Vaites\ApacheTika\Exceptions\Exception;
 
 /**
  * Standarized metadata class with common attributes for all document types
@@ -54,7 +54,7 @@ abstract class Metadata implements Contract
     /**
      * Parse Apache Tika response filling all properties
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function __construct(stdClass $meta, string $file, string $timezone)
     {
@@ -86,7 +86,7 @@ abstract class Metadata implements Contract
     /**
      * Return an instance of Metadata based on content type
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public static function make(stdClass $meta, string $file, string $timezone): Contract
     {
@@ -113,7 +113,7 @@ abstract class Metadata implements Contract
     /**
      * Sets an attribute
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public final function setAttribute(string $key, string $value): Contract
     {
@@ -154,7 +154,7 @@ abstract class Metadata implements Contract
     }
 
     /**
-     * Sets an speficic attribute for the file type
+     * Sets a specific attribute for the file type
      */
     abstract protected function setSpecificAttribute(string $key, string $value): Contract;
 }

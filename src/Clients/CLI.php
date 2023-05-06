@@ -2,16 +2,14 @@
 
 namespace Vaites\ApacheTika\Clients;
 
-use Exception;
-use ZipArchive;
-
+use Vaites\ApacheTika\Exceptions\Exception;
 use Vaites\ApacheTika\Client;
 
 /**
  * Apache Tika command line interface client
  *
  * @author  David Martínez <contacto@davidmartinez.net>
- * @link    https://tika.apache.org/2.3.0/gettingstarted.html#Using_Tika_as_a_command_line_utility
+ * @link    https://tika.apache.org/2.7.0/gettingstarted.html#Using_Tika_as_a_command_line_utility
  */
 class CLI extends Client
 {
@@ -27,24 +25,22 @@ class CLI extends Client
 
     /**
      * Java arguments
-     *
-     * @var string
      */
-    protected string $javaArgs;
+    protected array $javaArgs;
 
     /**
      * Environment variables
      *
      * @var array
      */
-    protected array $envVars = [];
+    protected array $envVars;
 
     /**
      * Configure client
      * 
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
-    public function __construct(string $path = null, string $java = null, array $args = null, bool $check = null)
+    public function __construct(string $path = null, string $java = null, bool $check = null)
     {
         parent::__construct();
 
@@ -56,11 +52,6 @@ class CLI extends Client
         if($java !== null)
         {
             $this->setJava($java);
-        }
-
-        if($args !== null)
-        {
-            $this->setJavaArgs(implode(' ', $args));
         }
 
         if($check === true)
@@ -108,9 +99,9 @@ class CLI extends Client
     /**
      * Get the Java arguments
      */
-    public function getJavaArgs(): ?string
+    public function getJavaArgs(): array
     {
-        return $this->javaArgs ?? null;
+        return $this->javaArgs ?? [];
     }
 
     /**
@@ -118,7 +109,7 @@ class CLI extends Client
      *
      * NOTE: to modify child process jvm args, prepend "J" to each argument (-JXmx4g)
      */
-    public function setJavaArgs(string $args): self
+    public function setJavaArgs(array $args): self
     {
         $this->javaArgs = $args;
 
@@ -130,7 +121,7 @@ class CLI extends Client
      */
     public function getEnvVars(): array
     {
-        return $this->envVars;
+        return $this->envVars ?? [];
     }
 
     /**
@@ -146,7 +137,7 @@ class CLI extends Client
     /**
      * Returns current Tika version
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getVersion(bool $request = false): string
     {
@@ -157,11 +148,11 @@ class CLI extends Client
             $path = $this->getPath();
 
             // try to get version using MANIFEST.MF file inside Apache Tika's JAR file
-            if($path !== null && file_exists($path) && class_exists(ZipArchive::class))
+            if($path !== null && file_exists($path) && class_exists(\ZipArchive::class))
             {
                 try
                 {
-                    $zip = new ZipArchive();
+                    $zip = new \ZipArchive();
 
                     if($zip->open($path))
                     {
@@ -192,7 +183,7 @@ class CLI extends Client
      *
      * NOTE: the data provided by the CLI must be parsed: mime type has no spaces, aliases go next prefixed with spaces
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getSupportedMIMETypes(): array
     {
@@ -223,14 +214,13 @@ class CLI extends Client
             }
         }
 
-
         return $mimeTypes;
     }
 
     /**
      * Returns the available detectors
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getAvailableDetectors(): array
     {
@@ -259,7 +249,7 @@ class CLI extends Client
     /**
      * Returns the available parsers
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getAvailableParsers(): array
     {
@@ -291,7 +281,7 @@ class CLI extends Client
     /**
      * Check Java binary and JAR path
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function check(): void
     {
@@ -320,7 +310,7 @@ class CLI extends Client
     /**
      * Configure and make a request and return its results
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function request(string $type, string $file = null): string
     {
@@ -334,7 +324,7 @@ class CLI extends Client
         }
 
         // command arguments
-        $arguments = $this->getArguments($type, $file);
+        $arguments = array_merge($this->getJavaArgs(), $this->getArguments($type, $file));
 
         // check the request
         $file = $this->checkRequest($type, $file);
@@ -348,7 +338,7 @@ class CLI extends Client
         // build command
         $jar = escapeshellarg($this->getPath() ?: 'error');
         $java = trim($this->getJava() ?: 'java');
-        $command = trim(sprintf('%s -jar %s %s %s', $java, $jar, implode(' ', $arguments), $this->getJavaArgs()));
+        $command = trim(sprintf('%s -jar %s %s', $java, $jar, implode(' ', $arguments)));
 
         // run command
         $response = $this->exec($command);
@@ -384,12 +374,12 @@ class CLI extends Client
     /**
      * Run the command and return its results
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function exec(string $command): ?string
     {
         // get env variables for proc_open()
-        $env = empty($this->envVars) ? null : array_merge(getenv(), $this->envVars);
+        $env = array_merge(getenv(), $this->getEnvVars());
 
         // run command
         $exit = -1;
@@ -431,7 +421,7 @@ class CLI extends Client
     /**
      * Get the arguments to run the command
      *
-     * @throws  Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function getArguments(string $type, string $file = null): array
     {

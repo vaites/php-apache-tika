@@ -3,13 +3,12 @@
 namespace Vaites\ApacheTika;
 
 use Closure;
-use Exception;
 use stdClass;
 
 use Vaites\ApacheTika\Clients\CLI;
 use Vaites\ApacheTika\Clients\REST;
 use Vaites\ApacheTika\Contracts\Metadata as MetadataContract;
-
+use Vaites\ApacheTika\Exceptions\Exception;
 /**
  * Apache Tika client interface
  *
@@ -61,7 +60,7 @@ abstract class Client
     /**
      * Remote download flag
      */
-    protected bool $downloadRemote = false;
+    protected bool $downloadRemote = true;
 
     /**
      * Allow unsupported versions
@@ -83,9 +82,9 @@ abstract class Client
      */
     protected static array $supportedVersions = 
     [
-        "1.19", "1.19.1", "1.20", "1.21", "1.22", "1.23", "1.24", "1.24.1", "1.25", "1.26","1.27", 
-        "1.28", "1.28.1", "1.28.2", "1.28.3",
-        "2.0.0", "2.1.0", "2.2.0", "2.2.1", "2.3.0", "2.4.0"
+        "1.19", "1.19.1", "1.20", "1.21", "1.22", "1.23", "1.24", "1.24.1", "1.25",
+        "1.26", "1.27", "1.28", "1.28.1", "1.28.2", "1.28.3", "1.28.4", "1.28.5",
+        "2.0.0", "2.1.0", "2.2.0", "2.2.1", "2.3.0", "2.4.0", "2.5.0", "2.6.0", "2.7.0"
     ];
 
     /**
@@ -110,11 +109,16 @@ abstract class Client
     {
         if($param1 !== null && preg_match('/\.jar$/', $param1))
         {
-            $client = new CLI($param1, (string) $param2, $options, $check);
+            $client = new CLI($param1, (string) $param2, $check);
+
+            if($options !== null)
+            {
+                $client->setJavaArgs($options);
+            }
         }
         else
         {
-            $client = new REST($param1, (int) $param2, $options, $check);
+            $client = new REST($param2 ? "$param1:$param2" : $param1, $options, $check);
         }
 
         return $client;
@@ -139,7 +143,7 @@ abstract class Client
     /**
      * Set the encoding
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setEncoding(string $encoding): self
     {
@@ -166,7 +170,7 @@ abstract class Client
     /**
      * Set the callback (callable or closure) for call on secuential read
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setCallback(callable $callback, bool $append = true): self
     {
@@ -237,7 +241,7 @@ abstract class Client
      */
     public function setDownloadRemote(bool $download): self
     {
-        $this->downloadRemote = (bool) $download;
+        $this->downloadRemote = $download;
 
         return $this;
     }
@@ -245,7 +249,7 @@ abstract class Client
     /**
      * Gets file metadata
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getMetadata(string $file, bool $content = false): MetadataContract
     {
@@ -277,7 +281,7 @@ abstract class Client
      *  ]
      *
      * @link https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-RecursiveMetadataandContent
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getRecursiveMetadata(string $file, ?string $format = 'ignore'): array
     {
@@ -312,7 +316,7 @@ abstract class Client
     /**
      * Detect language
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getLanguage(string $file): ?string
     {
@@ -322,7 +326,7 @@ abstract class Client
     /**
      * Detect MIME type
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getMIME(string $file): ?string
     {
@@ -332,7 +336,7 @@ abstract class Client
     /**
      * Extracts HTML
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getHTML(string $file, callable $callback = null, bool $append = true): ?string
     {
@@ -347,7 +351,7 @@ abstract class Client
     /**
      * Extracts XHTML
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getXHTML(string $file, callable $callback = null, bool $append = true): ?string
     {
@@ -362,7 +366,7 @@ abstract class Client
     /**
      * Extracts text
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getText(string $file, callable $callback = null, bool $append = true): ?string
     {
@@ -377,7 +381,7 @@ abstract class Client
     /**
      * Extracts main text
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getMainText(string $file, callable $callback = null, bool $append = true): ?string
     {
@@ -392,7 +396,7 @@ abstract class Client
     /**
      * Returns current Tika version
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getVersion(bool $request = false): ?string
     {
@@ -536,7 +540,7 @@ abstract class Client
      *
      * @param string $mime
      * @return bool
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function isMIMETypeSupported(string $mime): bool
     {
@@ -546,7 +550,7 @@ abstract class Client
     /**
      * Check the request before executing
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function checkRequest(string $type, string $file = null): ?string
     {
@@ -603,7 +607,7 @@ abstract class Client
      * Parse the response returned by Apache Tika
      *
      * @return mixed
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function parseJsonResponse(string $response)
     {
@@ -631,7 +635,7 @@ abstract class Client
      * Download file to a temporary folder and return its path
      *
      * @link https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function downloadFile(string $file): string
     {
@@ -680,21 +684,21 @@ abstract class Client
     /**
      * Must return the supported MIME types
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     abstract public function getSupportedMIMETypes(): array;
 
     /**
      * Must return the available detectors
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     abstract public function getAvailableDetectors(): array;
 
     /**
      * Must return the available parsers
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     abstract public function getAvailableParsers(): array;
 
@@ -706,7 +710,7 @@ abstract class Client
     /**
      * Configure and make a request and return its results.
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     abstract protected function request(string $type, string $file = null): ?string;
 }

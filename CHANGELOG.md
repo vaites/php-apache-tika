@@ -5,21 +5,28 @@
 ### Added
 * Force internal download for remote files
 * Version list `composer.json` moved `Client.php`
-* `declare(strict_types=1)`to all files
+* `declare(strict_types=1)` to all files
 * Exception for unsupported Apache Tika versions
 * Configuration using env variables
 * Metadata timezone customization
 * Typed class properties
+* Custom exceptions
 * `tika()` helper
 
 ### Changed
-* Renamed client and metadata classes (class aliases added to keep compatibility)
+* Renamed client and metadata classes (class aliases added to keep compatibility) 
 * `Client::check()` and `Client::request()` are now protected
-* Tested up to Apache Tika 1.28.3 and 2.4.0
+* Tested up to Apache Tika 1.28.5 and 2.7.0
 
 ### Removed
-* Support for PHP 7.4 and lower
+* Support for PHP 7
 * Support for Apache Tika 1.18 and lower
+
+## v1.2.5
+
+### Changed
+* Allow https:// URLs on web client
+* Tested up to Apache Tika 1.28.5 and 2.7.0
 
 ## v1.2.4
 

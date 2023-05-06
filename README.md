@@ -88,22 +88,15 @@ docker run -d -p 9998:9998 apache/tika:latest-full
 Instantiate the class, checking if JAR exists or server is running:
 
 ```php
-$client = \Vaites\ApacheTika\Client::make('localhost', 9998);           // server mode (default)
+$client = \Vaites\ApacheTika\Client::make('http://localhost:9998');     // server mode (default)
 $client = \Vaites\ApacheTika\Client::make('/path/to/tika-app.jar');     // app mode 
 ```
 
 If you want to use dependency injection, serialize the class or just delay the check:
 
 ```php
-$client = \Vaites\ApacheTika\Client::prepare('localhost', 9998);
-$client = \Vaites\ApacheTika\Client::prepare('/path/to/tika-app.jar'); 
-```
-
-You can use an URL too:
-
-```php
-$client = \Vaites\ApacheTika\Client::make('http://localhost:9998');
 $client = \Vaites\ApacheTika\Client::prepare('http://localhost:9998');
+$client = \Vaites\ApacheTika\Client::prepare('/path/to/tika-app.jar'); 
 ```
 
 If you prefer a shorter version, use the `tika()` helper:
@@ -119,8 +112,6 @@ This library will make a first request to check the Apache Tika version unless a
 $client = \Vaites\ApacheTika\Client::prepare('http://localhost:9998');
 $client->setVersion('2.0.0');
 ```
-
-The version can also be set using  en variable.
 
 Now, you can use the class to extract text from documents:
 
@@ -141,9 +132,10 @@ $metadata = $client->getMetadata('/path/to/your/image');
 $text = $client->getText('/path/to/your/image');
 ```
     
-You can use an URL instead of a file path and the library will download the file and pass it to Apache Tika. There's 
-**no need** to add `-enableUnsecureFeatures -enableFileUrl` to command line when starting the server, as described 
-[here](https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes).
+You can use an URL instead of a file path and the library will download the file and pass it to Apache Tika. 
+
+If you're using the 1.x version there's **no need** to add `-enableUnsecureFeatures -enableFileUrl` to command line when 
+starting the server, as described [here](https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-SpecifyingaURLInsteadofPuttingBytesinTika1.x).
 
 ### Methods
 
@@ -213,7 +205,7 @@ $client->getDownloadRemote();
 
 #### Command line client
     
-Set/get JAR/Java paths (only CLI mode):
+Set/get JAR/Java paths:
 
 ```php
 $client->setPath($path);
@@ -231,15 +223,9 @@ $client->getEnvVars();
 
 #### Web client
     
-Set/get host properties
+Set/get URL and retries
 
 ```php
-$client->setHost($host);
-$client->getHost();
-
-$client->setPort($port);
-$client->getPort();
-
 $client->setUrl($url);
 $client->getUrl();
 
@@ -292,9 +278,17 @@ Since 1.0 version there are some breaking changes:
     * Use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older
 * `$client->getRecursiveMetadata()` returns an array as expected
 * `Client::getSupportedVersions()` and `Client::isVersionSupported()` methods cannot be called statically
+* Methods `Client::getHost()`, `Client::setHost()`, `Client::getPort()`, `Client::setPort()` are removed
 * Values returned by `Client::getAvailableDetectors()` and `Client::getAvailableParsers()` are identical and have a new definition 
 
 See [CHANGELOG.md](CHANGELOG.md) for more details.
+
+### Upgrading from 1.x to 2.x
+
+* Update your composer.json file to use 2.x version
+* If you're using client classes directly:
+  * Replace `\Vaites\ApacheTika\Clients\CLIClient;` with `\Vaites\ApacheTika\Client\CLI`
+  * Replace `\Vaites\ApacheTika\Clients\WebClient;` with `\Vaites\ApacheTika\Client\REST`
 
 ## Benchmarks
 

@@ -2,8 +2,6 @@
 
 set -e
 
-SOURCE=$(dirname $0)
-COMPOSER="$SOURCE/../composer.json"
 LATEST=$(tail -n 1 .github/workflows/tests.yml | awk -F"'" '{print $2}')
 
 PORT=${APACHE_TIKA_PORT:-9998}
@@ -17,7 +15,7 @@ VERSION=${APACHE_TIKA_VERSION:-$LATEST}
     JAVA='java'
 }
 
-if [ $(ps aux | grep -c tika-server-$VERSION) -lt 2 ]; then
+if [ $(ps aux | grep -c "tika-server-$VERSION") -lt 2 ]; then
     $JAVA -version
 
     if [[ "$VERSION" =~ ^1 ]]; then

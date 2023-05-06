@@ -2,9 +2,8 @@
 
 namespace Vaites\ApacheTika\Clients;
 
-use Exception;
-
 use Vaites\ApacheTika\Client;
+use Vaites\ApacheTika\Exceptions\Exception;
 
 /**
  * Apache Tika rest client
@@ -15,14 +14,9 @@ use Vaites\ApacheTika\Client;
 class REST extends Client
 {
     /**
-     * Apache Tika server host
+     * Apache Tika server URL
      */
-    protected string $host;
-
-    /**
-     * Apache Tika server port
-     */
-    protected int $port = 9998;
+    protected string $url = 'http://localhost:9998';
 
     /**
      * Number of retries on server error
@@ -49,32 +43,21 @@ class REST extends Client
     /**
      * Configure class and test if server is running
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
-    public function __construct(string $host = null, int $port = null, array $options = null, bool $check = null)
+    public function __construct(string $url = null, array $options = null, bool $check = null)
     {
         parent::__construct();
 
-        if(is_string($host) && filter_var($host, FILTER_VALIDATE_URL))
+        if($url !== null)
         {
-            $this->setUrl($host);
-        }
-        elseif($host)
-        {
-            $this->setHost($host);
-        }
-
-        if(is_numeric($port) && $port)
-        {
-            $this->setPort($port);
+            $this->setUrl($url);
         }
 
         if(is_array($options))
         {
             $this->setOptions($options);
         }
-
-        $this->setDownloadRemote(true);
 
         if($check === true)
         {
@@ -87,62 +70,15 @@ class REST extends Client
      */
     public function getUrl(): string
     {
-        return sprintf('http://%s:%d', $this->host, $this->port ?: 9998);
+        return $this->url;
     }
 
     /**
-     * Set the host and port using an URL
+     * Set the base URL
      */
     public function setUrl(string $url): self
     {
-        $host = parse_url($url, PHP_URL_HOST);
-        $port = parse_url($url, PHP_URL_PORT);
-
-        if(!empty($host))
-        {
-            $this->setHost((string) $host);
-        }
-
-        if(!empty($port))
-        {
-            $this->setPort((int) $port);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get the host
-     */
-    public function getHost(): ?string
-    {
-        return $this->host;
-    }
-
-    /**
-     * Set the host
-     */
-    public function setHost(string $host): self
-    {
-        $this->host = $host;
-
-        return $this;
-    }
-
-    /**
-     * Get the port
-     */
-    public function getPort(): int
-    {
-        return $this->port;
-    }
-
-    /**
-     * Set the port
-     */
-    public function setPort(int $port): self
-    {
-        $this->port = $port;
+        $this->url = str_contains($url, '://') ? $url : "http://$url:9998";
 
         return $this;
     }
@@ -189,7 +125,7 @@ class REST extends Client
      * @link http://php.net/manual/en/curl.constants.php
      * @link http://php.net/manual/en/function.curl-setopt.php
      * @param mixed $value
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setOption(int $key, $value): self
     {
@@ -206,7 +142,7 @@ class REST extends Client
     /**
      * Set the cURL options
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setOptions(array $options): self
     {
@@ -248,7 +184,7 @@ class REST extends Client
     /**
      * Set a cURL header to be set with curl_setopt()
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setHeader(string $name, string $value): self
     {
@@ -260,7 +196,7 @@ class REST extends Client
     /**
      * Set the HTTP headers
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setHeaders(array $headers): self
     {
@@ -283,7 +219,7 @@ class REST extends Client
     /**
      * Set the accepted OCR language
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setOCRLanguage(string $language): self
     {  
@@ -293,7 +229,7 @@ class REST extends Client
     /**
      * Set the accepted OCR languages
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setOCRLanguages(array $languages): self
     {
@@ -316,7 +252,7 @@ class REST extends Client
     /**
      * Set the timeout value for cURL
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function setTimeout(int $value): self
     {
@@ -328,7 +264,7 @@ class REST extends Client
     /**
      * Returns the supported MIME types
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getSupportedMIMETypes(): array
     {
@@ -349,7 +285,7 @@ class REST extends Client
     /**
      * Returns the available detectors
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getAvailableDetectors(): array
     {
@@ -387,7 +323,7 @@ class REST extends Client
     /**
      * Returns the available parsers
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public function getAvailableParsers(): array
     {
@@ -423,9 +359,9 @@ class REST extends Client
     }
 
     /**
-     * Check server conection
+     * Check server connection
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function check(): void
     {
@@ -439,7 +375,7 @@ class REST extends Client
     /**
      * Configure, make a request and return its results
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function request(string $type, string $file = null): string
     {
@@ -496,15 +432,18 @@ class REST extends Client
             {
                 $this->cacheResponse($type, $response, $file);
             }
-        } // request completed successfully but result is empty
+        }
+        // request completed successfully but result is empty
         elseif($status == 204)
         {
             $response = null;
-        } // retry on request failed with error 500
+        }
+        // retry on request failed with error 500
         elseif($status == 500 && $file !== null && $retries[sha1($file)]--)
         {
             $response = $this->request($type, $file);
-        } // other status code is an error
+        }
+        // other status code is an error
         else
         {
             $this->error($status, $resource, $file);
@@ -516,7 +455,7 @@ class REST extends Client
     /**
      * Make a request to Apache Tika Server
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function exec(array $options = []): array
     {
@@ -554,7 +493,7 @@ class REST extends Client
     /**
      * Throws an exception for an error status code
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function error(int $status, string $resource, string $file = null): void
     {
@@ -605,7 +544,7 @@ class REST extends Client
      * Get the parameters to make the request
      *
      * @link https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function getParameters(string $type, string $file = null): array
     {
@@ -677,7 +616,7 @@ class REST extends Client
     /**
      * Get the cURL options
      *
-     * @throws \Exception
+     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     protected function getCurlOptions(string $type, string $file = null): array
     {
