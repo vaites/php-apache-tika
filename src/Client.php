@@ -7,6 +7,7 @@ use stdClass;
 
 use Vaites\ApacheTika\Clients\CLI;
 use Vaites\ApacheTika\Clients\REST;
+use Vaites\ApacheTika\Contracts\Client as ClientContract;
 use Vaites\ApacheTika\Contracts\Metadata as MetadataContract;
 use Vaites\ApacheTika\Exceptions\Exception;
 /**
@@ -15,7 +16,7 @@ use Vaites\ApacheTika\Exceptions\Exception;
  * @author  David Martínez <contacto@davidmartinez.net>
  * @link    https://tika.apache.org/2.7.0/formats.html
  */
-abstract class Client
+abstract class Client implements ClientContract
 {
     /**
      * Platform (unix or win)

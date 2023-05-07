@@ -137,6 +137,31 @@ You can use an URL instead of a file path and the library will download the file
 If you're using the 1.x version there's **no need** to add `-enableUnsecureFeatures -enableFileUrl` to command line when 
 starting the server, as described [here](https://cwiki.apache.org/confluence/display/TIKA/TikaServer#TikaServer-SpecifyingaURLInsteadofPuttingBytesinTika1.x).
 
+### Entities
+
+An easier way to use the library is through the `Entity` class and its subclasses:
+
+```php
+$client = \Vaites\ApacheTika\Client::make('localhost');
+$entity = \Vaites\ApacheTika\Entity::guess('/path/to/your/document', $client);
+
+$entity = \Vaites\ApacheTika\Entities\Document::make('/path/to/your/document', $client);
+$entity = \Vaites\ApacheTika\Entities\Image::make('/path/to/your/image', $client);
+$entity = \Vaites\ApacheTika\Entities\Video::make('/path/to/your/video', $client);
+```
+
+The `guess()` method will try to guess the type, falling back to `Document` if not available/detected. Now you can
+access all the properties of the entity:
+
+```php
+$entity->html;
+$entity->text;
+$entity->mime;
+```
+
+These entities rely on the client to get the main attributes and the `Metadata` classes for the format specific 
+attributes.
+
 ### Methods
 
 Here are the full list of available methods

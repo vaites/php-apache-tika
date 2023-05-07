@@ -104,6 +104,7 @@ abstract class Metadata implements Contract
         return match(current(explode('/', $mime)))
         {
             'image' => new Metadata\Image($meta, $file, $timezone),
+            'video' => new Metadata\Video($meta, $file, $timezone),
             default => new Metadata\Document($meta, $file, $timezone)
         };
     }
