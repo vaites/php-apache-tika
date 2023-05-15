@@ -108,6 +108,15 @@ abstract class Client implements ClientContract
      */
     public static function make(string $param1 = null, int|string $param2 = null, array $options = null, bool $check = null): CLI|REST
     {
+        if($param1 === null && $param2 === null && getenv('APACHE_TIKA_PATH') !== false)
+        {
+            $param1 = getenv('APACHE_TIKA_PATH');
+        }
+        elseif($param1 === null && $param2 === null && getenv('APACHE_TIKA_URL') !== false)
+        {
+            $param1 = getenv('APACHE_TIKA_URL');
+        }
+
         if($param1 !== null && preg_match('/\.jar$/', $param1))
         {
             $client = new CLI($param1, (string) $param2, $check);

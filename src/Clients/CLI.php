@@ -44,6 +44,16 @@ class CLI extends Client
     {
         parent::__construct();
 
+        if($path === null && getenv('APACHE_TIKA_PATH') !== false)
+        {
+            $path = getenv('APACHE_TIKA_PATH');
+        }
+
+        if($java === null && getenv('JAVA_HOME'))
+        {
+            $java = getenv('JAVA_HOME') . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'java';
+        }
+
         if($path !== null)
         {
             $this->setPath($path);

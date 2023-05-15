@@ -49,6 +49,11 @@ class REST extends Client
     {
         parent::__construct();
 
+        if($url === null && getenv('APACHE_TIKA_URL') !== false)
+        {
+            $url = getenv('APACHE_TIKA_URL');
+        }
+
         if($url !== null)
         {
             $this->setUrl($url);

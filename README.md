@@ -85,6 +85,11 @@ docker pull apache/tika:latest-full
 docker run -d -p 9998:9998 apache/tika:latest-full
 ```
 
+You can define the following environment variables to configure the client:
+* `APACHE_TIKA_URL`: full server URL (default: `http://localhost:9998`)
+* `APACHE_TIKA_PATH`: full path to Apache Tika JAR
+* `APACHE_TIKA_VERSION`: Apache Tika version
+
 Instantiate the class, checking if JAR exists or server is running:
 
 ```php
@@ -102,7 +107,7 @@ $client = \Vaites\ApacheTika\Client::prepare('/path/to/tika-app.jar');
 If you prefer a shorter version, use the `tika()` helper:
 
 ```php
-$client = tika('localhost');
+$client = tika('http://localhost:9998');
 ```
 
 This library will make a first request to check the Apache Tika version unless a version is set using the 
@@ -142,12 +147,11 @@ starting the server, as described [here](https://cwiki.apache.org/confluence/dis
 An easier way to use the library is through the `Entity` class and its subclasses:
 
 ```php
-$client = \Vaites\ApacheTika\Client::make('localhost');
-$entity = \Vaites\ApacheTika\Entity::guess('/path/to/your/document', $client);
+$entity = \Vaites\ApacheTika\Entity::guess('/path/to/your/document');
 
-$entity = \Vaites\ApacheTika\Entities\Document::make('/path/to/your/document', $client);
-$entity = \Vaites\ApacheTika\Entities\Image::make('/path/to/your/image', $client);
-$entity = \Vaites\ApacheTika\Entities\Video::make('/path/to/your/video', $client);
+$entity = \Vaites\ApacheTika\Entities\Document::make('/path/to/your/document');
+$entity = \Vaites\ApacheTika\Entities\Image::make('/path/to/your/image');
+$entity = \Vaites\ApacheTika\Entities\Video::make('/path/to/your/video');
 ```
 
 The `guess()` method will try to guess the type, falling back to `Document` if not available/detected. Now you can
@@ -161,6 +165,11 @@ $entity->mime;
 
 These entities rely on the client to get the main attributes and the `Metadata` classes for the format specific 
 attributes.
+
+A client instance can be passed to the `Entity::guess()` or `Entity::make()` methods to avoid creating a new one. If 
+not specified the library will create a new instance using environment variables or the default values.
+
+```php
 
 ### Methods
 
