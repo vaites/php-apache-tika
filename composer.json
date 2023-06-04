@@ -1,19 +1,7 @@
 {
     "name": "vaites/php-apache-tika",
     "description": "Apache Tika bindings for PHP: extracts text from documents and images (with OCR), metadata and more...",
-    "keywords": [
-        "apache",
-        "tika",
-        "pdf",
-        "doc",
-        "docx",
-        "ppt",
-        "pptx",
-        "odt",
-        "office",
-        "documents",
-        "ocr"
-    ],
+    "keywords": ["apache", "tika", "pdf", "doc", "docx", "ppt", "pptx", "odt", "office", "documents", "ocr"],
     "license": "MIT",
     "authors": [
         {
@@ -35,7 +23,7 @@
         }
     },
     "require": {
-        "php": ">=8.0.0",
+        "php": ">=8.1",
         "ext-curl": "*"
     },
     "require-dev": {
@@ -49,6 +37,10 @@
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse -c phpstan.neon",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php -S localhost:8000 -t ."
+        ],
         "test": "vendor/bin/phpunit --coverage-html reports"
     },
     "config": {

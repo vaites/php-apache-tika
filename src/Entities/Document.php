@@ -14,9 +14,10 @@ use Vaites\ApacheTika\Entity;
  * @property-read null|string $language
  * @property-read null|string $encoding
  * @property-read null|string $generator
+ * @property-read null|string $author
  * @property-read array $keywords
  * @property-read int $pages
- * @property-read int $word
+ * @property-read int $words
  */
 class Document extends Entity
 {

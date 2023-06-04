@@ -7,8 +7,6 @@ use Vaites\ApacheTika\Contracts\Metadata as Contract;
 
 /**
  * Metadata class for images
- *
- * @author  David Martínez <contacto@davidmartinez.net>
  */
 class Image extends Metadata
 {
@@ -53,7 +51,7 @@ class Image extends Metadata
                 break;
 
             case 'x-tika:content':
-                $this->content = (string) $value;
+                $this->content = $value;
                 break;
         }
 

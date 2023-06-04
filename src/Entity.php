@@ -5,9 +5,7 @@ namespace Vaites\ApacheTika;
 use Vaites\ApacheTika\Contracts\Client as ClientContract;
 use Vaites\ApacheTika\Contracts\Entity as EntityContract;
 use Vaites\ApacheTika\Contracts\Metadata as MetadataContract;
-use Vaites\ApacheTika\Entities\Document;
-use Vaites\ApacheTika\Entities\Image;
-use Vaites\ApacheTika\Entities\Video;
+use Vaites\ApacheTika\Exceptions\Exception;
 
 /**
  * Base entity
@@ -18,6 +16,8 @@ use Vaites\ApacheTika\Entities\Video;
  * @property-read null|string $text
  * @property-read null|string $xhtml
  * @property-read MetadataContract $metadata
+ *
+ * @method Contracts\Entity|Entities\Book|Entities\Document|Entities\Image|Entities\Text make(string $path, mixed ...$args)
  */
 abstract class Entity implements EntityContract
 {
@@ -39,7 +39,7 @@ abstract class Entity implements EntityContract
     /**
      * Create a new entity instance
      */
-    public function __construct(string $path, ...$args)
+    final public function __construct(string $path, mixed ...$args)
     {
         $this->path = $path;
 
@@ -53,52 +53,47 @@ abstract class Entity implements EntityContract
      */
     public function __get(string $name): mixed
     {
-        return match($name)
+        return match(true)
         {
-            'html'      => $this->client->getHTML($this->path),
-            'mainText'  => $this->client->getMainText($this->path),
-            'metadata'  => $this->metadata(),
-            'mime'      => $this->client->getMIME($this->path),
-            'text'      => $this->client->getText($this->path),
-            'xhtml'     => $this->client->getXHTML($this->path),
-            default     => $this->metadata()->$name ?? null
+            $name === 'html'        => $this->client->getHTML($this->path),
+            $name === 'mainText'    => $this->client->getMainText($this->path),
+            $name === 'mime'        => $this->client->getMIME($this->path),
+            $name === 'text'        => $this->client->getText($this->path),
+            $name === 'xhtml'       => $this->client->getXHTML($this->path),
+            $name === 'metadata'    => $this->metadata(),
+
+            property_exists($this->metadata(), $name) => $this->metadata()->$name,
+            default => throw new Exception(sprintf('Undefined property %s::$%s', static::class, $name))
         };
     }
 
     /**
      * Return an instance of the entity guessing the type
      */
-    public static function make(string $path, ...$args): EntityContract
+    public static function make(string $path, mixed ...$args): EntityContract
     {
-        return new static($path, ...$args);
+        if(filter_var($path, FILTER_VALIDATE_URL))
+        {
+            $mime = get_headers($path)['Content-Type'] ?? null;
+        }
+        elseif(extension_loaded('fileinfo'))
+        {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
+            $mime = $finfo ? finfo_file($finfo, $path) : null;
+        }
+        else
+        {
+            $mime = static::client(...$args)->getMIME($path);
+        }
+
+        $entity = MIME::guess($mime)->entity();
+
+        return new $entity($path, ...$args);
     }
 
     /**
-     * Guess the entity type and return an instance
-     */
-    public static function guess(string $path, ...$args): EntityContract
-    {
-        $mime = match(true)
-        {
-            filter_var($path, FILTER_VALIDATE_URL)  => get_headers($path)['Content-Type'] ?? null,
-            extension_loaded('fileinfo')            => finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path),
-            default                                 => static::client(...$args)->getMIME($path)
-        };
-
-        $entity = match(true)
-        {
-            str_contains($mime, 'image/')   => Image::class,
-            str_contains($mime, 'video/')   => Video::class,
-            default                         => Document::class,
-        };
-
-        return $entity::make($path, ...$args);
-    }
-
-    /**
-     *
-     *
-     * @throws \Vaites\ApacheTika\Exceptions\Exception
+     * Get and load the file metadata
      */
     protected function metadata(): MetadataContract
     {
@@ -113,7 +108,7 @@ abstract class Entity implements EntityContract
     /**
      * Return an instance of the client
      */
-    protected static function client(...$args): ClientContract
+    protected static function client(mixed ...$args): ClientContract
     {
         return match(true)
         {

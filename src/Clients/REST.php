@@ -8,8 +8,7 @@ use Vaites\ApacheTika\Exceptions\Exception;
 /**
  * Apache Tika rest client
  *
- * @author  David Martínez <contacto@davidmartinez.net>
- * @link    https://cwiki.apache.org/confluence/display/TIKA/TikaServer
+ * @link https://cwiki.apache.org/confluence/display/TIKA/TikaServer
  */
 class REST extends Client
 {

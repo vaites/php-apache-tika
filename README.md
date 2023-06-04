@@ -147,7 +147,7 @@ starting the server, as described [here](https://cwiki.apache.org/confluence/dis
 An easier way to use the library is through the `Entity` class and its subclasses:
 
 ```php
-$entity = \Vaites\ApacheTika\Entity::guess('/path/to/your/document');
+$entity = \Vaites\ApacheTika\Entity::naje('/path/to/your/document');
 
 $entity = \Vaites\ApacheTika\Entities\Document::make('/path/to/your/document');
 $entity = \Vaites\ApacheTika\Entities\Image::make('/path/to/your/image');
@@ -166,7 +166,7 @@ $entity->mime;
 These entities rely on the client to get the main attributes and the `Metadata` classes for the format specific 
 attributes.
 
-A client instance can be passed to the `Entity::guess()` or `Entity::make()` methods to avoid creating a new one. If 
+A client instance can be passed to the `Entity::make()` methods to avoid creating a new one. If 
 not specified the library will create a new instance using environment variables or the default values.
 
 ```php

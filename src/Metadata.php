@@ -6,12 +6,11 @@ use DateTime;
 use DateTimeZone;
 use stdClass;
 
+use Vaites\ApacheTika\Exceptions\Exception;
 use Vaites\ApacheTika\Contracts\Metadata as Contract;
 
 /**
- * Standarized metadata class with common attributes for all document types
- *
- * @author  David Martínez <contacto@davidmartinez.net>
+ * Standardized metadata class with common attributes for all document types
  */
 abstract class Metadata implements Contract
 {
@@ -58,7 +57,15 @@ abstract class Metadata implements Contract
     public function __construct(stdClass $meta, string $file, string $timezone)
     {
         $this->meta = $meta;
-        $this->timezone = new DateTimeZone($timezone);
+
+        try
+        {
+            $this->timezone = new DateTimeZone($timezone);
+        }
+        catch(\Exception $exception)
+        {
+            throw new Exception('Invalid timezone: ' . $timezone);
+        }
         
         // process each meta
         foreach((array) $this->meta as $key => $value)
@@ -86,11 +93,9 @@ abstract class Metadata implements Contract
      * Return an instance of Metadata based on content type
      *
      * @return \Vaites\ApacheTika\Metadata
-     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public static function make(stdClass $meta, string $file, string $timezone): Contract
     {
-        // get content type
         try
         {
             $mime = is_array($meta->{'Content-Type'}) ? current($meta->{'Content-Type'}) : $meta->{'Content-Type'};
@@ -100,19 +105,13 @@ abstract class Metadata implements Contract
             $mime = 'application/octet-stream';
         }
 
-        // instance based on content type
-        return match(current(explode('/', $mime)))
-        {
-            'image' => new Metadata\Image($meta, $file, $timezone),
-            'video' => new Metadata\Video($meta, $file, $timezone),
-            default => new Metadata\Document($meta, $file, $timezone)
-        };
+        $metadata = MIME::guess($mime)->metadata();
+
+        return new $metadata($meta, $file, $timezone);
     }
 
     /**
      * Sets an attribute
-     *
-     * @throws \Vaites\ApacheTika\Exceptions\Exception
      */
     public final function setAttribute(string $key, string $value): Contract
     {

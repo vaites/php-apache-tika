@@ -7,8 +7,6 @@ use Vaites\ApacheTika\Contracts\Metadata as Contract;
 
 /**
  * Metadata class for documents
- *
- * @author  David Martínez <contacto@davidmartinez.net>
  */
 class Document extends Metadata
 {

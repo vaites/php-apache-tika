@@ -2,6 +2,9 @@
 
 namespace Vaites\ApacheTika\Exceptions;
 
+/**
+ * Base exception class
+ */
 class Exception extends \Exception
 {
 

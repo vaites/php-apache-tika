@@ -13,7 +13,6 @@ use Vaites\ApacheTika\Exceptions\Exception;
 /**
  * Apache Tika client interface
  *
- * @author  David Martínez <contacto@davidmartinez.net>
  * @link    https://tika.apache.org/2.7.0/formats.html
  */
 abstract class Client implements ClientContract
@@ -269,7 +268,7 @@ abstract class Client implements ClientContract
         {
             throw new Exception("Unexpected metadata response for $file");
         }
-        
+
         $metadata = Metadata::make($response, $file, $this->getTimezone());
 
         if($content === true)
