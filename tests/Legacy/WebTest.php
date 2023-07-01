@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Vaites\ApacheTika\Tests;
+namespace Vaites\ApacheTika\Tests\Legacy;
 
-use Vaites\ApacheTika\Client;
+use Vaites\ApacheTika\Legacy\REST as Client;
 
 /**
  * Tests for web mode
@@ -14,7 +14,7 @@ class WebTest extends BaseTest
      */
     public static function setUpBeforeClass(): void
     {
-        self::$client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 30]);
+        self::$client = new Client('localhost', 9998, [CURLOPT_TIMEOUT => 30]);
     }
 
     /**
@@ -22,7 +22,7 @@ class WebTest extends BaseTest
      */
     public function testHttpHeader(): void
     {
-        $client = Client::make('localhost', 9998)->setHeader('Foo', 'bar');
+        $client = (new Client('localhost', 9998))->setHeader('Foo', 'bar');
 
         $this->assertEquals('bar', $client->getHeader('foo'));
     }
@@ -32,7 +32,7 @@ class WebTest extends BaseTest
      */
     public function testOCRLanguage(): void
     {
-        $client = Client::make('localhost', 9998)->setOCRLanguage('spa');
+        $client = (new Client('localhost', 9998))->setOCRLanguage('spa');
 
         $this->assertEquals(['spa'], $client->getOCRLanguages());
     }
@@ -42,7 +42,7 @@ class WebTest extends BaseTest
      */
     public function testOCRLanguages(): void
     {
-        $client = Client::make('localhost', 9998)->setOCRLanguages(['fra', 'spa']);
+        $client = (new Client('localhost', 9998))->setOCRLanguages(['fra', 'spa']);
 
         $this->assertEquals(['fra', 'spa'], $client->getOCRLanguages());
     }
@@ -52,7 +52,7 @@ class WebTest extends BaseTest
      */
     public function testCurlSingleOption(): void
     {
-        $client = Client::make('localhost', 9998)->setOption(CURLOPT_TIMEOUT, 3);
+        $client = (new Client('localhost', 9998))->setOption(CURLOPT_TIMEOUT, 3);
 
         $this->assertEquals(3, $client->getOption(CURLOPT_TIMEOUT));
     }
@@ -62,7 +62,7 @@ class WebTest extends BaseTest
      */
     public function testCurlOptions(): void
     {
-        $client = Client::make('localhost', 9998, [CURLOPT_TIMEOUT => 3]);
+        $client = new Client('localhost', 9998, [CURLOPT_TIMEOUT => 3]);
         $options = $client->getOptions();
 
         $this->assertEquals(3, $options[CURLOPT_TIMEOUT]);
@@ -73,7 +73,7 @@ class WebTest extends BaseTest
      */
     public function testCurlTimeoutOption(): void
     {
-        $client = Client::make('localhost', 9998)->setTimeout(3);
+        $client = (new Client('localhost', 9998))->setTimeout(3);
 
         $this->assertEquals(3, $client->getTimeout());
     }
@@ -85,7 +85,7 @@ class WebTest extends BaseTest
     {
         $header = 'Content-Type: image/jpeg';
 
-        $client = Client::make('localhost', 9998, [CURLOPT_HTTPHEADER => [$header]]);
+        $client = new Client('localhost', 9998, [CURLOPT_HTTPHEADER => [$header]]);
         $options = $client->getOptions();
 
         $this->assertContains($header, $options[CURLOPT_HTTPHEADER]);
@@ -96,7 +96,7 @@ class WebTest extends BaseTest
      */
     public function testSetHost(): void
     {
-        $client = Client::make('localhost', 9998);
+        $client = new Client('localhost', 9998);
         $client->setHost('127.0.0.1');
 
         $this->assertEquals('127.0.0.1', $client->getHost());
@@ -107,7 +107,7 @@ class WebTest extends BaseTest
      */
     public function testSetPort(): void
     {
-        $client = Client::make('localhost', 9998);
+        $client = new Client('localhost', 9998);
         $client->setPort(9997);
 
         $this->assertEquals(9997, $client->getPort());
@@ -118,7 +118,7 @@ class WebTest extends BaseTest
      */
     public function testSetUrlHost(): void
     {
-        $client = Client::make('http://localhost:9998');
+        $client = new Client('http://localhost:9998');
 
         $this->assertEquals('localhost', $client->getHost());
     }
@@ -128,7 +128,7 @@ class WebTest extends BaseTest
      */
     public function testSetUrlPort(): void
     {
-        $client = Client::make('http://localhost:9998');
+        $client = new Client('http://localhost:9998');
 
         $this->assertEquals(9998, $client->getPort());
     }
@@ -138,7 +138,7 @@ class WebTest extends BaseTest
      */
     public function testSetRetries(): void
     {
-        $client = Client::make('localhost', 9998);
+        $client = new Client('localhost', 9998);
         $client->setRetries(5);
 
         $this->assertEquals(5, $client->getRetries());
@@ -149,7 +149,7 @@ class WebTest extends BaseTest
      */
     public function testDelayedCheck(): void
     {
-        $client = Client::prepare('localhost', 9997);
+        $client = new Client('localhost', 9997, [], false);
         $client->setPort(9998);
 
         $this->assertStringContainsString(self::$version, $client->getVersion());

@@ -49,7 +49,7 @@ enum MIME
         {
             $mime === 'application/epub+zip'    => self::BOOK,
             str_starts_with($mime, 'image/')    => self::IMAGE,
-            'text/plain'                        => self::TEXT,
+            $mime === 'text/plain'              => self::TEXT,
             default                             => self::DOCUMENT
         };
     }

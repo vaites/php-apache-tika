@@ -38,12 +38,12 @@ to work with the new versions of the tool.
 
 Minimum versions:
 
-* PHP 8.0 or greater
+* PHP 8.1 or greater
     * [Multibyte String support](http://php.net/manual/en/book.mbstring.php)
     * [cURL extension](http://php.net/manual/en/book.curl.php)
 * Apache Tika 1.19 or greater
-* Java 8
-* [Tesseract](https://github.com/tesseract-ocr/tesseract) 4.0 (optional for OCR recognition)
+* Java 8 or greater
+* [Tesseract](https://github.com/tesseract-ocr/tesseract) 4.0 or greater (optional for OCR recognition)
 
 **NOTE**: the supported PHP version will remain synced with [the latest supported by PHP team](https://www.php.net/supported-versions.php)
 
@@ -147,14 +147,15 @@ starting the server, as described [here](https://cwiki.apache.org/confluence/dis
 An easier way to use the library is through the `Entity` class and its subclasses:
 
 ```php
-$entity = \Vaites\ApacheTika\Entity::naje('/path/to/your/document');
+$entity = \Vaites\ApacheTika\Entity::make('/path/to/your/document');
 
+$entity = \Vaites\ApacheTika\Entities\Book::make('/path/to/your/book');
 $entity = \Vaites\ApacheTika\Entities\Document::make('/path/to/your/document');
 $entity = \Vaites\ApacheTika\Entities\Image::make('/path/to/your/image');
-$entity = \Vaites\ApacheTika\Entities\Video::make('/path/to/your/video');
+$entity = \Vaites\ApacheTika\Entities\Text::make('/path/to/your/plain-text');
 ```
 
-The `guess()` method will try to guess the type, falling back to `Document` if not available/detected. Now you can
+The `make()` method will try to guess the type, falling back to `Document` if not available/detected. Now you can
 access all the properties of the entity:
 
 ```php
@@ -307,7 +308,7 @@ Since 1.0 version there are some breaking changes:
 * Apache Tika versions prior to 1.19 are not supported
     * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 1.18 and older
     * Use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 1.14 and older
-* PHP minimum requirement is 8.0
+* PHP minimum requirement is 8.1
     * Use [1.x](https://github.com/vaites/php-apache-tika/tree/1.x) version for 7.4 and older
     * Use [0.x](https://github.com/vaites/php-apache-tika/tree/0.x) version for 7.1 and older
 * `$client->getRecursiveMetadata()` returns an array as expected
@@ -346,7 +347,7 @@ Summary
 
 ### Empty responses or unexpected results
 
-This library is only a _proxy_ so if you get an empy responses or unexpected results the most common cause is Tika 
+This library is only a _proxy_ so if you get an empty responses or unexpected results the most common cause is Tika 
 itself. A simple test is using the GUI to check the response:
 
 1. Run the Tika app without arguments: `java -jar tika-app-x.xx.jar` 
@@ -359,7 +360,7 @@ and open an issue if necessary.
 
 ### Encoding
 
-By default the returned text is encoded with UTF-8, andthe `Client::setEncoding()` method allows to set the expected 
+By default the returned text is encoded with UTF-8, and the `Client::setEncoding()` method allows to set the expected 
 encoding. 
 
 ## Tests

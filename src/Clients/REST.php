@@ -82,7 +82,12 @@ class REST extends Client
      */
     public function setUrl(string $url): self
     {
-        $this->url = str_contains($url, '://') ? $url : "http://$url:9998";
+        $this->url = match(true)
+        {
+            str_contains($url, '://')   => $url,
+            str_contains($url, ':')     => "http://$url",
+            default =>                  "http://$url:9998"
+        };
 
         return $this;
     }
@@ -487,7 +492,19 @@ class REST extends Client
         // exception if cURL fails
         if(curl_errno($curl))
         {
-            throw new Exception(curl_error($curl), curl_errno($curl));
+            $message = curl_error($curl);
+
+            if(empty($message) && curl_errno($curl) === CURLE_URL_MALFORMAT)
+            {
+                $url = $options[CURLOPT_URL] ?? '<url>';
+                $message = "cURL error 3: $url malformed";
+            }
+            elseif(empty($message))
+            {
+                 $message = sprintf('cURL error %d', curl_errno($curl));
+            }
+
+            throw new Exception($message, curl_errno($curl));
         }
 
         // return the response and the status code

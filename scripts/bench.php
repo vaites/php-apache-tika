@@ -1,6 +1,6 @@
 <?php require('./vendor/autoload.php');
 
-$version = getenv('APACHE_TIKA_VERSION') ?: '2.4.0';
+$version = getenv('APACHE_TIKA_VERSION') ?: '2.8.0';
 $type = $GLOBALS['argv'][1] ?? null;
 $client = tika($type === '--cli' ? "./bin/tika-app-$version.jar" : '127.0.0.1');
 

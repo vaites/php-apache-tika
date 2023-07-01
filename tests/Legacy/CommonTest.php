@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Vaites\ApacheTika\Tests;
+namespace Vaites\ApacheTika\Tests\Legacy;
 
-use Vaites\ApacheTika\Client;
+use Vaites\ApacheTika\Legacy\CLI as Client;
 
 /**
  * Common test functionality
@@ -21,7 +21,7 @@ class CommonTest extends TestCase
     {
         parent::__construct($name, $data, $dataName);
 
-        self::$client = Client::make(self::$binaries . '/tika-app-' . self::$version . '.jar', 'java');
+        self::$client = new Client(self::$binaries . '/tika-app-' . self::$version . '.jar', 'java');
     }
 
     /**

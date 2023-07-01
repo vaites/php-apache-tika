@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Vaites\ApacheTika\Tests;
+namespace Vaites\ApacheTika\Tests\Legacy;
 
 use Vaites\ApacheTika\Clients\REST;
 

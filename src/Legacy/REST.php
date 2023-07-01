@@ -6,6 +6,8 @@ use Vaites\ApacheTika\Clients\REST as Client;
 
 /**
  * Keep compatibility with old WebClient class
+ *
+ * @method static REST make(string $host = 'localhost', int $port = 9998, array $options = [], bool $check = true)
  */
 class REST extends Client
 {

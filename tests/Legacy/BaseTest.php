@@ -1,16 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Vaites\ApacheTika\Tests;
+namespace Vaites\ApacheTika\Tests\Legacy;
 
 use DateTime;
 use DateTimeZone;
-use Exception;
-
 use Vaites\ApacheTika\Client;
+use Vaites\ApacheTika\Clients\REST;
 use Vaites\ApacheTika\Metadata;
 use Vaites\ApacheTika\Metadata\Document;
 use Vaites\ApacheTika\Metadata\Image;
-use Vaites\ApacheTika\Clients\REST;
 
 /**
  * Common test functionality
@@ -483,7 +481,7 @@ abstract class BaseTest extends TestCase
     {
         $samples = [];
 
-        foreach(glob(dirname(__DIR__) . "/samples/$sample*") as $sample)
+        foreach(glob(dirname(__DIR__, 2) . "/samples/Legacy/$sample*") as $sample)
         {
             $samples[basename($sample)] = [$sample];
         }

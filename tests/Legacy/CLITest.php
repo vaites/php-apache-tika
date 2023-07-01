@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Vaites\ApacheTika\Tests;
+namespace Vaites\ApacheTika\Tests\Legacy;
 
-use Vaites\ApacheTika\Client;
+use Vaites\ApacheTika\Legacy\CLI as Client;
 
 /**
  * Tests for command line mode
@@ -14,7 +14,7 @@ class CLITest extends BaseTest
      */
     public static function setUpBeforeClass(): void
     {
-        self::$client = Client::make(self::getPathForVersion(self::$version));
+        self::$client = new Client(self::getPathForVersion(self::$version));
     }
 
     /**
@@ -34,7 +34,7 @@ class CLITest extends BaseTest
     {
         $path = self::getPathForVersion(self::$version);
 
-        $client = Client::make($path);
+        $client = new Client($path);
 
         $this->assertEquals($path, $client->getPath());
     }
@@ -46,7 +46,7 @@ class CLITest extends BaseTest
     {
         $path = self::getPathForVersion(self::$version);
 
-        $client = Client::make($path, 'java');
+        $client = new Client($path, 'java');
 
         $this->assertEquals('java', $client->getJava());
     }
@@ -58,10 +58,10 @@ class CLITest extends BaseTest
     {
         $path = self::getPathForVersion(self::$version);
 
-        $client = Client::make($path);
-        $client->setJavaArgs('-JXmx4g');
+        $client = new Client($path);
+        $client->setJavaArgs(['-JXmx4g']);
 
-        $this->assertEquals('-JXmx4g', $client->getJavaArgs());
+        $this->assertEquals(['-JXmx4g'], $client->getJavaArgs());
     }
 
     /**
@@ -71,7 +71,7 @@ class CLITest extends BaseTest
     {
         $path = self::getPathForVersion(self::$version);
 
-        $client = Client::make($path);
+        $client = new Client($path);
         $client->setEnvVars(['LANG' => 'UTF-8']);
 
         $this->assertArrayHasKey('LANG', $client->getEnvVars());
@@ -84,7 +84,7 @@ class CLITest extends BaseTest
     {
         $path = self::getPathForVersion(self::$version);
 
-        $client = Client::prepare('/nonexistent/path/to/apache-tika.jar');
+        $client = new Client('/nonexistent/path/to/apache-tika.jar', null, false);
         $client->setPath($path);
 
         $this->assertStringContainsString(self::$version, $client->getVersion());

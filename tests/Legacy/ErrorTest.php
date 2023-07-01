@@ -1,12 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Vaites\ApacheTika\Tests;
+namespace Vaites\ApacheTika\Tests\Legacy;
 
 use Exception;
-
-use Vaites\ApacheTika\Client;
-use Vaites\ApacheTika\Clients\CLI;
-use Vaites\ApacheTika\Metadata;
+use Vaites\ApacheTika\Legacy\CLI;
+use Vaites\ApacheTika\Legacy\REST;
 
 /**
  * Error tests
@@ -20,7 +18,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = Client::make('/nonexistent/path/to/apache-tika.jar');
+            $client = new CLI('/nonexistent/path/to/apache-tika.jar');
             $client->getSupportedMIMETypes();
 
             $this->fail();
@@ -38,7 +36,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = CLI::make(__FILE__);
+            $client = new CLI(__FILE__);
             $client->getSupportedMIMETypes();
 
             $this->fail();
@@ -56,7 +54,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = CLI::make('/nonexistent/path/to/apache-tika.jar', '/nonexistent/path/to/java');
+            $client = new CLI('/nonexistent/path/to/apache-tika.jar', '/nonexistent/path/to/java');
             $version = $client->getSupportedMIMETypes();
 
             $this->fail();
@@ -74,7 +72,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = Client::prepare('localhost', 9997);
+            $client = new REST('localhost', 9997);
             $client->getSupportedMIMETypes();
 
             $this->fail();
@@ -96,7 +94,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            Client::make('localhost', 9998, [CURLOPT_PUT => false]);
+            new REST('localhost', 9998, [CURLOPT_PUT => false]);
 
             $this->fail();
         }
@@ -113,7 +111,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = Client::make('localhost', 9998);
+            $client = new REST('localhost', 9998);
             $client->getRecursiveMetadata(dirname(__DIR__) . '/samples/sample3.png', 'bad');
 
             $this->fail();
@@ -135,7 +133,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = Client::make('localhost', 9998);
+            $client = new REST('localhost', 9998);
             $client->getText(dirname(__DIR__) . '/samples/sample4.doc');
 
             $this->fail();
@@ -160,7 +158,7 @@ class ErrorTest extends TestCase
     {
         try
         {
-            $client = Client::make('localhost', 9998);
+            $client = new REST('localhost', 9998);
             $client->getRecursiveMetadata('example.doc', 'error');
 
             $this->fail();
@@ -168,26 +166,6 @@ class ErrorTest extends TestCase
         catch(Exception $exception)
         {
             $this->assertStringContainsString('Unknown recursive type', $exception->getMessage());
-        }
-    }
-
-    /**
-     * @testdox Invalid request type must throw an exception
-     *
-     * @dataProvider    parameterProvider
-     */
-    public function testRequestType(array $parameters): void
-    {
-        try
-        {
-            $client = call_user_func_array(['Vaites\ApacheTika\Client', 'make'], $parameters);
-            $client->request('bad');
-
-            $this->fail();
-        }
-        catch(Exception $exception)
-        {
-            $this->assertStringContainsString('Unknown type bad', $exception->getMessage());
         }
     }
 
