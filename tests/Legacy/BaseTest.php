@@ -4,6 +4,7 @@ namespace Vaites\ApacheTika\Tests\Legacy;
 
 use DateTime;
 use DateTimeZone;
+
 use Vaites\ApacheTika\Client;
 use Vaites\ApacheTika\Clients\REST;
 use Vaites\ApacheTika\Metadata;
@@ -416,39 +417,39 @@ abstract class BaseTest extends TestCase
     /**
      * Document file provider
      */
-    public function documentProvider(): array
+    public static function documentProvider(): array
     {
-        return $this->samples('sample1');
+        return static::samples('sample1');
     }
 
     /**
      * Image file provider
      */
-    public function imageProvider(): array
+    public static function imageProvider(): array
     {
-        return $this->samples('sample2');
+        return static::samples('sample2');
     }
 
     /**
      * File provider for OCR testing
      */
-    public function ocrProvider(): array
+    public static function ocrProvider(): array
     {
-        return $this->samples('sample3');
+        return static::samples('sample3');
     }
 
     /**
      * File provider for callback testing
      */
-    public function callbackProvider(): array
+    public static function callbackProvider(): array
     {
-        return $this->samples('sample5');
+        return static::samples('sample5');
     }
 
     /**
      * File provider for remote testing
      */
-    public function remoteProvider(): array
+    public static function remoteProvider(): array
     {
         return
         [
@@ -461,23 +462,23 @@ abstract class BaseTest extends TestCase
     /**
      * File provider for encoding testing
      */
-    public function encodingProvider(): array
+    public static function encodingProvider(): array
     {
-        return $this->samples('sample7');
+        return static::samples('sample7');
     }
 
     /**
      * File provider for recursive testing
      */
-    public function recursiveProvider(): array
+    public static function recursiveProvider(): array
     {
-        return $this->samples('sample8');
+        return static::samples('sample8');
     }
 
     /**
      * File provider using "samples" folder
      */
-    protected function samples(string $sample): array
+    protected static function samples(string $sample): array
     {
         $samples = [];
 

@@ -3,6 +3,7 @@
 namespace Vaites\ApacheTika\Tests\Legacy;
 
 use Exception;
+
 use Vaites\ApacheTika\Legacy\CLI;
 use Vaites\ApacheTika\Legacy\REST;
 
@@ -212,7 +213,7 @@ class ErrorTest extends TestCase
     /**
      * Client parameters provider
      */
-    public function parameterProvider(): array
+    public static function parameterProvider(): array
     {
         return
         [
