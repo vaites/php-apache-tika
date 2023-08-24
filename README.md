@@ -31,7 +31,7 @@ to work with the new versions of the tool.
 * Support for local and remote resources
 * No heavyweight library dependencies
 * Compatible with Apache Tika 1.15 or greater
-    * Tested up to 1.28.5 and 2.7.0
+    * Tested up to 1.28.5 and 2.8.0
 * Works on Linux, macOS, Windows and probably on FreeBSD
 
 ## Requirements
@@ -124,8 +124,8 @@ You can use an URL instead of a file path and the library will download the file
 
 If you use Apache Tika >= 2.0.0, you *can* [define an HttpFetcher](https://cwiki.apache.org/confluence/display/TIKA/tika-pipes)
 and use the option `-enableUnsecureFeatures -enableFileUrl` when starting the server to make the server download remote
-files when passing a URL instead of a filname to `$client->getText()`. In order to do so, you must set the name of
-the HttpFetcher using `$client->setFetcherName('yourFetcherName')`.
+files when passing a URL instead of a filename. In order to do so, you must set the name of the HttpFetcher using 
+`$client->setFetcherName('yourFetcherName')`.
 
 ### Methods
 
@@ -188,6 +188,14 @@ Enable/disable the internal remote file downloader:
 ```php
 $client->setDownloadRemote(true);
 $client->getDownloadRemote();
+```
+
+
+Set the [fetcher name](https://cwiki.apache.org/confluence/display/TIKA/tika-pipes):
+
+```php
+$client->setFetcherName($fetcher); // one of FileSystemFetcher, HttpFetcher, S3Fetcher, GCSFetcher, or SolrFetcher
+$client->getFetcherName();
 ```
 
 #### Command line client

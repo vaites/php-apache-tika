@@ -216,10 +216,27 @@ class WebClient extends Client
     }
 
     /**
+     * Get the name of the fetcher to be used (for Tika >= 2.0.0 only)
+     *
+     * @return string|null
+     */
+    public function getFetcherName(): ?string
+    {
+        return $this->fetcherName;
+    }
+
+    /**
      * Set the name of the fetcher to be used (for Tika >= 2.0.0 only)
+     *
+     * @link https://cwiki.apache.org/confluence/display/TIKA/tika-pipes
      */
     public function setFetcherName(string $fetcherName): self
     {
+        if(!in_array($fetcherName, ['FileSystemFetcher', 'HttpFetcher', 'S3Fetcher', 'GCSFetcher', 'SolrFetcher']))
+        {
+            throw new Exception("Fetcher name $fetcherName is invalid, see https://cwiki.apache.org/confluence/display/TIKA/tika-pipes");
+        }
+
         $this->fetcherName = $fetcherName;
 
         return $this;
@@ -643,10 +660,13 @@ class WebClient extends Client
 
         if(!empty($file) && preg_match('/^http/', $file))
         {
-            if($this->fetcherName) {
+            if($this->fetcherName)
+            {
                 $headers[] = "fetcherName:$this->fetcherName";
                 $headers[] = "fetchKey:$file";
-            } else {
+            }
+            else
+            {
                 $headers[] = "fileUrl:$file";
             }
         }

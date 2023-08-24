@@ -231,6 +231,22 @@ class ErrorTest extends TestCase
     }
 
     /**
+     * Test invalid fetcher name
+     */
+    public function testUnsupportedFetcherName(): void
+    {
+        try
+        {
+            $client = Client::make('localhost', 9998);
+            $client->setFetcherName('UnknownFetcher');
+        }
+        catch(Exception $exception)
+        {
+            $this->assertStringContainsString('Fetcher name UnknownFetcher is invalid', $exception->getMessage());
+        }
+    }
+
+    /**
      * Test wrong request type for all clients
      *
      * @dataProvider    parameterProvider
