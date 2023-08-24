@@ -52,6 +52,13 @@ class WebClient extends Client
     protected $retries = 3;
 
     /**
+     * Name of the fetcher to be used (for Tika >= 2.0.0 only)
+     *
+     * @var string|null
+     */
+    protected $fetcherName = null;
+
+    /**
      * Default cURL options
      *
      * @var array
@@ -204,6 +211,16 @@ class WebClient extends Client
     public function setRetries(int $retries): self
     {
         $this->retries = $retries;
+
+        return $this;
+    }
+
+    /**
+     * Set the name of the fetcher to be used (for Tika >= 2.0.0 only)
+     */
+    public function setFetcherName(string $fetcherName): self
+    {
+        $this->fetcherName = $fetcherName;
 
         return $this;
     }
@@ -626,7 +643,12 @@ class WebClient extends Client
 
         if(!empty($file) && preg_match('/^http/', $file))
         {
-            $headers[] = "fileUrl:$file";
+            if($this->fetcherName) {
+                $headers[] = "fetcherName:$this->fetcherName";
+                $headers[] = "fetchKey:$file";
+            } else {
+                $headers[] = "fileUrl:$file";
+            }
         }
 
         switch($type)
