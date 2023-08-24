@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.0
+
+* Added `WebClient::setFetcherName()` to easily set the [fetcher name](https://cwiki.apache.org/confluence/display/TIKA/tika-pipes) (thanks to @relthyg)
+* Tested up to Apache Tika 1.28.5 and 2.8.0
+
 ## v1.2.5
 
 * Tested up to Apache Tika 1.28.5 and 2.7.0

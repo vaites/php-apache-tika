@@ -157,6 +157,24 @@ class WebTest extends BaseTest
     }
 
     /**
+     * Set fetcher name test
+     */
+    public function testFetcherName(): void
+    {
+        if(version_compare(self::$version, '2.0.0') >= 0)
+        {
+            $client = Client::make('localhost', 9998);
+            $client->setFetcherName('FileSystemFetcher');
+
+            $this->assertEquals('FileSystemFetcher', $client->getFetcherName());
+        }
+        else
+        {
+            $this->markTestSkipped('Apache Tika 1.x doesn\'t have tika-pipes module');
+        }
+    }
+
+    /**
      * Test delayed check
      */
     public function testDelayedCheck(): void
