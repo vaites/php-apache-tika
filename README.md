@@ -113,7 +113,7 @@ $client = tika('http://localhost:9998');
 This library will make a first request to check the Apache Tika version unless a version is set using the 
 `APACHE_TIKA_VERSION` env variable or using the class method:
 
-```
+```php
 $client = \Vaites\ApacheTika\Client::prepare('http://localhost:9998');
 $client->setVersion('2.0.0');
 ```

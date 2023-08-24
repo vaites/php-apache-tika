@@ -34,7 +34,7 @@
         "filp/whoops": "^2.7",
         "psy/psysh": "^0.11.17",
         "nunomaduro/collision": "^v7.6.0",
-        "pestphp/pest": "^v2.8.0"
+        "pestphp/pest": "^v2.9.0"
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse -c phpstan.neon",
