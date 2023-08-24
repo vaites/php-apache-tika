@@ -122,6 +122,11 @@ You can use an URL instead of a file path and the library will download the file
 **no need** to add `-enableUnsecureFeatures -enableFileUrl` to command line when starting the server, as described 
 [here](https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes).
 
+If you use Apache Tika >= 2.0.0, you *can* [define an HttpFetcher](https://cwiki.apache.org/confluence/display/TIKA/tika-pipes)
+and use the option `-enableUnsecureFeatures -enableFileUrl` when starting the server to make the server download remote
+files when passing a URL instead of a filname to `$client->getText()`. In order to do so, you must set the name of
+the HttpFetcher using `$client->setFetcherName('yourFetcherName')`.
+
 ### Methods
 
 Here are the full list of available methods
@@ -252,6 +257,12 @@ Set/get OCR languages (see [TikaOCR](https://cwiki.apache.org/confluence/display
 $client->setOCRLanguage($language);
 $client->setOCRLanguages($languages);
 $client->getOCRLanguages();
+```
+
+Set HTTP fetcher name (for Tika >= 2.0.0 only, see https://cwiki.apache.org/confluence/display/TIKA/tika-pipes)
+
+```php
+$client->setFetcherName($fetcherName)
 ```
 
 ### Breaking changes
