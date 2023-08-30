@@ -232,11 +232,6 @@ class WebClient extends Client
      */
     public function setFetcherName(string $fetcherName): self
     {
-        if(!in_array($fetcherName, ['FileSystemFetcher', 'HttpFetcher', 'S3Fetcher', 'GCSFetcher', 'SolrFetcher']))
-        {
-            throw new Exception("Fetcher name $fetcherName is invalid, see https://cwiki.apache.org/confluence/display/TIKA/tika-pipes");
-        }
-
         $this->fetcherName = $fetcherName;
 
         return $this;
@@ -662,13 +657,10 @@ class WebClient extends Client
         {
             if($this->fetcherName)
             {
-                $headers[] = "fetcherName:$this->fetcherName";
-                $headers[] = "fetchKey:$file";
+                $headers[] = "fetcherName: $this->fetcherName";
+                $headers[] = "fetchKey: $file";
             }
-            else
-            {
-                $headers[] = "fileUrl:$file";
-            }
+            $headers[] = "fileUrl: $file";
         }
 
         switch($type)
