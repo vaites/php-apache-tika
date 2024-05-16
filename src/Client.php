@@ -634,6 +634,7 @@ abstract class Client
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_exec($ch);
 
         if(curl_errno($ch))
