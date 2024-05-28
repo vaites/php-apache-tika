@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.2
+
+* Fixed remote file download (thanks to @denistorresan)
+* Tested up to Apache Tika 1.28.5 and 2.9.2
+
+## v1.3.1
+
+* Removed `WebClient::setFetcherName()` restrictions (thanks to @mpdude)
+
 ## v1.3.0
 
 * Added `WebClient::setFetcherName()` to easily set the [fetcher name](https://cwiki.apache.org/confluence/display/TIKA/tika-pipes) (thanks to @relthyg)
