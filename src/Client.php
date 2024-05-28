@@ -531,12 +531,17 @@ abstract class Client
         if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
         {
             //
-        } 
+        }
         // invalid local file
         elseif($file !== null && !preg_match('/^http/', $file) && !file_exists($file))
         {
             throw new Exception("File $file can't be opened");
-        } 
+        }
+        // download remote file if required only for integrated downloader
+        elseif($file !== null && preg_match('/^http/', $file) && $this->downloadRemote)
+        {
+            $file = $this->downloadFile($file);
+        }
         // invalid remote file
         elseif($file !== null && preg_match('/^http/', $file))
         {
@@ -546,11 +551,6 @@ abstract class Client
             {
                 throw new Exception("File $file can't be opened", 2);
             }
-        } 
-        // download remote file if required only for integrated downloader
-        elseif($file !== null && preg_match('/^http/', $file) && $this->downloadRemote)
-        {
-            $file = $this->downloadFile($file);
         }
 
         return $file;
@@ -634,6 +634,7 @@ abstract class Client
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_exec($ch);
 
         if(curl_errno($ch))
