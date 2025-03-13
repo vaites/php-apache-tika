@@ -77,7 +77,7 @@ class WebClient extends Client
      *
      * @throws \Exception
      */
-    public function __construct(string $host = null, int $port = null, array $options = [], bool $check = true)
+    public function __construct(?string $host = null, ?int $port = null, array $options = [], bool $check = true)
     {
         parent::__construct();
 
@@ -490,7 +490,7 @@ class WebClient extends Client
      *
      * @throws \Exception
      */
-    public function request(string $type, string $file = null): string
+    public function request(string $type, ?string $file = null): string
     {
         static $retries = [];
 
@@ -602,7 +602,7 @@ class WebClient extends Client
      *
      * @throws \Exception
      */
-    protected function error(int $status, string $resource, string $file = null): void
+    protected function error(int $status, string $resource, ?string $file = null): void
     {
         switch($status)
         {
@@ -648,7 +648,7 @@ class WebClient extends Client
      * @link https://wiki.apache.org/tika/TikaJAXRS#Specifying_a_URL_Instead_of_Putting_Bytes
      * @throws \Exception
      */
-    protected function getParameters(string $type, string $file = null): array
+    protected function getParameters(string $type, ?string $file = null): array
     {
         $headers = [];
         $callback = null;
@@ -728,7 +728,7 @@ class WebClient extends Client
      *
      * @throws \Exception
      */
-    protected function getCurlOptions(string $type, string $file = null): array
+    protected function getCurlOptions(string $type, ?string $file = null): array
     {
         // base options
         $options = $this->options;
