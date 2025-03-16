@@ -60,10 +60,10 @@ jobs:
  
    steps:
      - name: Checkout code
-       uses: actions/checkout@v2
+       uses: actions/checkout@v4
  
      - name: Cache Apache Tika binaries
-       uses: actions/cache@v1
+       uses: actions/cache@v4
        with:
          path: bin
          key: binaries-apache-tika-${{ matrix.tika }}
