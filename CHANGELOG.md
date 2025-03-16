@@ -1,9 +1,19 @@
 # Changelog
 
-## v1.3.1
+## v1.4.0
+
+* Fixed deprecations for nullable parameters on PHP 8.4 (thanks to @denistorresan)
+* Tested up to Apache Tika 1.28.5, 2.9.3 and 3.1.0
+* Tested up to PHP 8.4
+
+## v1.3.2
 
 * Fixed remote file download (thanks to @denistorresan)
 * Tested up to Apache Tika 1.28.5 and 2.9.2
+
+## v1.3.1
+
+* Removed `WebClient::setFetcherName()` restrictions (thanks to @mpdude)
 
 ## v1.3.0
 
