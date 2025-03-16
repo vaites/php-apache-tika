@@ -91,7 +91,7 @@ jobs:
 
      - name: Install dependencies
        run: |
-        composer config platform.php 7.3.0
+        composer config platform.php 7.4.0
         composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
  
      - name: Download Apache Tika binaries
