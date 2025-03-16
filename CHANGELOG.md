@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.0
+
+* Fixed deprecations for nullable parameters on PHP 8.4 (thanks to @denistorresan)
+* Tested up to Apache Tika 1.28.5, 2.9.3 and 3.1.0
+* Tested up to PHP 8.4
+
 ## v1.3.2
 
 * Fixed remote file download (thanks to @denistorresan)
