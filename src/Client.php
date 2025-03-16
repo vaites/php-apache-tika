@@ -109,7 +109,7 @@ abstract class Client
      * @return \Vaites\ApacheTika\Clients\CLIClient|\Vaites\ApacheTika\Clients\WebClient
      * @throws \Exception
      */
-    public static function make(string $param1 = null, $param2 = null, array $options = [], bool $check = true): Client
+    public static function make(?string $param1 = null, $param2 = null, array $options = [], bool $check = true): Client
     {
         if(preg_match('/\.jar$/', func_get_arg(0)))
         {
@@ -334,7 +334,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getHTML(string $file, callable $callback = null, bool $append = true): ?string
+    public function getHTML(string $file, ?callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -349,7 +349,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getXHTML(string $file, callable $callback = null, bool $append = true): ?string
+    public function getXHTML(string $file, ?callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -364,7 +364,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getText(string $file, callable $callback = null, bool $append = true): ?string
+    public function getText(string $file, ?callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -379,7 +379,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function getMainText(string $file, callable $callback = null, bool $append = true): ?string
+    public function getMainText(string $file, ?callable $callback = null, bool $append = true): ?string
     {
         if(!is_null($callback))
         {
@@ -525,7 +525,7 @@ abstract class Client
      *
      * @throws \Exception
      */
-    public function checkRequest(string $type, string $file = null): ?string
+    public function checkRequest(string $type, ?string $file = null): ?string
     {
         // no checks for getters
         if(in_array($type, ['detectors', 'mime-types', 'parsers', 'version']))
@@ -685,5 +685,5 @@ abstract class Client
      *
      * @throws \Exception
      */
-    abstract public function request(string $type, string $file = null): ?string;
+    abstract public function request(string $type, ?string $file = null): ?string;
 }
