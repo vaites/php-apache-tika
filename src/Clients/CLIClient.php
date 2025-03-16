@@ -50,7 +50,7 @@ class CLIClient extends Client
      *
      * @throws \Exception
      */
-    public function __construct(string $path = null, string $java = null, bool $check = true)
+    public function __construct(?string $path = null, string $java = null, bool $check = true)
     {
         parent::__construct();
 
@@ -308,7 +308,7 @@ class CLIClient extends Client
      *
      * @throws \Exception
      */
-    public function request(string $type, string $file = null): string
+    public function request(string $type, ?string $file = null): string
     {
         // check if not checked
         $this->check();
@@ -418,7 +418,7 @@ class CLIClient extends Client
      *
      * @throws  Exception
      */
-    protected function getArguments(string $type, string $file = null): array
+    protected function getArguments(string $type, ?string $file = null): array
     {
         $arguments = $this->encoding ? ["--encoding={$this->encoding}"] : [];
 
