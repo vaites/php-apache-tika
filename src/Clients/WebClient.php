@@ -303,7 +303,7 @@ class WebClient extends Client
      */
     public function getHeader(string $name): ?string
     {
-        $value = [];
+        $value = null;
 
         foreach($this->options[CURLOPT_HTTPHEADER] as $header)
         {

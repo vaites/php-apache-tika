@@ -50,7 +50,7 @@ class CLIClient extends Client
      *
      * @throws \Exception
      */
-    public function __construct(?string $path = null, string $java = null, bool $check = true)
+    public function __construct(?string $path = null, ?string $java = null, bool $check = true)
     {
         parent::__construct();
 
