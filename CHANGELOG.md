@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.1
+
+* Fixed `WebCLient::getHeader()` to return null if header does not exist (thanks to @menturion)
+* Fixed mode deprecations for nullable parameters on PHP 8.4 (thanks to @Zombaya)
+* Tested up to Apache Tika 1.28.5, 2.9.4 and 3.2.2
+
 ## v1.4.0
 
 * Drop support for PHP 7.3
