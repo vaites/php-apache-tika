@@ -45,7 +45,7 @@ abstract class BaseTest extends TestCase
      * 
      * @throws \Exception
      */
-    public function __construct(string $name = null, array $data = array(), $dataName = '')
+    public function __construct(?string $name = null, array $data = array(), $dataName = '')
     {
         self::$version = getenv('APACHE_TIKA_VERSION');
         self::$binaries = getenv('APACHE_TIKA_BINARIES');
